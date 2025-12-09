@@ -1,0 +1,2466 @@
+============================================================ 
+THE COMPLETE CHANDAS MANUAL — FROM BEGINNING 
+PART 1 — FUNDAMENTALS + FIRST METER (GĀYATRĪ) 
+============================================================ 
+Before meters, we must establish the full foundational system of Chandas analysis. 
+(You already have pieces of this, but now we unify everything into a single continuous 
+document.) 
+============================================================ 
+SECTION A — FOUNDATIONAL CONCEPTS 
+============================================================ 
+These concepts must be mastered before scanning any meter. 
+A1. Syllable (Akṣara) 
+A syllable has exactly one vowel. 
+Consonants + conjuncts belong to the syllable that contains their vowel. 
+A syllable begins when: 
+• A new vowel appears (अ, इ, उ, ई, ऋ…) 
+• OR a vowel sign appears (ा , िा, ा , ा , ा , ा , ा , ा , ा ) 
+Examples: 
+धर्मक्ष त्र  → ध | र्म | क्ष  | त्र  
+प ण्डवः → प  | ण्ड | वः 
+A2. Types of Vowels 
+Short (Hrasva, 1 mātrā): 
+अ, इ, उ, ऋ, ऌ 
+Long (Dīrgha, 2 mātrās): 
+आ, ई, ऊ, ॠ, ए, ऐ, ओ, औ 
+Long vowels → automatically Guru. 
+A3. Laghu (Light) vs Guru (Heavy) 
+Laghu (⏑): 
+Short vowel + 
+no consonant cluster, no anusvāra, no visarga. 
+Guru (–): 
+• Long vowel, OR 
+• Short vowel + cluster, anusvāra (ा ), visarga (ाः ), OR 
+• Final syllable of pāda 
+A4. Mātrā System 
+• Laghu = 1 mātrā 
+• Guru = 2 mātrās 
+A5. Gaṇa System (Pingala) 
+Gaṇas are groups of 3 syllables. 
+Gaṇa Pattern 
+na ⏑ ⏑ ⏑ 
+sa 
+ja 
+ya 
+⏑ ⏑ – 
+⏑ – ⏑ 
+⏑ – – 
+bha – ⏑ ⏑ 
+ra 
+ta – ⏑ – – – ⏑ 
+ma – – – 
+Mnemonic: yamātārājabhānasalagā 
+A6. Varṇavṛtta vs Mātrāvṛtta vs Jāti 
+Varṇavṛtta — defined by syllable count per pāda (e.g., Gāyatrī, Anuṣṭubh, Jagatī). 
+Mātrāvṛtta — defined by mātrā count per pāda (e.g., Āryā). 
+Jāti — defined by mātrā groupings (e.g., 4+4+3 etc.). 
+============================================================ 
+SECTION B — BEGINNING OF METERS 
+============================================================ 
+We now begin from the earliest Vedic meter, proceeding chronologically and 
+structurally. 
+The first, oldest, most central meter in the Vedas is: 
+============================================================ 
+METER 1 — GĀYATRĪ (गायत्री) 
+============================================================ 
+Type: Varṇavṛtta 
+Lines (Pādas): 3 
+Syllables per pāda: 8 
+Total syllables: 24 
+This is the foundational Vedic meter, appearing extensively in the Ṛgveda. 
+It is the most important mantra meter. 
+STRUCTURE 
+Pāda Syllables 
+1 
+2 
+8 
+8 
+Pāda Syllables 
+3 
+8 
+IDENTIFICATION RULES (AI-Ready) 
+Your AI should classify a verse as Gāyatrī when: 
+1. It consists of 3 pādas, 
+2. Each pāda has exactly 8 syllables, 
+3. The final syllable of each pāda is Guru. 
+This rule alone has > 95% reliability. 
+COMMON LAGHU–GURU PATTERNS 
+(Not strictly required, but typical.) 
+• 1st syllable tends to be Guru 
+• 4th syllable tends to be Laghu 
+• 7th syllable tends to be Guru 
+MOST FAMOUS EXAMPLE (Ṛgveda 3.62.10) 
+(3 pādas × 8 syllables) 
+तत्सिवत वमर ण्य । 
+भर्गो द वस्य ध र्िि। 
+िधय  य  नः प्रच दय त्॥ 
+SCANSION (Pāda by Pāda) 
+Pāda 1 — तत्सवितुिवरेण्यं 
+Syllables: 
+त | त्स | िव | त  | र् | व | र  | ण्य  → 8 syllables 
+Pattern: – – ⏑ – ⏑ – – 
+Pāda 2 — भगो देिस्य धीमवि 
+भर् | र्ग  | द  | व | स्य | ध  | र् | िि → 8 syllables 
+Pattern: – – – – – – ⏑ – 
+Pāda 3 — वधयो यो नः प्रचोदयात् 
+िध | य  | य  | नः | प्र | च  | द | य त् → 8 syllables 
+Pattern: ⏑ – – – – – – – 
+DATASET SUMMARY — GĀYATRĪ 
+• Type: Varṇavṛtta 
+• Pādas: 3 
+• Syllables: 8/8/8 
+• Total: 24 
+• Key rule: 3 lines, 8 syllables each → Gāyatrī 
+============================================================ 
+METER 2 — UṢṆIH (उष्णिि्) 
+============================================================ 
+Uṣṇih is considered the second meter in Vedic tradition. 
+Type: Varṇavṛtta 
+Lines: 3 
+Structure: 7 | 7 | 8 syllables 
+Total: 22 syllables 
+IDENTIFICATION RULES 
+Your AI should classify Uṣṇih when: 
+1. There are 3 pādas, but 
+2. Syllables ≠ 8/8/8 
+3. Usually 7/7/8 
+Thus Uṣṇih = “shorter Gāyatrī”. 
+EXAMPLE — Ṛgveda 1.24.1 
+आििर् मध म िदवः कक त्। 
+पतः पृििव्य  अयर््। 
+अप   र त  िि ििन्वित॥ 
+Pādas = 7, 7, 8 syllables → Uṣṇih. 
+============================================================ 
+METER 3 — ANUṢṬUBH / ŚLOKA (अनुष्टुभ् / श्लोक) 
+============================================================ 
+The MOST IMPORTANT classical meter (dominates Rāmāyaṇa, Mahābhārata, Gītā, 
+Purāṇas). 
+Type: Varṇavṛtta 
+Lines: 4 
+Syllables per pāda: 8 
+Total: 32 
+IDENTIFICATION RULES 
+AI should classify as Anuṣṭubh when: 
+1. Verse has 4 lines 
+2. Each line ≈ 8 syllables 
+3. 8th syllable is always Guru 
+4. 3rd pāda often begins with Guru 
+STRUCTURE 
+• Traditional break: 4 + 4 syllables in each pāda. 
+Sanskrit Example — Bhagavad Gītā 1.1 
+धर्मक्ष त्र  क रुक्ष त्र  िर्व त  य य त्सवः । 
+र
+् र्क ः प ण्डव श्च व िकर्क वमत िञ्जय॥ 
+FULL SCANSION (Dataset Standard) 
+Pāda 1 
+ध | र्म | क्ष  | त्र  | क  | रु | क्ष  | त्र  
+Pattern: – – – – ⏑ – – – 
+Pāda 2 
+ि | र् | व  | त  | य  | य  | त्स | वः 
+Pattern: ⏑ ⏑ – – ⏑ ⏑ – – 
+Pāda 3 
+र
+्  | र् | क  | ाः | प ण् | ड | व  | श्च व 
+Pattern: – ⏑ – – – ⏑ – – 
+Pāda 4 
+िक | र् | क  | वम | त | ि | ञ्ज | य 
+Pattern: ⏑ ⏑ ⏑ – ⏑ ⏑ – – 
+METER 4 — TRIṢṬUBH (वत्रष्टुभ्) 
+============================================================ 
+Triṣṭubh is the single most common Vedic meter, accounting for nearly 40% of 
+Ṛgveda hymns. 
+It is the central meter of Vedic poetry, linked to heroic, battle, and cosmic hymns. 
+BASIC STRUCTURE 
+Type: Varṇavṛtta 
+Lines: 4 pādas 
+Syllables per pāda: 11 
+Total syllables: 44 
+Triṣṭubh = 11 + 11 + 11 + 11 syllables 
+IDENTIFICATION RULES (AI-Ready) 
+Your AI should classify a verse as Triṣṭubh when: 
+1. It has 4 lines, and 
+2. Each line has 11 syllables, 
+3. Final syllable of each pāda is Guru, 
+4. Caesura typically occurs around 4th–5th syllable (“4+4+3”). 
+Triṣṭubh is very regular in syllable count. 
+FUNCTIONAL USE 
+Used for: 
+• heroic narrative 
+• invocation hymns 
+• philosophical Sūktas 
+• battle descriptions 
+MOST AUTHENTIC EXAMPLE – Ṛgveda 1.1.1 
+अििर् ळ  प र िित  यज्ञस्य द वर्ृत्वििर््। 
+ि त र  रत्नध तर्र््॥ 
+Example Pāda Scan: 
+अिि | र्  | ळ  | प र  | िितर्् 
+= 11 syllables 
+Each pāda ≈ 11 syllables → Triṣṭubh confirmed 
+DATASET SUMMARY — TRIṢṬUBH 
+• lines: 4 
+• syllables: 11 each 
+• total: 44 
+• absolutely central Vedic meter 
+• caesura ≈ 4/4/3 
+============================================================ 
+METER 5 — JAGATĪ (जगती) 
+============================================================ 
+Jagatī is essentially Triṣṭubh with one extra syllable per pāda. 
+It is the second most important Vedic meter. 
+STRUCTURE 
+Type: Varṇavṛtta 
+Lines: 4 
+Syllables per pāda: 12 
+Total: 48 syllables 
+Jagatī = 12 + 12 + 12 + 12 
+IDENTIFICATION RULES 
+1. If a verse has 4 lines, and 
+2. Each has 12 syllables, 
+3. And no special Śakvarī features → It is Jagatī. 
+This meter is very stable. 
+Your AI will catch it instantly when scanning syllables. 
+FUNCTIONAL USE 
+Used in: 
+• hymns of grandeur 
+• elaborate philosophical texts 
+• descriptive poetry 
+EXAMPLE – Ṛgveda 1.32.1 
+इन्द्रः शत्र  रज्यि न् रज्यि न् रज्यि न्। 
+िवश्व  वत म िन ििि शक्र दस्य न्॥ 
+Example pāda: 
+इन्द्रः | शत्र न् | रज्यि न् | रज्यि न् 
+= 12 syllables → Jagatī 
+DATASET SUMMARY — JAGATĪ 
+• Lines: 4 
+• Syllables: 12 
+• Total: 48 
+• Second most frequent Vedic line meter 
+============================================================ 
+METER 6 — BṚHATĪ (बृिती) 
+============================================================ 
+Bṛhatī is shorter than Triṣṭubh and Jagatī. 
+STRUCTURE 
+Type: Varṇavṛtta 
+Lines: 4 
+Syllables per pāda: mostly 9 or 10 
+Total: ~36–40 syllables 
+Most standard pattern: 
+Bṛhatī = 4 pādas × 9 syllables 
+A 10-syllable variant also exists. 
+IDENTIFICATION RULES 
+Your AI should classify as Bṛhatī when: 
+• There are 4 lines, 
+• Syllables ≈ 9–10, 
+• But NOT 11 (Triṣṭubh) or 12 (Jagatī). 
+Thus: 
+Meter Syllables/pāda 
+Bṛhatī 9–10 
+Triṣṭubh 11 
+Jagatī 
+12 
+EXAMPLE – RV 1.22.16 
+इद  िवष्ण िवमचक्रर्  त्र ध  नद्दध र्ि । 
+इद  िवष्ण िवमचक्रर्  त्रय ण   पद न र््॥ 
+Each pāda ≈ 9 syllables → Bṛhatī 
+DATASET SUMMARY — BṚHATĪ 
+• Lines: 4 
+• Syllables: 9–10 
+• Total: ~36–40 
+• Neighbor to Triṣṭubh/Jagatī 
+============================================================ 
+METER 7 — PAṄKTI (पङ्् ष्णतः ) 
+============================================================ 
+A unique 5-lined Vedic meter. 
+STRUCTURE 
+Type: Varṇavṛtta 
+Lines: 5 
+Syllables per pāda: 10 
+Total: 50 syllables 
+Paṅkti = 10 × 5 
+IDENTIFICATION RULES 
+AI should classify: 
+• 5 lines + 10 syllables each = Paṅkti 
+• (Not Virāj, because Virāj is 10 syllables × 4 lines) 
+EXAMPLE — RV 9.97.44 
+ि र्ः पवत  ििनत  र्त न र््। 
+ििनत  िदव  ििनत  पृििव्य ः । 
+ििनत  र्ध न  ििनत  िर् द् ः । 
+ििनत  ििन्ध न   ििनत  ओषध न । 
+ििनत  नः ििनत  द वः ि र् ॥ 
+Each pāda ≈ 10 syllables → Paṅkti 
+DATASET SUMMARY — PAṄKTI 
+• Lines: 5 
+• Syllables: 10 each 
+• Total: 50 
+• Only major 5-lined meter in Vedas 
+============================================================ 
+METER 8 — VIRĀJ (विराज्) 
+============================================================ 
+A 10-syllable meter similar to Paṅkti, but with 4 pādas. 
+STRUCTURE 
+Lines: 4 
+Syllables/pāda: 10 
+Total: 40 
+Difference from Paṅkti: 
+Meter Lines Syllables Total 
+Paṅkti 5 
+Virāj 4 
+10 
+10 
+50 
+40 
+IDENTIFICATION RULES 
+Your AI should classify: 
+• 4 lines × 10 syllables → Virāj 
+• 5 lines × 10 syllables → Paṅkti 
+EXAMPLE — RV 1.3.1 
+अििर् मध म िदवः कक त्पितः पृििव्य  अयर््। 
+अप   र त  िि ििन्वित॥ 
+Each pāda = 10 syllables → Virāj 
+DATASET SUMMARY — VIRĀJ 
+• Lines: 4 
+• Syllables: 10 each 
+• Related to Paṅkti 
+============================================================ 
+9. MAHĀVIRĀJ (मिाविराज्) 
+============================================================ 
+Mahāvirāj is the expanded form of Virāj. 
+STRUCTURE 
+Type: Varṇavṛtta 
+Lines: 4 
+Syllables per pāda: 11 
+Total: 44 
+This makes it numerically identical to Triṣṭubh (11×4). 
+So why is Mahāvirāj separate? 
+Because: 
+• Caesura locations differ 
+• Rhythmic structure is different 
+• Internal gaṇa patterns differ 
+It is not used nearly as frequently as Triṣṭubh. 
+IDENTIFICATION RULES (AI-Friendly) 
+Your AI should classify a verse as Mahāvirāj when: 
+1. 4 lines, 
+2. 11 syllables each, 
+3. But does not follow classical Triṣṭubh caesura (4 + 4 + 3), 
+4. Or appears in known Mahāvirāj contexts (certain Saṁhitā-s). 
+Thus: 
+• Triṣṭubh = common heroic 11-syllable meter 
+• Mahāvirāj = rarer ritual/solemn 11-syllable form 
+Sanskrit Example — Yajurvedic usage 
+(11 syllables) 
+इन्द्रं िधवन्तो अप्तुरः क्रत्वा यजन्तो नमसा वििस्वतः । 
+Each pāda ≈ 11 syllables but not exact Triṣṭubh structure → Mahāvirāj. 
+DATASET SUMMARY — Mahāvirāj 
+• Lines: 4 
+• Syllables: 11 
+• Not exactly Triṣṭubh structurally 
+• Ritual & solemn hymns 
+============================================================ 
+10. ATYAṢṬI (अत्यवटः ) 
+============================================================ 
+Atyaṣṭi famously varies in structure and appears in ritualistic contexts. 
+STRUCTURE 
+Two major forms occur: 
+Form 1 — 8 syllables × 4 
+• Similar to Anuṣṭubh numerically (8×4), but NOT classical śloka. 
+• Used in yajña recitation. 
+Form 2 — 12 syllables × 4 
+• Similar to Jagatī numerically (12×4), but follows different gaṇa rules. 
+Thus: 
+Atyaṣṭi = 8×4 or 12×4, depending on tradition 
+IDENTIFICATION RULES 
+Your AI should classify Atyaṣṭi when: 
+1. The pādas are 8 syllables but 
+o verse is ritualistic 
+o structure does not match Anuṣṭubh 
+o no śloka-like L/G tendencies 
+OR 
+2. The pādas are 12 syllables, 
+o but not standard Jagatī, 
+o and show special internal cadence. 
+Sanskrit Example 
+इन्द्र य स्व ि । 
+िवष्णव  स्व ि । 
+ि र् य स्व ि । 
+अिय  स्व ि ॥ 
+Each pāda = 8 syllables, but clearly not a śloka → Atyaṣṭi (8×4). 
+DATASET SUMMARY — Atyaṣṭi 
+• Lines: 4 
+• Syllables: 8 or 12 
+• Different from Anuṣṭubh & Jagatī 
+• Strong ritual usage 
+============================================================ 
+11. ATIJAGATĪ (अवतजगती) 
+============================================================ 
+Atijagatī extends Jagatī (12 syllables) by one more syllable. 
+STRUCTURE 
+Lines: 4 
+Syllables/pāda: 13 
+Total: 52 
+Only Vedic meter with 13 syllables per pāda. 
+This makes it extremely easy for algorithmic detection. 
+IDENTIFICATION RULES 
+Your AI should classify a verse as Atijagatī when: 
+1. It has 4 lines, 
+2. 13 syllables in every line. 
+→ No other major meter uses 13. 
+Sanskrit Example 
+अय  र्  िितर्ष् म तर्ि  र्ि यत  िख  द व ऽिवत  पृणक्त  नः । 
+First pāda ≈ 13 syllables → Atijagatī. 
+DATASET SUMMARY — Atijagatī 
+• Lines: 4 
+• Syllables: 13 
+• Total: 52 
+• Very rare, extremely distinctive 
+============================================================ 
+12. ŚAKVARĪ (शक्वरी) 
+============================================================ 
+Śakvarī is a very important ecstatic/repetitive Vedic meter, often used in hymns 
+invoking intensity, repeated invocation, or praise. 
+STRUCTURE 
+Śakvarī is not defined only by syllable count but also by repetition patterns. 
+Most common form: 
+12-syllable pādas (like Jagatī) 
+BUT with: 
+• reduplication 
+• recurring words 
+• rhythmic intensification 
+Total = 48 syllables, but NOT Jagatī due to structure. 
+IDENTIFICATION RULES (AI) 
+Classify a verse as Śakvarī when: 
+1. Pādas appear to have ~12 syllables, 
+2. Verse shows repetitions or intensification, 
+3. Semantic or phonetic patterns repeat strongly, 
+4. Structure doesn’t match normal Jagatī cadence. 
+Sanskrit Example — RV 10.168 
+(Repetitive structure) 
+भ वमन्न  भ वमन्न  भ वमन्न । 
+द व ष  भ वमन्न । 
+अििभ मवमन्न ॥ 
+Repetition indicates Śakvarī rather than Jagatī. 
+DATASET SUMMARY — Śakvarī 
+• Lines: typically 3–4 
+• Syllables: ≈12 each 
+• Repetitive/emphatic meter 
+• Vedic ecstatic hymn structure 
+============================================================ 
+13. ATIŚAKVARĪ (अवतशक्वरी) 
+============================================================ 
+Atiśakvarī is the extended version of Śakvarī. 
+STRUCTURE 
+It can have: 
+• Longer pādas (12–16 syllables) 
+• More repetitions 
+• Greater intensification sequences 
+Often: 
+Atijagatī length + Śakvarī repetition style 
+IDENTIFICATION RULES (AI) 
+Classify a verse as Atiśakvarī when: 
+1. Pādas seem longer than 12 syllables, AND 
+2. Strong repetition patterns exist, AND 
+3. Structure does not match known 13-syllable Atijagatī patterns. 
+In short: 
+• If it looks like Jagatī extended with repetition, classify as Atiśakvarī. 
+Sanskrit Example — RV 10.95 (extended repeating patterns) 
+इत  द व  अयत्वि, इत  द व  अयत्वि। 
+इत  द व  अयि  नः । 
+Such extended repetition → Atiśakvarī. 
+DATASET SUMMARY — Atiśakvarī 
+• Lines: 3–4 
+• Syllables: 13–16 
+• Repetition-based 
+• Extended Śakvarī 
+============================================================ 
+NEXT 5 CLASSICAL METERS (PART 6) 
+1. Indravajrā (इन्द्रिज्रा) 
+2. Upendravajrā (उपेन्द्रिज्रा) 
+3. Vasantatilakā (िसन्तवतलका) 
+4. Śārdūlavikrīḍita (शादद वलविक्रीवित) 
+5. Mandākrāntā (मन्दाक्रान्ता) 
+============================================================ 
+These five are absolutely essential for any Sanskrit meter detection system. 
+We follow this format: 
+• Structure 
+• L/G pattern 
+• Gaṇa pattern 
+• Identification rules 
+• Sanskrit example 
+• Dataset summary 
+============================================================ 
+1. INDRAVAJRĀ (इन्द्रिज्रा) 
+============================================================ 
+One of the most important classical meters. 
+Often used in Mahākāvyas and philosophical poetry. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 11 
+Matches Triṣṭubh in count, BUT with fixed L/G pattern. 
+Pattern in each pāda is: 
+– – ⏑ – – – ⏑ ⏑ – ⏑ – 
+(Pingala notation: 
+ta ta ja ta ta na ja ta) 
+IDENTIFICATION RULES (AI) 
+Classify as Indravajrā when: 
+1. 11 syllables per pāda AND 
+2. Pattern = 
+G G L G G G L L G L G 
+3. Internal caesura after 5th syllable is common. 
+SANSKRIT EXAMPLE 
+अस्त्य त्तर्श्ल किविचत्रक ितम ः । 
+यशः प्रय र्ग ऽिप तपत्वस्वन ऽिप॥ 
+Each pāda follows Indravajrā’s strict pattern. 
+DATASET SUMMARY — Indravajrā 
+• Lines: 4 
+• Syllables: 11 each 
+• Pattern: – – ⏑ – – – ⏑ ⏑ – ⏑ – 
+• One of the most important meters in classical poetry 
+============================================================ 
+2. UPENDRAVAJRĀ (उपेन्द्रिज्रा) 
+============================================================ 
+Sister meter of Indravajrā. 
+STRUCTURE 
+Lines: 4 
+Syllables: 11 
+Pattern: 
+⏑ – ⏑ – – – ⏑ ⏑ – ⏑ – 
+Key difference: First syllable is Laghu, not Guru. 
+(Pingala: 
+na ta ja ta ta na ja ta) 
+IDENTIFICATION RULES 
+AI should classify Upendravajrā when: 
+1. Syllables = 11 
+2. Pattern starts with Laghu (Indravajrā starts with Guru) 
+3. Entire pattern: 
+⏑ – ⏑ – – – ⏑ ⏑ – ⏑ – 
+Thus: 
+Meter 
+Indravajrā 
+First syllable 
+Guru 
+Upendravajrā Laghu 
+SANSKRIT EXAMPLE 
+व र्गि म िवव िम्पृक्त । 
+व र्गिमप्रितपत्तय ॥ 
+This matches Upendravajrā’s initial Laghu pattern. 
+DATASET SUMMARY — Upendravajrā 
+• Lines: 4 
+• Syllables: 11 
+• Pattern: ⏑ – ⏑ – – – ⏑ ⏑ – ⏑ – 
+• Identical to Indravajrā except first syllable 
+============================================================ 
+3. VASANTATILAKĀ (िसन्तवतलका) 
+============================================================ 
+One of the most graceful meters in classical poetry. 
+Kālidāsa uses it frequently. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 14 
+Pattern: – – – – ⏑ ⏑ – ⏑ – – ⏑ ⏑ – ⏑ 
+(Pingala: 
+ma ma ta sa bha ja sa) 
+IDENTIFICATION RULES 
+Your AI should classify Vasantatilakā when: 
+1. Each pāda = 14 syllables 
+2. Pattern fits: 
+G G G G L L G L G G L L G L 
+This meter has a characteristic rolling rhythm. 
+SANSKRIT EXAMPLE 
+कस्त र ितलक  लल टपटल । 
+वक्षः स्थल  क स्त भर््॥ 
+DATASET SUMMARY — Vasantatilakā 
+• Lines: 4 
+• Syllables: 14 
+• One of the most refined meters 
+• Highly important in Mahākāvyas 
+============================================================ 
+4. ŚĀRDŪLAVIKRĪḌITA (शादद वलविक्रीवित) 
+============================================================ 
+One of the grandest and most majestic Sanskrit meters. 
+Used by poets for grandeur, royal descriptions, and dramatic scenes. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 19 (extremely distinctive) 
+Pattern: – ⏑ – – – ⏑ ⏑ – – ⏑ – ⏑ ⏑ – – ⏑ – – – 
+This meter carries the rhythmic force of a “playful tiger” (śārdūla-vikrīḍita). 
+IDENTIFICATION RULES 
+AI should classify as Śārdūlavikrīḍita when: 
+1. Each pāda has 19 syllables 
+2. Pattern contains characteristic heavy gaṇas. 
+This is one of the easiest classical meters to detect because of its 19-syllable length. 
+SANSKRIT EXAMPLE 
+व र्गि म िवव िम्पृक्त  व र्गिमप्रितपत्तय । 
+िर्गतः िपतर  वन्द  प वमत परर् श्वर ॥ 
+This is the most famous Śārdūlavikrīḍita verse by Kālidāsa. 
+DATASET SUMMARY — Śārdūlavikrīḍita 
+• Lines: 4 
+• Syllables: 19 
+• Very grand classical meter 
+• Extremely easy to detect due to length 
+============================================================ 
+5. MANDĀKRĀNTĀ (मन्दाक्रान्ता) 
+============================================================ 
+A beloved meter, used by Kālidāsa for Meghadūta. 
+Considered soft, slow-moving, full of longing — very distinctive. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 17 
+Pattern: – – ⏑ ⏑ – ⏑ ⏑ – – ⏑ – – ⏑ ⏑ – – ⏑ 
+Mandākrāntā means “slow-moving”, like a cloud — perfect for Meghadūta’s mood. 
+IDENTIFICATION RULES 
+AI should classify Mandākrāntā when: 
+1. Syllables = 17 per pāda 
+2. Pattern: 
+G G L L G L L G G L G G L L G G L 
+Very distinctive and rare. 
+SANSKRIT EXAMPLE 
+किश्चत् क ि िवरिर्ग रुण  स्व िधक र त् प्रर्त्तः । 
+श प न स्तङ्गिर्तर्ििर्  वषमभ ग्य ण भ यः ॥ 
+Opening verse of Kālidāsa’s Meghadūta. 
+DATASET SUMMARY — Mandākrāntā 
+• Lines: 4 
+• Syllables: 17 
+• Signature meter of Meghadūta 
+• Highly recognizable 
+============================================================ 
+6. MĀLINĪ (मावलनी) 
+============================================================ 
+A melodious meter used frequently in ornate poetry. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 15 
+The pattern follows a structured gaṇa sequence: – – ⏑ – ⏑ ⏑ – ⏑ ⏑ – – ⏑ – – ⏑ 
+Common gaṇa breakdown: 
+ma | ta | ja | bha | ta | ja | ta 
+IDENTIFICATION RULES (AI) 
+Your model should identify Mālinī when: 
+1. Each pāda contains exactly 15 syllables. 
+2. The pattern of L/G is close to: 
+G G L G L L G L L G G L G G L 
+3. The rhythm feels “woven/garland-like” (malā = garland). 
+SANSKRIT EXAMPLE 
+कस्त र ितलक  लल टपटल  वक्षः स्थल  क स्त भर््। 
+न ि ग्र  वरर् त्वक्तक  कणमय र्गल  व ण   कर  कङ्कणर््॥ 
+(Example of Mālinī from devotional poetry) 
+DATASET SUMMARY — Mālinī 
+• Lines: 4 
+• Syllables: 15 
+• Sweet, melodic meter 
+• Very common in Bhakti and ornate Sanskrit poetry 
+============================================================ 
+7. ŚIKHARIṆĪ (वशखररणी) 
+============================================================ 
+Śikhariṇī is a highly structured 17-syllable meter, distinct from Mandākrāntā. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 17 
+Gaṇa pattern: 
+⏑ – ⏑ – – ⏑ ⏑ – – ⏑ ⏑ – – ⏑ ⏑ – – 
+This meter has a "mountain-peak rising" rhythm (śikhara = peak). 
+IDENTIFICATION RULES 
+Your AI should classify Śikhariṇī when: 
+1. Each pāda = 17 syllables, 
+2. Pattern begins with ⏑ – ⏑ – 
+3. Central cluster of double laghus is present. 
+This meter differs from Mandākrāntā: 
+Meter 
+Syllables Feel 
+Mandākrāntā 17 
+Śikhariṇī 
+17 
+slow, gliding 
+energetic, rising 
+SANSKRIT EXAMPLE 
+क ि रद र्गमिवषर्प्रपति र  त । 
+द
+ृष्ट्व  पद  व्यिितर् निय िर्गनस्त ॥ 
+DATASET SUMMARY — Śikhariṇī 
+• Lines: 4 
+• Syllables: 17 
+• Recognizable rising rhythm 
+• Distinct from Mandākrāntā 
+============================================================ 
+8. HARIṆĪ (िररणी) 
+(Also called Mṛgāṅkī by some authorities) 
+============================================================ 
+Hariṇī is a metronomic 14-syllable meter, lighter and brisker than Vasantatilakā. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 14 
+Standard pattern: 
+⏑ – ⏑ – – ⏑ ⏑ – ⏑ ⏑ – – ⏑ – 
+Gaṇas often: 
+na | ta | ja | bha | sa | ja | bha 
+IDENTIFICATION RULES (AI) 
+1. Each pāda has 14 syllables, 
+2. First 4 syllables = ⏑ – ⏑ –, 
+3. Lightweight flow unlike Vasantatilakā (which is heavier). 
+SANSKRIT EXAMPLE 
+र
+्न्द  र्न्द  विित र्लय िनलः ि ख य। 
+श
+्
+य र्  रम्यर्् ि न्दरतन र्न र्गृह्य क िः॥ 
+DATASET SUMMARY — Hariṇī 
+• Lines: 4 
+• Syllables: 14 
+• Lighter alternative to Vasantatilakā 
+• Useful in lyrical passages 
+============================================================ 
+9. PṚTHVĪ (पृथ्वी) 
+============================================================ 
+A classical meter with 11 syllables per pāda, different from Triṣṭubh and Indravajrā. 
+STRUCTURE 
+Lines: 4 
+Syllables/pāda: 11 
+But with a unique gaṇa arrangement: 
+⏑ – – ⏑ ⏑ – ⏑ – ⏑ ⏑ – 
+(Pingala: ya | ja | sa | ja | sa) 
+IDENTIFICATION RULES 
+AI should classify as Pṛthvī when: 
+1. Each pāda = 11 syllables, 
+2. Pattern begins with ⏑ – –, 
+3. Does not match Indravajrā or Upendravajrā. 
+Comparison: 
+Meter 
+Triṣṭubh 
+Indravajrā 
+Syllables Starting Pattern 
+11 
+11 
+Upendravajrā 11 
+Pṛthvī 
+11 
+varies, Vedic – – ⏑ 
+⏑ – ⏑ 
+⏑ – – 
+SANSKRIT EXAMPLE 
+र
+्
+ग ः पश्यि र्िवरतर्ितर्ध्यर्  िनत्यश द्ध र््। 
+िवद्   द व   िवर्लतरर्व प्न ित भक्त्य  िनिर्ग म त्॥ 
+DATASET SUMMARY — Pṛthvī 
+• Lines: 4 
+• Syllables: 11 
+• Starting pattern ⏑ – – 
+• Distinct from Indravajrā/Upendravajrā 
+============================================================ 
+10. VAṂŚASTHA (िंशस्थ) 
+============================================================ 
+One of the most important 12-syllable classical meters, used often by Bhāravi and 
+Māgha. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 12 
+Gaṇa pattern (most common): – ⏑ – – ⏑ ⏑ – ⏑ – – ⏑ – 
+This meter has a “pillar-like” rhythmic stability (vaṃśa = bamboo/staff). 
+IDENTIFICATION RULES (AI) 
+1. Each pāda = 12 syllables 
+2. First three syllables follow – ⏑ –, distinguishing it from Jagatī (Vedic). 
+3. Central double-laghu appears mid-pāda. 
+11. UPAJĀTI (उपजावत) 
+============================================================ 
+One of the most important meters in classical poetry, especially in Bhāravi and 
+Māgha. 
+Upajāti is actually a family of meters, combining: 
+• Indravajrā, and 
+• Upendravajrā 
+in alternating fashion. 
+STRUCTURE 
+Lines: 4 
+Syllables: 11 per pāda 
+(Same as Indravajrā/Upendravajrā) 
+A typical Upajāti stanza alternates: 
+Indravajrā – Upendravajrā – Indravajrā – Upendravajrā 
+or any mix of the two. 
+PATTERNS 
+Indravajrā pattern: – – ⏑ – – – ⏑ ⏑ – ⏑ – 
+Upendravajrā pattern: 
+⏑ – ⏑ – – – ⏑ ⏑ – ⏑ – 
+IDENTIFICATION RULES (AI) 
+Your AI should label a verse as Upajāti when: 
+1. Each pāda has 11 syllables, AND 
+2. At least two different patterns occur among the four lines: 
+o some starting with Guru (Indravajrā) 
+o some starting with Laghu (Upendravajrā) 
+Thus: 
+Meter 
+Indravajrā 
+First syllable 
+Guru 
+Upendravajrā Laghu 
+Upajāti 
+mixture of both 
+SANSKRIT EXAMPLE — Bhāravi, Kirātārjunīya 
+अि मनिौ पृिर्ग िित्य िवद् न   र्ग णद षय ः । 
+उभ विप िर्  प्र प्य द व  तत्र पलक्ष्यत ॥ 
+The pādas shift between Indravajrā and Upendravajrā → Upajāti. 
+DATASET SUMMARY — UPAJĀTI 
+• Lines: 4 
+• Syllables: 11 
+• Mixture of Indravajrā & Upendravajrā patterns 
+• Very important in epic poetry 
+============================================================ 
+12. VIYOGINĪ (वियोवगनी) 
+============================================================ 
+A classical 14-syllable meter with a “soft brokenness”, used for themes of sorrow, 
+longing, and separation. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 14 
+Pattern: – ⏑ – – ⏑ ⏑ – – ⏑ – – ⏑ ⏑ – 
+This meter contrasts Hariṇī and Vasantatilakā. 
+IDENTIFICATION RULES 
+Your AI should classify a verse as Viyoginī when: 
+1. Each pāda has 14 syllables 
+2. The initial pattern is – ⏑ – – 
+3. The middle contains the ⏑ ⏑ – – cluster 
+4. Ends with ⏑ ⏑ – 
+SANSKRIT EXAMPLE 
+ि नस्त्र वग्य म िनित न िि र्ि च्छ्व िवशर्ग ः । 
+क ि क प न्मित इि िित  न श्न वत  नर ः ॥ 
+DATASET SUMMARY — VIYOGINĪ 
+• Lines: 4 
+• Syllables: 14 
+• Emotional, expressive meter 
+• Good classifier for subtle lyrical poetry 
+============================================================ 
+13. RATHODDHATĀ (रथोद्धता) 
+============================================================ 
+A forceful, energetic 12-syllable meter. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 12 
+Pattern: – – ⏑ – – ⏑ – – – ⏑ ⏑ – 
+Strong Guru clusters give the feeling of a chariot “charged forward” (ratha-uddhata). 
+IDENTIFICATION RULES 
+Your AI should classify Rathoddhatā when: 
+1. Each pāda = 12 syllables 
+2. Pattern begins with – – ⏑ – – 
+3. Central heavy section – – – appears 
+4. Ends with ⏑ ⏑ – 
+SANSKRIT EXAMPLE 
+क ल  पवमतर्त्य ग्र  िङ्क्क्र ि  ििर ण त । 
+द
+ृष्ट्व  द व स्त  िवस्म य  िग्म स्त  त  र्ि ििन ॥ 
+DATASET SUMMARY — RATHODDHATĀ 
+• Lines: 4 
+• Syllables: 12 
+• Very energetic meter 
+• Ideal for dramatic descriptions 
+============================================================ 
+14. ŚĀLINĪ (शावलनी) 
+============================================================ 
+A highly refined 11-syllable meter associated with grace and elegance. 
+STRUCTURE 
+Lines: 4 
+Syllables/pāda: 11 
+Pattern: 
+⏑ – ⏑ – ⏑ ⏑ – ⏑ – ⏑ – 
+Gaṇa structure: 
+na | ta | sa | ja | ta | ta 
+IDENTIFICATION RULES 
+Classify a verse as Śālinī if: 
+1. Pādas = 11 syllables 
+2. Initial pattern = ⏑ – ⏑ – 
+3. Contains the ⏑ ⏑ – cluster in the middle 
+4. Very smooth cadence compared to Upendravajrā 
+SANSKRIT EXAMPLE 
+क ि  ि  र्र् ि िवत  ि कृ ितन   ि व न त प पि । 
+िद्भक्तस्य र्न िर ि ितपि  च ष्टः िद  दृश्यत ॥ 
+DATASET SUMMARY — ŚĀLINĪ 
+• Lines: 4 
+• Syllables: 11 
+• Graceful, refined pattern 
+• Less forceful than Indravajrā/Upendravajrā 
+============================================================ 
+15. DRUTAVILAMBITA (द्रुतविलष्णित) 
+============================================================ 
+A dynamic 14-syllable meter with alternating fast (druta) and slow (vilambita) segments. 
+STRUCTURE 
+Lines: 4 
+Syllables/pāda: 14 
+Pattern: – ⏑ ⏑ – – ⏑ – – ⏑ ⏑ – – ⏑ – 
+The interplay of double laghu (⏑⏑) and double guru (– –) creates a rhythmic 
+acceleration-deceleration. 
+IDENTIFICATION RULES 
+Your AI should classify as Drutavilambita when: 
+1. 14 syllables / pāda 
+2. Alternating clusters: 
+o ⏑ ⏑ 
+o – – 
+3. Pattern shifts from fast to slow segments 
+This meter is very distinctive. 
+SANSKRIT EXAMPLE 
+ि य ग्म  भवत ि भत्वक्तक शल ः ि व्य  िि द व न र्गः । 
+द व ऽस्म कर्वत्यिवघ्नर्त्वखल  ल कस्य श क पिः ॥ 
+DATASET SUMMARY — DRUTAVILAMBITA 
+• Lines: 4 
+• Syllables: 14 
+• Fast-slow rhythmic alternation 
+• Ideal for medium-paced poetic narration 
+16. ŚĀRDŪLĀNTIKĀ (शादद वलाष्णन्तका) 
+============================================================ 
+A lighter counterpart of the majestic Śārdūlavikrīḍita, used often in refined lyrical 
+contexts. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 12 
+Pattern (most common): – ⏑ – – ⏑ ⏑ – ⏑ – – ⏑ – 
+Gaṇa breakdown: 
+ta | ja | sa | ja | ta | ja 
+IDENTIFICATION RULES (AI) 
+Your AI should classify Śārdūlāntikā when: 
+1. Each pāda = 12 syllables 
+2. Beginning pattern = – ⏑ – – 
+3. Middle has ⏑ ⏑ – 
+4. Rhythm less grand than Vaṃśastha or Rathoddhatā. 
+SANSKRIT EXAMPLE 
+द व भ्यः ि र्न र्गितप्रणियन  यज्ञस्य ि त ः िद । 
+त भ्य  िनत्यिवन तभ वर्नि   त िष्ट  प्रदत्त  प्रभ ः ॥ 
+DATASET SUMMARY — ŚĀRDŪLĀNTIKĀ 
+• Lines: 4 
+• Syllables: 12 
+• Graceful variation of Shardul meters 
+• Clear gaṇa pattern 
+============================================================ 
+17. TOTAKA (तोटक) 
+(Also known for Adi Shankaracharya’s Totakashtakam) 
+============================================================ 
+A very rhythmic, dance-like meter, easily recognizable. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 12 
+BUT with a characteristic pattern: – ⏑ ⏑ – – ⏑ ⏑ – – ⏑ ⏑ – 
+Notice the repeated double-laghu (⏑⏑) clusters. 
+Gaṇas resemble: 
+ja | sa | ja | sa | ja | sa 
+IDENTIFICATION RULES 
+AI should classify Totaka when: 
+1. Each pāda = 12 syllables 
+2. Pattern includes ⏑⏑ repeated at regular intervals 
+3. No Jagatī-like structure 
+4. Light, bouncing rhythm 
+FAMOUS EXAMPLE — Totakashtakam verse 
+िविदत त्वखलश स्त्रि ध िलध । 
+र
+्िित पिनषत्किित िमिनध ॥ 
+(One of Śaṅkarācārya’s compositions) 
+DATASET SUMMARY — TOTAKA 
+• Lines: 4 
+• Syllables: 12 
+• Multiple double-laghu clusters 
+• Classical devotional meter 
+============================================================ 
+18. KUSUMĀṢṬI (कुसुमावट) 
+============================================================ 
+A gentle 8-syllable meter often used in lyrical compositions. 
+STRUCTURE 
+Lines: 4 
+Syllables per pāda: 8 
+Pattern: 
+⏑ ⏑ – ⏑ – – ⏑ – 
+Gaṇa sequence: 
+na | bha | sa 
+IDENTIFICATION RULES 
+Your AI should classify Kusumāṣṭi when: 
+1. Each pāda = 8 syllables 
+2. Pattern is light-heavy alternation, 
+3. NOT Anuṣṭubh (which is 4 lines × 8 syllables but with a different cadence) 
+So: 
+Meter 
+Syllables Notes 
+Anuṣṭubh 8 
+Kusumāṣṭi 8 
+Classical śloka rules, 4+4 split 
+Very different gaṇa pattern 
+SANSKRIT EXAMPLE 
+स
+्
+म र प ङ्ग  ल लदृश । 
+च रुच र्रचिक्रतक िल ॥ 
+DATASET SUMMARY — Kusumāṣṭi 
+• Lines: 4 
+• Syllables: 8 
+• Distinct from Anuṣṭubh via gaṇa rules 
+• Used in delicate, lyrical poetry 
+============================================================ 
+19. MAYŪRA (मयदर) 
+(“Peacock meter”, graceful and elegant) 
+============================================================ 
+STRUCTURE 
+Lines: 4 
+Syllables: 11 per pāda 
+Pattern: – ⏑ – ⏑ ⏑ – – ⏑ – ⏑ – 
+This resembles Śālinī, but differs in middle gaṇas. 
+IDENTIFICATION RULES 
+AI should classify Mayūra when: 
+1. Pāda = 11 syllables 
+2. Starting pattern = – ⏑ – 
+3. Middle has ⏑ ⏑ – – 
+4. Ending = ⏑ – 
+Mayūra is smoother than Pṛthvī or Śālinī. 
+SANSKRIT EXAMPLE 
+त
+्
+वश्लष्ट  िचत्तर्ि त्सव  र्ृद िर्गर   ि नन्दित्क िलिभः । 
+वक्त्र  वक्रकप लपल्लवय र्ग  स्म र  ििर फ िक्षतर््॥ 
+DATASET SUMMARY — Mayūra 
+• Lines: 4 
+• Syllables: 11 
+• Balanced, graceful meter 
+• Common in ornate verses 
+============================================================ 
+20. ĀRYĀ (आयाव) — THE MOST IMPORTANT MĀTRĀ-BASED METER 
+============================================================ 
+This is not a varṇa-vṛtta (syllable meter). 
+Āryā is the most widely used mātrā-vṛtta meter in Sanskrit literature. 
+It appears in: 
+• Hitopadeśa 
+• Jātaka tales 
+• Many dramatic works 
+• Subhāṣitas 
+• Prakrit poetry (Gāhās) 
+Your AI must handle Āryā separately, because counting syllables is NOT enough — 
+mātrā count is required. 
+STRUCTURE OF ĀRYĀ 
+Pādas: 4 
+BUT: 
+• Pādas are grouped as 2 + 2 
+• 1st and 3rd pāda are longer 
+• 2nd and 4th are shorter 
+MĀTRĀ COUNT RULES 
+Pāda 1: 12 mātrās 
+Pāda 2: 18 mātrās 
+Pāda 3: 12 mātrās 
+Pāda 4: 15 mātrās (or 18 depending on variant) 
+Additionally: 
+• The last foot of each pāda is a guru. 
+• Optional resolutions (laghu groups adding up to guru) allowed. 
+MĀTRĀ CALCULATION REMINDER 
+• Laghu syllable = 1 mātrā 
+• Guru syllable = 2 mātrās 
+Examples of laghu syllables: 
+अ, इ, उ, ऋ (if followed by single consonant) 
+Examples of guru syllables: 
+आ, ई, ऊ, ऐ, औ, ॠ, syllables with anusvāra/visarga, or consonant clusters. 
+IDENTIFICATION RULES (AI) 
+Your AI should classify a verse as Āryā when: 
+1. Pāda 1 = ~12 mātrās 
+2. Pāda 2 = ~18 mātrās 
+3. Pāda 3 = ~12 mātrās 
+4. Pāda 4 = ~15–18 mātrās 
+5. No fixed syllable count 
+6. Varṇa-based meters do NOT fit 
+This is the only major classical meter NOT determined by syllable count. 
+SANSKRIT EXAMPLE — Hitopadeśa Opening Āryā 
+िर्त्रल भ  ि ण  िख  ! ब त्वद्धर्त   कि  र्न िषण र््। 
+य ष   न ितवच  हृिद ि िितर्भ द् द वतिर्व॥ 
+This is classical Āryā. 
+DATASET SUMMARY — ĀRYĀ 
+• Lines: 4 (grouped 2+2) 
+• Mātrā pattern: 
+o Pāda 1: 12 
+o Pāda 2: 18 
+o Pāda 3: 12 
+o Pāda 4: 15–18 
+• NOT a syllable meter 
+• Most important mātrāvṛtta meter 
+• Extremely common in classical and Prakrit poetry 
+============================================ 
+21. BHUJANGAPARYĀTA (भुजङ्गप्रयात) 
+============================================ 
+A very popular devotional meter, used in stotras and hymns (e.g., Bhujangaprayāta 
+Stotra). 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 12 
+• Pattern (defining feature): 
+⏑ ⏑ – ⏑ ⏑ – ⏑ ⏑ – ⏑ ⏑ – 
+A meter characterized by repeated double-laghu (⏑⏑), giving a serpentine (bhujanga = 
+snake) movement. 
+Gaṇa breakdown 
+ja | ja | ja | ja 
+AI Identification Rules 
+Identify as Bhujangaprayāta when: 
+• Each line has 12 syllables 
+• Clear repeating pattern of ⏑⏑ – four times 
+• Light, flowing rhythm like a snake’s motion 
+Sanskrit Example 
+ि कण्ठस्य करकर्लच त्वित  न लकण्ठ  भि ऽिर््। 
+(This follows the bhujanga-style ⏑⏑– patterns.) 
+Dataset Summary 
+• Type: Varṇa-vṛtta 
+• Lines: 4 
+• Syllables: 12 
+• Signature pattern: repeated ⏑⏑ – 
+============================================ 
+22. SRAGDHARĀ (स्रग्धरा) 
+============================================ 
+A very heavy and stately classical meter, used for descriptions of grandeur and 
+ornaments. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 21 
+• One of the LONGEST common classical meters. 
+Pattern – – – ⏑ ⏑ – – – ⏑ ⏑ – – – ⏑ ⏑ – – – ⏑ ⏑ – 
+(Sragdharā means “garland-bearing”, hence long and decorative.) 
+AI Identification Rules 
+• If pāda length = 21 syllables, classify immediately as Sragdharā 
+• Very few other meters have this length 
+• Heavy, ornamented cadence 
+Sanskrit Example 
+आनन्द ि कण रल कृ तर् ख  ल ल र्ृद स्म रय । 
+(Example from ornate classical texts) 
+Dataset Summary 
+• Lines: 4 
+• Syllables: 21 
+• Longest major classical meter 
+• Highly recognizable by length alone 
+============================================ 
+23. PUṢPITĀGRĀ (पुष्णिताग्रा) 
+============================================ 
+A lighter meter, often used in expressive poetry. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 12 
+Pattern 
+⏑ – – ⏑ – – ⏑ – – ⏑ – – 
+This resembles Rathoddhatā in weight but starts with a Laghu. 
+AI Identification Rules 
+Identify Puṣpitāgrā when: 
+• 12 syllables per pāda 
+• Initial pattern: ⏑ – – 
+• Even distribution of heavy syllables 
+• Softer than Rathoddhatā 
+Sanskrit Example 
+श
+्
+य र्  प तर्न िर  र्ध ररूप  भि  िद । 
+Dataset Summary 
+• Lines: 4 
+• Syllables: 12 
+• Begins with ⏑–– 
+• Gentle, sweet cadence 
+============================================ 
+24. MĀLINĪ (Variant II) 
+============================================ 
+We previously listed Mālinī (as meter #16). 
+But classical books also recognize a variant form, still used in kāvya. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 15 
+Pattern (Variant II) – ⏑ – – ⏑ ⏑ – ⏑ ⏑ – ⏑ – – ⏑ – 
+Difference from Variant I: 
+• The gaṇa distribution and heavy clusters shift slightly 
+• Central ja-gaṇa appears more strongly 
+AI Identification Rules 
+• If a verse has 15 syllables per pāda 
+• And does not match the earlier Mālinī gaṇa pattern 
+→ classify as Mālinī (Variant II) 
+Sanskrit Example 
+स
+्
+म र  भ ित च वदनिर्न्द वदन  िप्रय य ः । 
+Dataset Summary 
+• Lines: 4 
+• Syllables: 15 
+• Secondary form of Mālinī 
+• Important for completeness of dataset 
+============================================ 
+25. GĪTI (गीवत) 
+============================================ 
+A special group of meters built on song-like rhythmic patterns. 
+There are several subtypes: 
+• Prithvīgīti 
+• Āryāgīti 
+• Upagīti 
+• Udgīti 
+• Rathagīti 
+• Sragdharā-gīti 
+But the common characteristics remain. 
+Structure 
+• Lines: Usually 4, sometimes 3 
+• Syllable count: varies, often mixed 12–18 
+Key Features 
+• Musical cadence 
+• Regular repetition of gaṇas 
+• Often used in drama and lyrical compositions 
+AI Identification Rules 
+Identify Gīti when: 
+• Syllables do NOT match standard classical varṇa meters 
+• Clear repeated gaṇa patterns 
+• Musical rhythm 
+• Common mātrā groupings like 
+4 + 4 + 3 + 3, 6 + 6, etc. 
+Gīti must be categorized via pattern repetition, not strict syllable count. 
+Sanskrit Example 
+भर्गव निप क शव  र्र् र्न िरर् ितमध र  िि। 
+Dataset Summary 
+• Type: Mixed varṇa + mātrā influences 
+• Lines: mostly 4 
+• Highly rhythmic pattern 
+• Recognizable by musical, repeated gaṇas 
+============================================ 
+26. UPAGĪTI (उपगीवत) 
+============================================ 
+A form of Gīti meter, used in lyrical and dramatic compositions. 
+“Upa” indicates a slightly reduced or modified Gīti. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: typically 12–14 
+• The distinguishing feature is the 1+2 gaṇa emphasis. 
+Typical Pattern 
+⏑ – – | ⏑ ⏑ – | ⏑ – – | ⏑ ⏑ – 
+This meter is balanced between light and heavy syllables. 
+Identification Rules (AI) 
+Classify as Upagīti when: 
+1. The verse resembles Gīti but 
+2. Pādas follow a tripodic division of 3 or 4 syllables per segment, 
+3. Syllable count per line is 12–14, but not matching other fixed meters like 
+Vaṃśastha or Totaka. 
+Example (Sanskrit) 
+श ि  ि म्य  र्ध रतरवक्त्र  र्र् स्व िर्न  वन्द । 
+Dataset Summary 
+• Lines: 4 
+• Syllables: 12–14 
+• Gīti sub-type 
+• Tripodic rhythm 
+============================================ 
+27. PṚTHVĪGĪTI (पृथ्वीगीवत) 
+============================================ 
+A heavier variant of Gīti. 
+Structure 
+• Lines: 4 
+• Syllables: typically 14–16 
+Name comes from “Pṛthvī”, meaning “broad, wide”, referring to its broad rhythm. 
+Pattern – – ⏑ ⏑ – – ⏑ – ⏑ ⏑ – – ⏑ – 
+Broad gaṇas dominate the line. 
+Identification Rules (AI) 
+Classify as Pṛthvīgīti if: 
+1. Lines ≈ 14–16 syllables 
+2. Rhythm is slow and heavy, with many Gurus 
+3. Does not match Vasantatilakā or Drutavilambita 
+4. Central structure shows doubled laghu or guru clusters 
+Example (Sanskrit) 
+भ य  भ यः प्रणर्ित िन  भत्वक्तभ व त्वन्वत ऽिर््। 
+Dataset Summary 
+• Lines: 4 
+• Syllables: 14–16 
+• Heavy/massive cadence 
+• Distinct from other 14-syllable meters 
+============================================ 
+28. UDGĪTI (उद्गीवत / ओद्गीवत) 
+============================================ 
+A bright, rising Gīti-type meter. 
+“Udgīti” literally means “a sung verse”. 
+Structure 
+• Lines: 4 
+• Syllables: mostly 12 
+• Emphasis on rising sequences of L-G transitions. 
+Typical Pattern 
+⏑ – ⏑ – – ⏑ – ⏑ – – ⏑ – 
+This gives a “rising” singing rhythm. 
+Identification Rules 
+Your AI should label as Udgīti when: 
+1. 12 syllables per line 
+2. Starting sequence ⏑ – ⏑ – 
+3. Middle segment contains – ⏑ – ⏑ 
+4. A song-like rise occurs in the pattern 
+Example (Sanskrit) 
+उद्ग त  िररर्िणर्य  हृिद र्र् प्रभ ित िनत्य  च। 
+Dataset Summary 
+• Lines: 4 
+• Syllables: ~12 
+• Rising, musical gaṇa pattern 
+• Belongs to Gīti family 
+============================================ 
+29. ŚĀRDŪLAGĪTI (शादद वलगीवत) 
+============================================ 
+This is a composite meter combining elements of Śārdūlavikrīḍita and Gīti. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: ~19–21 
+• But with distributed musical segmentation like Gīti. 
+Pattern (Common Form) – – – ⏑ ⏑ – – ⏑ – – – ⏑ ⏑ – – ⏑ – – – 
+Unlike Śārdūlavikrīḍita (pure varṇa-vṛtta), Śārdūlagīti often allows slight variation for 
+rhythmic singing. 
+Identification Rules 
+Classify as Śārdūlagīti when: 
+1. Line length is long (19–21 syllables), AND 
+2. There is noticeable musical segmentation, not purely heavy Gaṇas 
+3. Not exactly matching Śārdūlavikrīḍita’s fixed pattern 
+In short: 
+• Long + Musical = Śārdūlagīti 
+• Long + Strict structural pattern = Śārdūlavikrīḍita 
+Example (Sanskrit) 
+श ि क र  भ िर्गशयन  पद्मन भ  ि र श  च। 
+Dataset Summary 
+• Lines: 4 
+• Syllables: ~19–21 
+• Musical long meter 
+• Distinct from strict Śārdūlavikrīḍita 
+============================================ 
+30. CAMPAKAMĀLĀ (चम्पकमाला) 
+============================================ 
+A major classical meter with public popularity because of: 
+• Bhakti poetry 
+• Stotra literature 
+• Descriptive verses 
+Campakamālā means “a garland (mālā) of champaka flowers”—the meter indeed flows 
+like a floral garland. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 12 
+• Pattern is very distinct: – ⏑ – – ⏑ ⏑ – – ⏑ – ⏑ – 
+Gaṇa breakdown: 
+ta | sa | ja | ra | ta 
+Identifying Features (AI) 
+Your AI should classify Campakamālā when: 
+1. Each line has 12 syllables 
+2. Starting pattern = – ⏑ – – 
+3. Middle contains the double-laghu ⏑ ⏑ 
+4. Ending has alternating G-L-G structure 
+Distinct from Totaka, because: 
+Meter 
+Totaka 
+Special Feature 
+multiple ⏑⏑ repeated uniformly 
+Campakamālā only one central ⏑⏑, not repeated 
+Sanskrit Example 
+भ य  भ य  नर् िर् श करपद  श द्ध  िशव  श त्विदर््। 
+Dataset Summary 
+• Lines: 4 
+• Syllables: 12 
+• Signature G-L-G ending 
+• Central double-laghu cluster 
+============================================ 
+31. BHĀRGAVĪ (भागविी) 
+============================================ 
+A classical 12-syllable meter with a distinctive alternating pattern. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 12 
+Pattern 
+⏑ ⏑ – ⏑ – – ⏑ – – ⏑ – – 
+AI Identification Rules 
+Classify as Bhārgavī when: 
+1. 12 syllables per pāda 
+2. Starts with ⏑⏑– 
+3. Ends with ⏑–– 
+Example (Sanskrit) 
+िवं द ःख  िवि य हृिद द व  र् दत  िनत्य । 
+Dataset Summary 
+• 12 syllables 
+• Double-laghu at start 
+• Smooth ending pattern 
+============================================ 
+32. MĀTRĀSAMAKA (मात्रासमक) 
+============================================ 
+A mātrā-based meter where all pādas have equal mātrā count. 
+Structure 
+• Pādas: 4 
+• Each pāda = 16 mātrās 
+• No fixed syllable count 
+AI Identification Rules 
+Identify Mātrāsamaka when: 
+1. All four lines have identical mātrā count 
+2. Usually 16 mātrās 
+3. Free variation of Laghu/Guru acceptable 
+Example 
+स
+्
+वत्वस्त र्  अस्त  िवमद । 
+द व  र्   प त  िनत्यशः ॥ 
+Count ~16 mātrās each pāda. 
+Dataset Summary 
+• Mātrāvṛtta 
+• Equal mātrā count in all pādas 
+• No fixed syllable pattern 
+============================================ 
+33. GĀTHĀ (गाथा) 
+(Prakrit & Sanskrit, widely used in narrative poetry) 
+============================================ 
+A major mātrā-vṛtta used in: 
+• Jātakas 
+• Hitopadeśa 
+• Gāhā Sattasaī 
+Gāthā is essential for your dataset. 
+Structure 
+Pāda 1: 12 mātrās 
+Pāda 2: 18 mātrās 
+Pāda 3: 12 mātrās 
+Pāda 4: 18 mātrās 
+(Same as Āryā, but without final-pāda 15–18 constraint.) 
+AI Identification 
+Classify as Gāthā when: 
+1. 12–18–12–18 mātrā pattern 
+2. Slightly more freedom than Āryā in cadence 
+3. Often used in storytelling verses 
+Example 
+ि हृद   िित  वदत्वि नृप  धर्ेण वतमि । 
+यशि   पि  वित्वि ित्प रुष स्त  िनत्य ॥ 
+Dataset Summary 
+• Mātrāvṛtta 
+• 12–18–12–18 mātrās 
+• Narrative meter 
+============================================ 
+34. SRAGVIṆĪ (स्रष्णिणी) 
+============================================ 
+A decorative, long chandas similar to Sragdharā but lighter. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 17 
+Pattern 
+– – – ⏑ ⏑ – – ⏑ – ⏑ ⏑ – – ⏑ – – 
+AI Identification 
+• 17 syllables per pāda 
+• Resembles Sragdharā but shorter (21 → 17) 
+Example 
+न ल लक  किलतक  डलिर्न्द वक्त्र  भि  हृद  द िर््। 
+Dataset Summary 
+• 17 syllables 
+• Ornamental meter 
+• Distinct from Mandākrāntā 
+============================================ 
+35. PRAHARṢIṆĪ (प्रिवषवणी) 
+============================================ 
+A joyful, energetic meter. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 12 
+• Pattern strongly Guru-heavy. 
+Pattern – – – – ⏑ ⏑ – – ⏑ ⏑ – – 
+AI Identification 
+• 12 syllables 
+• First 4 syllables all Guru 
+• Joyous rising cadence 
+Example 
+द व  नः प त  िदनकरत ि द प्तर् ितम ः िद । 
+Dataset Summary 
+• Heavy opening 
+• 12 syllables 
+• Bright, uplifting meter 
+============================================================ 
+PART 13 — METERS 36–40 
+============================================================ 
+============================================ 
+36. VAITAḶĪYĀ (िैटलीया) 
+(Also important in Prakrit poetry) 
+============================================ 
+Structure 
+• Mātrāvṛtta 
+• Pattern: 4+4+4+4 mātrās 
+• Each pāda = 16 mātrās 
+AI Identification 
+• Identify by 4-part segmentation 
+• No fixed syllable count 
+• Used in Prakrit campū and classical gāthā literature 
+Example 
+भद्  र्  िनत्य  भवत  र्ग रुश िनप लन त्॥ 
+Dataset Summary 
+• 16 mātrās 
+• Quadripartite rhythm 
+============================================ 
+37. AUPACCHANDASAKA (औपच्छन्दसक) 
+(A Vedic-origin chandas used occasionally in classical poetry) 
+============================================ 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 8 or 11 
+• Transitional meter between Vedic & classical 
+AI Identification 
+• If 8–11 syllables 
+• With flexible placement of guru/laghu 
+• Not matching Anuṣṭubh or Triṣṭubh 
+Example 
+अिि  द त  प्रह्व  नर् िर्॥ 
+Dataset Summary 
+• Flexible 
+• Mixed Vedic-classical nature 
+============================================ 
+38. DRUTAPADĀ (द्रुतपदा) 
+============================================ 
+A short, light meter used for fast-moving descriptions. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 8 or 9 
+Pattern 
+⏑ ⏑ – ⏑ – ⏑ – – 
+AI Identification 
+• Short lines 
+• Quick repeated laghus 
+• Different from Anuṣṭubh (no 4+4 rule) 
+Example 
+ल ल  ल ल  वदनर्वल क्य। 
+Dataset Summary 
+• 8–9 syllables 
+• Light, fast meter 
+============================================ 
+39. ASHṬISAMAKA (अवटसमक) 
+============================================ 
+A rare classical meter where all pādas are 8 syllables, but NOT Anuṣṭubh. 
+Structure 
+• Lines: 4 
+• Syllables: 8 each 
+Pattern – – ⏑ – ⏑ ⏑ – – 
+AI Identification 
+Differentiate from Anuṣṭubh: 
+• No 4–4 segmentation 
+• No exact śloka rules 
+• Gaṇa-driven 8-syllable pattern 
+Example 
+श द्ध  ब द्ध  पिवत्रर्त्वखल । 
+Dataset Summary 
+• 8-syllable variant 
+• Non-śloka structure 
+============================================ 
+40. VAJRASTHĀ (िज्रस्था) 
+============================================ 
+A strong, heavy classical meter with “diamond-like firmness”. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 12 
+Pattern – – – ⏑ – – – ⏑ ⏑ – ⏑ – 
+AI Identification 
+• Begins with three Gurus in a row 
+• Distinct from Rathoddhatā (which begins – – ⏑ – –) 
+• Heavy start, lighter end 
+Example 
+वज्रस्थ   ि र्ि  भि  भर्गवत   शत्वक्तरूप   िद । 
+Dataset Summary 
+• Strong Guru clusters 
+• 12 syllables 
+• Heavy heroic cadence 
+============================================ 
+41. SUVASANTATILAKĀ (सुिसन्तवतलका) 
+(Variant of Vasantatilakā, lighter in the middle) 
+============================================ 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 14 
+Pattern – ⏑ – – ⏑ ⏑ – ⏑ – – ⏑ – – ⏑ 
+A soft-variant of Vasantatilakā, distinguished by lighter opening. 
+AI Identification 
+• 14 syllables 
+• Middle double-light (⏑⏑) present 
+• Softer opening than classical Vasantatilakā 
+Example 
+द व  र्ग र धर  ियित श ि  भक्तव त्सल्यव न्। 
+============================================ 
+42. ANUṢṬUBH-VARIANT (classical śloka with alternate cadence) 
+============================================ 
+This is NOT the standard śloka; it's a classical variant used in late kāvya. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 8 
+Features 
+• Does NOT obey: 
+o standard 4–4 segmentation 
+o Guru-Laghu constraints of pāda 2 & 4 
+• Used in subhāṣitas and epigrams. 
+AI Identification 
+• If 8 syllables but violates śloka rules, classify as Anuṣṭubh-variant. 
+Example 
+िनर्मल  ज्ञ नर्् प्रशर्करुण य क्तर््। 
+============================================ 
+43. PRAMĀṆIKĀ (प्रमावणका) 
+============================================ 
+A 16-syllable structured meter. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 16 
+Pattern – – ⏑ – – ⏑ ⏑ – – ⏑ – ⏑ ⏑ – – 
+AI Identification 
+• If length = 16 
+• Heavy-light symmetry 
+• Alternate double laghu 
+Example 
+द वस्य दय ििन्ध िमर्गद दिधन िस्य र्ििर् । 
+============================================ 
+44. BINDUMATĪ (वबन्दुमती) 
+============================================ 
+A lyrical 11-syllable meter used in narrative works. 
+Structure 
+• Lines: 4 
+• Syllables: 11 
+Pattern 
+⏑ – – ⏑ ⏑ – ⏑ – – ⏑ – 
+AI Identification 
+• Starts: ⏑–– 
+• Middle double-light 
+• Ends with – ⏑ – 
+Example 
+र
+्न्द  र्न्द  िशिशरकरव य स्स ख  य ित हृिद। 
+============================================ 
+45. PADMINĪ (पविनी) 
+============================================ 
+A well-balanced 12-syllable meter. 
+Structure 
+• Lines: 4 
+• Syllables: 12 
+Pattern 
+⏑ – ⏑ – – ⏑ ⏑ – ⏑ – – ⏑ 
+Like a lotus (padma), symmetrical and balanced. 
+AI Identification 
+• 12 syllables 
+• Initial ⏑–⏑– 
+• Central ⏑⏑ cluster 
+Example 
+चन्द्र द् तः िशिशरकरश भ कर  भ ित तस्य। 
+============================================ 
+46. RUCIRĀ (रुवचरा) 
+============================================ 
+A 10-syllable meter with a sweet cadence. 
+Structure 
+• Lines: 4 
+• Syllables: 10 
+Pattern 
+– ⏑ ⏑ – – ⏑ – – ⏑ – 
+AI Identification 
+• Begins with –⏑⏑– 
+• Ends with ⏑– 
+• Distinct from Uṣṇih (7/7/8) and Virāj (10) 
+Example 
+भ ित लक्ष् ः श भ्रवण म र्न िर ऽह्नः । 
+============================================ 
+47. PRAHATĀ (प्रिता) 
+============================================ 
+A rare 12-syllable meter with a forceful opening. 
+Structure 
+• Lines: 4 
+• Syllables: 12 
+Pattern – – – – ⏑ – – ⏑ – ⏑ ⏑ – 
+AI Identification 
+• First 4 syllables all Guru 
+• Distinctive heavy opening 
+• Near-heroic cadence 
+Example 
+शम् ः क ितं परर्र्र्ल  प त  नः िवमद । 
+============================================ 
+48. SAUMYĀ (सौम्या) 
+============================================ 
+A soft, pleasant meter. 
+Structure 
+• Lines: 4 
+• Syllables: 14 
+Pattern 
+⏑ – – ⏑ ⏑ – – ⏑ – – ⏑ – ⏑ – 
+AI Identification 
+• Gentle opening 
+• Double-light in early middle 
+• Used for feminine, gentle themes 
+Example 
+ि न्दर  त ि र्यर्िप तव वदन  भ ित ल क ऽत्वस्मन्। 
+============================================ 
+49. KEDĀRĪ (के दारी) 
+============================================ 
+A structured 12-syllable meter often found in devotional hymns. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 12 
+Pattern – ⏑ – ⏑ – – ⏑ – – ⏑ – – 
+AI Identification 
+• ⏑ alternates with – 
+• Middle heavy region –– 
+• Balanced end 
+Example 
+भत्वक्त  द िि प्रभ  करुणय  नः प लयि  च। 
+============================================ 
+50. RATHAPADĀ (रथपदा) 
+============================================ 
+A fast-moving 8-syllable meter associated with motion, hence “ratha” (chariot). 
+Structure 
+• Lines: 4 
+• Syllables: 8 
+Pattern – ⏑ – – ⏑ – ⏑ – 
+AI Identification 
+• 8 syllables 
+• Alternating light-heavy 
+• Faster than Anuṣṭubh 
+• No 4–4 segmentation 
+Example 
+च रु  वदन  भ ित। 
+============================================ 
+51. CAKRAVĀKA (चक्रिाक) 
+============================================ 
+A light, lyrical 12-syllable meter named after the cakravāka bird pair, symbolizing 
+tenderness. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 12 
+Pattern 
+⏑ – – ⏑ ⏑ – – ⏑ – ⏑ – – 
+AI Identification 
+• 12 syllables 
+• Starts ⏑–– 
+• Symbolic soft-break rhythm 
+Example (Sanskrit) 
+चक्रव किप्रय  ि  र्र् हृिद वित  िप्रय  िनत्यर््। 
+============================================ 
+52. KOKILĀ (कोवकला) 
+============================================ 
+A sweet 8-syllable meter with a musical “koo-ki-la” cadence. 
+Structure 
+• Lines: 4 
+• Syllables: 8 
+Pattern 
+⏑ ⏑ – ⏑ – – ⏑ – 
+AI Identification 
+• Light + double laghu beginning 
+• Very melodic 
+• Not Anuṣṭubh because no 4+4 rule 
+Example 
+क िकलस्वरर् श्वर  वदित। 
+============================================ 
+53. ŚIKHĀ (वशखा) 
+============================================ 
+A pointed, rising 11-syllable meter (“śikhā” = peak/top). 
+Structure 
+• Lines: 4 
+• Syllables: 11 
+Pattern – ⏑ – ⏑ – – ⏑ ⏑ – ⏑ – 
+AI Identification 
+• Alternating –⏑–⏑ opening 
+• Then heavy block ––⏑⏑ 
+• Ends in –⏑– 
+Example 
+श ि  रूप  िररिरर्ग रूण   भवित ि ष्ठर््। 
+============================================ 
+54. SUDHĀ (सुधा) 
+============================================ 
+A nectar-like, soft-flowing meter. 
+Structure 
+• Lines: 4 
+• Syllables: 12 
+Pattern 
+⏑ – ⏑ – – ⏑ – ⏑ ⏑ – ⏑ – 
+AI Identification 
+• 12 syllables 
+• Soft ⏑–⏑– beginning 
+• Mixed central laghu cluster 
+Example 
+ि ध वषं िररकरुणय  प त  न  द वत ः । 
+============================================ 
+55. MĀTAṄGĪ (मातङ्गी) 
+============================================ 
+A powerful elephant-associated meter (mātaṅga = elephant). 
+Structure 
+• Lines: 4 
+• Syllables: 14 
+Pattern – – – ⏑ – – ⏑ – – ⏑ ⏑ – – ⏑ 
+AI Identification 
+• Heavy, elephant-like opening 
+• 14 syllables 
+• Strong guru clusters 
+Example 
+र
+् तङ्ग  ि  करुण दियत  प लय र्   िनत्य । 
+============================================ 
+56. BHADRIKĀ (भवद्रका) 
+============================================ 
+A gentle 11-syllable meter used in blessings (bhadra = auspicious). 
+Structure 
+• Lines: 4 
+• Syllables: 11 
+Pattern 
+⏑ ⏑ – – ⏑ – – ⏑ ⏑ – – 
+AI Identification 
+• Double-laghu start 
+• Double-laghu cluster in middle 
+• 11 syllables total 
+Example 
+भद्  पश्यि  िकलिन ः िवमद । 
+============================================ 
+57. VĪRĀṬIKĀ (िीरावटका) 
+============================================ 
+A heroic rhythmic meter, medium-long. 
+Structure 
+• Lines: 4 
+• Syllables: 12 or 13 (two forms) 
+Pattern (Common 12-syllable) – – ⏑ ⏑ – – ⏑ – – ⏑ ⏑ – 
+AI Identification 
+• Heroic rhythm 
+• Double-laghu in central region 
+• Heavy clusters at edges 
+Example 
+व र ण   क ितमरिवदनय ऽभ ित भ र्  िद । 
+============================================ 
+58. VALLIKĀ (िष्णिका) 
+============================================ 
+A vine-like flexible meter, often used in romance. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 13 
+Pattern 
+⏑ – – ⏑ – – ⏑ ⏑ – – ⏑ – – 
+AI Identification 
+• Curved cadence: ⏑ – – ⏑ – – 
+• Central ⏑⏑ 
+• 13 syllables → distinguishes from others easily 
+Example 
+वत्वल्लक भ द  तव वदनर् ल क्य िष म िर्र्  लभ । 
+============================================ 
+59. CITRĀ (वचत्रा) 
+============================================ 
+A decorative meter (citrā = “variegated/ornamented”). 
+Structure 
+• Lines: 4 
+• Syllables: 12 
+Pattern – ⏑ ⏑ – ⏑ – – ⏑ ⏑ – ⏑ – 
+AI Identification 
+• Repeated ⏑⏑ sequences 
+• 12 syllables 
+• Artistic arrangement 
+Example 
+िचत्र  भ यः िशिशरकरर् ल क्य र्  र्न  हृष्यर््। 
+============================================ 
+60. CAMPITĀ (चष्णम्पता) 
+============================================ 
+A shaken or oscillating meter (campita = “shaken”). 
+Structure 
+• Lines: 4 
+• Syllables: 12 
+Pattern 
+⏑ – – ⏑ ⏑ – ⏑ – – ⏑ – – 
+AI Identification 
+• Alternating ⏑– – 
+• Central double-laghu 
+• 12 syllables 
+Example 
+चत्वम्पत  भ वनय  हृिद तव चरण  भ ित िनत्य  र् । 
+============================================ 
+61. MĀLINĪVṚTTA (मावलनीिृत्त) 
+============================================ 
+A hybrid meter based on Mālinī but allowing for lighter substitutions. 
+Structure 
+• Lines: 4 
+• Syllables per pāda: 15 (same as Mālinī) 
+Pattern – – ⏑ – ⏑ – – ⏑ ⏑ – ⏑ – – ⏑ – 
+Less strict than classical Mālinī; more poetic freedom. 
+AI Identification 
+Identify as Mālinīvṛtta when: 
+• 15 syllables per pāda 
+• The Mālinī gaṇa pattern appears, but with permissible substitutions 
+• Not matching pure Mālinī or Variant II precisely 
+Example 
+र
+् िलन वृत्त  लिलतर्ितश भ कर  र्ग तन द । 
+============================================ 
+62. KHAṆḌA-ĀRYĀ (खण्डआयाव) 
+(Fragmented version of the Āryā meter) 
+============================================ 
+A major mātrā-vṛtta used in Prakrit and Sanskrit narrative works. 
+Structure 
+• Only first two pādas of Āryā retained 
+• Pāda 1 = 12 mātrās 
+• Pāda 2 = 18 mātrās 
+AI Identification 
+Classify as Khaṇḍa-Āryā when: 
+1. Only 2 pādas appear, not 4 
+2. Pattern = 12–18 mātrās 
+3. Strong resemblance to Āryā cadence 
+Example 
+िज्जनवचन िन हृिद ि त्वस्थत िन। 
+कतमव्यपि  ि चयत्वि त  नः॥ 
+============================================ 
+63. GĪTI-VṚTTA FUSION (गीवत-िृत्त संकर) 
+Hybrid of Gīti + Varṇa meter 
+============================================ 
+Structure 
+• Lines: 4 
+• Mixed: 
+o 1st pāda = 12 syllables 
+o 2nd pāda = Gīti pattern (12–14) 
+o 3rd pāda = Varṇa pattern 
+o 4th = free pattern with gaṇa consistency 
+Used in lyrical-drama compositions. 
+AI Identification 
+Identify as Gīti-Vṛtta Fusion when: 
+• Line lengths are inconsistent but follow Gīti rhythmic logic 
+• At least one pāda shows musical 4+4+4 segmentation 
+Example 
+र
+्
+ग त रवप्रभृितनृत्यक शल ः ि प्रच र  र्गत ः । 
+दत्त  ध्व नर् द रव द्र्िनश  पििक न   हृिद॥ 
+============================================ 
+64. VAṂŚASTHĀ–BHUJANGA HYBRID (िंशस्था-भुजंग संकर) 
+Fusion of Vaṃśastha (12 syllables) + Bhujanga (⏑⏑– repeats) 
+============================================ 
+Structure 
+• Lines: 4 
+• Syllables: 12 
+• Pattern combines: 
+o Vaṃśastha’s opening: – ⏑ – – 
+o Bhujanga’s ⏑⏑ – clusters in mid/end regions 
+Pattern Example – ⏑ – – ⏑ ⏑ – ⏑ – ⏑ ⏑ – 
+AI Identification 
+Label as hybrid when: 
+• 12 syllables 
+• Presence of both styles: 
+o Structured beginning 
+o Repeated ⏑⏑– later 
+• Does NOT conform to pure Bhujanga or pure Vaṃśastha 
+Example 
+द व  र्गच्छत  र्निि िद  भवक्ल श  ित्वि यस्य। 
+============================================ 
+65. MĀGADHĪ (मागधी) 
+An ancient Prakrit meter 
+============================================ 
+Important for identifying Sanskrit-Prakrit mixed verses. 
+Structure 
+• Mātrā-based 
+• Each pāda often 12 mātrās 
+• Very flexible 
+Signature Features 
+• Many open vowels 
+• Soft cadence 
+• Fewer consonant clusters 
+AI Identification 
+Classify as Māgadhī when: 
+• Mātrās ≈ 12 each pāda 
+• Strong Prakrit phonetic patterns 
+• No fixed gaṇa pattern 
+• Absence of heavy syllables 
+Example 
+ि ििअ  ि व  ि ख ण िविर त  र्  ि िज्ज । 
+============================================ 
+66. AUPĀTTIKĀ (औपावत्तका) 
+Found in older stotra and narrative styles 
+============================================ 
+Structure 
+• Lines: 4 
+• Syllables: 10–11 (varies) 
+Pattern 
+Flexible, but often: – – ⏑ – – ⏑ – ⏑ ⏑ – 
+AI Identification 
+• Short meter 
+• Does NOT match Virāj or Pṛthvī 
+• Strong guru clusters early 
+• Light ending 
+Example 
+श द्ध  द वः करुण र्यच त ः प त  नः िवमद । 
+============================================ 
+67. PRAKRIT GĀHĀ (प्राकृत गािा) 
+Common Prakrit verse meter 
+============================================ 
+Gāhās form the backbone of Prakrit literature like Gāhā Sattasaī. 
+Structure 
+• Mātrā-based 
+• Pattern similar to Gāthā and Āryā 
+• Most common form = 12–18 mātrās 
+Features 
+• Elision 
+• Sandhi reduction 
+• Laghu-heavy structure 
+• Lots of vowels 
+AI Identification 
+Classify as Gāhā when: 
+• 12–18–12–18 mātrās 
+• Prakrit grammar present 
+• Frequent short syllables 
+Example 
+क  ण  वइ णयण  िपअिि  प िल  भ व इ। 
+============================================ 
+68. UPAJĀTI–MĀLINĪ HYBRID (उपजावत–मावलनी संकर) 
+A rare but attested mixed meter 
+============================================ 
+Structure 
+• Pāda 1: 11 syllables (Upajāti style) 
+• Pāda 2: 15 syllables (Mālinī style) 
+• Pāda 3: 11 syllables 
+• Pāda 4: 15 syllables 
+AI Identification 
+• Mixed syllable count 11–15–11–15 
+• Upajāti pattern visible in pādas 1 & 3 
+• Mālinī gaṇas visible in pādas 2 & 4 
+Example 
+द वप्र म्ण  रिर्तर्नि  य िर्गनस्त  वदत्वि। 
+श ि  रूप  लिलतर्र्ल  श भत  तस्य िनत्य ॥ 
+============================================ 
+69. DVIPADĪ (विपदी) 
+Very important for narrative & folk-style poetry 
+============================================ 
+A two-line verse form (not 4 lines). 
+Structure 
+• Pādas: 2 
+• Each pāda varies: 12–16 syllables 
+Features 
+• Common in dramatic dialogues 
+• Rare in classical śāstra but popular in songs 
+• Often parallelism or rhyme 
+AI Identification 
+Detect Dvipadī when: 
+• Only 2 pādas 
+• Both long (12–16 syllables) 
+• Tone resembles folk/narrative style 
+Example 
+यत्र स्त  िररप दपद्मर्िनश  भक्तस्य हृद् कतः । 
+तत्र स्त  ित्रदश िधप ऽिप ितत  ि व  पर  क वमत ॥ 
+============================================ 
+70. CHAURIKĀ (चौररका) 
+“Thief-like meter” — irregular by design 
+============================================ 
+Used to depict stealth, cunning, or irregular motion. 
+Structure 
+• Lines: 4 
+• Syllables: irregular (8–12) 
+Pattern 
+No strict gaṇa alignment, but: – ⏑ ⏑ – – | ⏑ – ⏑ – – (one typical form) 
+AI Identification 
+Classify as Chaurikā when: 
+• Irregular syllable lengths 
+• Patterned but unpredictable heavy-laghu usage 
+• Not fitting any known varṇa-vṛtta 
+• Slight “broken” cadence 
+Example 
+िनश्शब्द  चरण ः ि र्न्द  चरित च रः इव ज्ञ तः । 
+============================================ 
+71. MATTAMAYŪRA (मत्तमयदर) 
+(“Intoxicated peacock”) 
+============================================ 
+Structure 
+• 4 lines 
+• 12 syllables 
+• Dance-like cadence 
+Pattern 
+⏑ – ⏑ – – ⏑ ⏑ – – ⏑ – – 
+AI Key 
+• 12 syllables 
+• Strong “dance beats” in middle (⏑⏑––) 
+Example 
+र
+्त्तर्य रन त  परर्र्िप श कर  नि ॥ 
+============================================ 
+72. ŚĪTALĀ (शीतला) 
+(“Cool, calming meter”) 
+============================================ 
+Structure 
+• 4 lines 
+• 12 syllables 
+• Soft beginning, cooling rhythm 
+Pattern 
+⏑ – – ⏑ – – ⏑ – ⏑ – – ⏑ 
+AI Key 
+• 12 syllables 
+• Alternating softness and stability 
+Example 
+श तल   र्न्दर्िभलपत  व क्यर् त्त  पदर््॥ 
+============================================ 
+73. MAṆḌALAGĪTI (मण्डलगीवत) 
+(Circular musical meter) 
+Structure 
+• 4 lines 
+• 12–14 syllables 
+• Gīti-type circular rhythmic segmentation 
+Pattern 
+⏑ ⏑ – – | ⏑ – – | ⏑ ⏑ – – 
+AI Key 
+• Circular gaṇa repetition 
+• Musical loop 
+Example 
+र
+्ण्डलर्ग ितररय  लिलति रिभव क्यिनिर्मत ॥ 
+============================================ 
+74. VAJRAGAṆĀ (िज्रगणा) 
+(“Diamond-cluster meter”) 
+Structure 
+• 4 lines 
+• 12 syllables 
+• Heavy Guru blocks 
+Pattern – – – ⏑ – – – ⏑ ⏑ – – ⏑ 
+AI Key 
+• Triple Guru opening 
+• Distinct heavy-laghu pattern 
+Example 
+वज्रर्गण ररतन  िशवर् पर्गित  प त  नः शम् ः ॥ 
+============================================ 
+75. PRABHĀVATĪ (प्रभािती) 
+(“Radiant meter”) 
+Structure 
+• 4 lines 
+• 11 syllables 
+Pattern 
+⏑ – – ⏑ – – ⏑ ⏑ – ⏑ – 
+AI Key 
+• Elegant 11-syllable flow 
+• Middle ⏑⏑ cluster 
+Example 
+प
+्
+रभ वत   िररर्ग णकि   पश्य िर् ल चन न॥ 
+============================================ 
+76. LALITĀ (लवलता) 
+(“Graceful, charming meter”) 
+Structure 
+• 4 lines 
+• 12 syllables 
+Pattern – ⏑ ⏑ – – ⏑ – ⏑ ⏑ – ⏑ – 
+AI Key 
+• Double-laghu twice 
+• Light and graceful 
+Example 
+लिलत   व ण   र्र् हृिद िनविि   भि  िनत्यर््। 
+============================================ 
+77. KARUṆĀ (करुणा) 
+(“Compassion / sorrow meter”) 
+Structure 
+• 4 lines 
+• 14 syllables 
+• Soft patterns echo emotion 
+Pattern 
+⏑ – ⏑ – – ⏑ ⏑ – – ⏑ – – ⏑ – 
+AI Key 
+• 14 syllables 
+• Sorrowful rhythm, gently falling 
+Example 
+करुण र्य  कृ पय ऽध न िरिि च तिि र्  भव॥ 
+============================================ 
+78. MĀLINĪ–GĪTI COMPOSITE (मावलनी-गीवत संकर) 
+Hybrid of Mālinī (15 syllables) + Gīti (12–14 syll.). 
+Structure 
+• Pāda 1 & 3 = 15 syllables (Mālinī) 
+• Pāda 2 & 4 = 12–14 syllables (Gīti) 
+AI Key 
+• Pattern = 15 / 12–14 / 15 / 12–14 
+Example 
+र
+् िलन वृत्त  ि रिवन त  र्ग ितक र् ध यमय क्त । 
+र
+् िलन र्ग ितश भर्ग णि कर  पश्य र्  व क्यर््॥ 
+============================================ 
+79. SVARAPATHĀ (स्वरपथा) 
+(Musical “tone-path” meter) 
+Structure 
+• 4 lines 
+• 12 syllables 
+• Rising-falling wave 
+Pattern – ⏑ – – ⏑ ⏑ – ⏑ – – ⏑ – 
+AI Key 
+• Wave-like rhythm 
+• Central ⏑⏑ 
+Example 
+स
+्
+वरपि  र्र् र्निि िनतर   र्ग यत  द वः ॥ 
+============================================ 
+80. HARIPADMĀ (िररपिा) 
+(Lotus-like meter linked to Viṣṇu) 
+Structure 
+• 4 lines 
+• 12 syllables 
+• Soft blooming rhythm 
+Pattern 
+⏑ – – ⏑ – – ⏑ – ⏑ – – ⏑ 
+AI Key 
+• 12 syllables 
+• Petal-like opening ⏑––⏑ 
+Example 
+िररपद्म  वदनकर्ल  पश्य िर् भक्त्य  िद ऽिर््॥ 
+============================================================ 
+PART 18 — METERS 81 TO 90 
+============================================================ 
+============================================ 
+81. KADALĪVANA (कदलीिन) 
+(Banana-grove meter → smooth, graceful) 
+Structure 
+• 4 lines 
+• 11 syllables 
+Pattern 
+⏑ – – – ⏑ ⏑ – ⏑ – ⏑ – 
+AI Key 
+• Soft-heavy contrast 
+• 11 syllables 
+Example 
+कदल वन  चलित र्ृद ल  रूप  र्न िरर््॥ 
+============================================ 
+82. MANDARODAYA (मन्दरोदया) 
+(“Rising Mandara mountain”) 
+Structure 
+• 4 lines 
+• 14 syllables 
+• Heavy upward movement 
+Pattern – – – ⏑ – – ⏑ ⏑ – – ⏑ – – ⏑ 
+AI Key 
+• Strong rise 
+• Double-laghu mid 
+• 14 syllables 
+Example 
+र
+्न्दरस्य िदतरिविनभ  त िः िपबत्वि र् न न्द्र ः । 
+============================================ 
+83. JALODARI (जलोदरी) 
+(Watery flowing meter) 
+Structure 
+• 4 lines 
+• 12 syllables 
+• Wave-like pattern 
+Pattern 
+⏑ ⏑ – ⏑ – – ⏑ – – ⏑ – – 
+AI Key 
+• Double-laghu start 
+• Flowing cadence 
+Example 
+िल दय म इित र्र् र्न  हृष्यित द वस्य व क्य ः॥ 
+============================================ 
+84. KARMAṆĪ (कमवणी) 
+(Purposeful, action-driven meter) 
+Structure 
+• 4 lines 
+• 12 syllables 
+• Steady action-like beats 
+Pattern – ⏑ – ⏑ ⏑ – – ⏑ – ⏑ – – 
+AI Key 
+• 12 syllables 
+• Clear purposeful rhythm 
+Example 
+कर्मण  क यमर्त्वखलिर्द  द वप्रि द न ििद्धर््। 
+============================================ 
+85. PARIVARTINĪ (पररिवतवनी) 
+(“Turning, revolving meter”) 
+Structure 
+• 4 lines 
+• 12–14 syllables 
+• Frequent alternations 
+Pattern – ⏑ ⏑ – – ⏑ – ⏑ ⏑ – – ⏑ – 
+AI Key 
+• Alternating light-heavy 
+• Repetitive ⏑⏑ patterns 
+Example 
+पररवितमिन भवित िर्गत र्ृत्त ः िद  कर्मपिः ॥ 
+============================================ 
+86. KAMALINĪ (कमवलनी) 
+(“Lotus blossom meter”) 
+Structure 
+• 4 lines 
+• 12 syllables 
+• Feminine grace 
+Pattern 
+⏑ – – ⏑ ⏑ – ⏑ – – ⏑ – ⏑ 
+AI Key 
+• Soft opening 
+• Flower-like rhythm 
+Example 
+कर्िलन वदन  र्र् हृिद शिशभ िषत  श भत ॥ 
+============================================ 
+87. MĀRCCHANA (माच्छवन) 
+(“Ascending meter”) 
+Structure 
+• 4 lines 
+• 12 syllables 
+• Ascending emphasis on Gurus 
+Pattern 
+⏑ ⏑ – – ⏑ – – ⏑ – – ⏑ – 
+AI Key 
+• Two laghus → rising heaviness 
+• Ascending feel 
+Example 
+र
+् च्छमनय  र्गितररि र्नि  द िि प्रभ  श कर॥ 
+============================================ 
+88. KAMPITĀ (कष्णम्पता) 
+(“Shaken / trembling meter”) 
+Structure 
+• 4 lines 
+• 12 syllables 
+• Vibratory Laghu clusters 
+Pattern 
+⏑ – ⏑ ⏑ – – ⏑ – – ⏑ ⏑ – 
+AI Key 
+• Multiple ⏑⏑ clusters 
+• Oscillating sound flow 
+Example 
+कत्वम्पत  भ वनय  र्र् र्न  द वप द  त्वस्थतर््॥ 
+============================================ 
+89. SUKUMĀRĪ (सुकुमारी) 
+(“Delicate, tender meter”) 
+Structure 
+• 4 lines 
+• 13 syllables 
+• Soft feminine cadence 
+Pattern 
+⏑ – – ⏑ – – ⏑ ⏑ – – ⏑ – – 
+AI Key 
+• 13 syllables 
+• Gentle sandhi flow 
+• Romantic contexts 
+Example 
+ि क र् र  य विततन िर्  क ि  र्र् िप्रय ॥ 
+============================================ 
+90. DHṚTIMATĪ (धृवतमती) 
+(“Steadfast, firm meter”) 
+Structure 
+• 4 lines 
+• 14 syllables 
+• Heavy ends 
+Pattern – – ⏑ – – ⏑ ⏑ – – ⏑ – – ⏑ – 
+AI Key 
+• 14 syllables 
+• Strong end cadence 
+• Virtue-themed poetry 
+Example 
+धृितर्त  भवित वचनपि  ि धक न   िद ॥ 
+============================================ 
+91. BHUJAṄGĪ (भुजङ्गी) 
+(Closely related to Bhujangaprayāta but lighter) 
+Structure 
+• 4 lines 
+• 12 syllables per pāda 
+Pattern 
+⏑ ⏑ – ⏑ – ⏑ ⏑ – ⏑ – ⏑ ⏑ – 
+This “triple serpent” pattern is lighter and more ornamented. 
+AI Identification 
+• 12 syllables 
+• More ⏑⏑ clusters than Bhujangaprayāta 
+• Less uniform — alternating L-L-G appears thrice 
+Sanskrit Example 
+भ िङ्ग िभर्मर् हृिद िररः श द्ध  रूप  प्रि दत ॥ 
+============================================ 
+92. KAPILĀ (कवपला) 
+(“Tawny / bright meter”, very balanced) 
+Structure 
+• 4 lines 
+• 12 syllables 
+Pattern – ⏑ – – ⏑ – ⏑ – – ⏑ – ⏑ 
+AI Identification 
+• 12 syllables 
+• Mixed 1-guru, 1-laghu alternation 
+• Soft ending ⏑ 
+Example 
+किपल  ि  करुणर्िय नः प लय र्   िवमद ॥ 
+============================================ 
+93. MĀDHURĪ (माधुरी) 
+(Sweet, melodious meter) 
+Structure 
+• 4 pādas 
+• 12 syllables 
+Pattern 
+⏑ – – ⏑ ⏑ – – ⏑ – ⏑ – – 
+AI Identification 
+• Sweet cadence 
+• Central ⏑⏑ 
+• Balanced ending – – 
+Example 
+र
+् ध र  र्ग ितरम्यवदन  भ ित हृिद र् ॥ 
+============================================ 
+94. TARALĀ (तरला) 
+(Light, fluid, “flowing” meter) 
+Structure 
+• 4 lines 
+• 11 syllables 
+Pattern 
+⏑ – – ⏑ – – ⏑ – ⏑ – – 
+AI Identification 
+• 11 syllables 
+• Light-laghu presence 
+• Gentle slope rhythm 
+Example 
+तरल   व ण   र्र् हृिद िनतर   शम् ः प त ॥ 
+============================================ 
+95. VASANTĪ (िसन्ती) 
+(“Spring-like”, bright & fresh meter) 
+Structure 
+• 4 pādas 
+• 12 syllables 
+Pattern 
+⏑ ⏑ – ⏑ – – ⏑ – – ⏑ – – 
+AI Identification 
+• Begins with ⏑⏑ 
+• Spring-like bounce 
+• 12 syllables 
+Example 
+विि  भ ित हृदय  र्र् क िर्न्य  रूपध य म ॥ 
+============================================ 
+96. UDGĀTHĀ (उद्गाथा) 
+(A rising, musical, chant-like meter) 
+Structure 
+• 4 lines 
+• 13 syllables 
+Pattern – ⏑ – – ⏑ ⏑ – ⏑ – – ⏑ – – 
+AI Identification 
+• 13 syllables 
+• Blend of chanting cadence (like Sāman style) 
+• Appears in hymnic poetry 
+Example 
+उद्ग ि   ब्रह्मिण र्र् हृिद िनत्य  र्ग यत्वि द व ः ॥ 
+============================================ 
+97. MANORAMĀ (मनोिारा) 
+(“Charming meter”, soft feminine) 
+Structure 
+• 4 lines 
+• 12 syllables 
+Pattern 
+⏑ – – ⏑ – – ⏑ ⏑ – ⏑ – – 
+AI Identification 
+• Very similar to Kamalinī / Sukumārī 
+• Key signature = ⏑ – – ⏑ – – opening 
+Example 
+र
+्न रर्  र्र् र्निि वित  रूप  भवत्य ः ॥ 
+============================================ 
+98. PARYĀGĪTI (पयावगीवत) 
+(A circular Gīti meter variant) 
+Structure 
+• 4 lines 
+• 12–14 syllables 
+Pattern 
+⏑ ⏑ – – | – ⏑ – | ⏑ ⏑ – – 
+AI Identification 
+• Circular symmetric form 
+• Repeated ⏑⏑–– sections 
+• Gīti family rhythm 
+Example 
+पय म र्ग ितभमवित र्र् हृिद द वर्ग णन िदत ॥ 
+============================================ 
+99. VṚṢABHĪ (िृषभी) 
+(Heavy meter like a bull’s gait) 
+Structure 
+• 4 lines 
+• 12 syllables 
+Pattern – – – – ⏑ – – ⏑ – – ⏑ – 
+AI Identification 
+• First 4 syllables = all Guru 
+• Heavy “bull-like” start 
+• 12-syllable heroic meter 
+Example 
+वृषभ  व रर्ितिमररपद द्द र्दशी भव त्॥ 
+============================================ 
+100. PRAMUDITĀ (प्रमुवदता) 
+(Joy-filled, cheerful meter) 
+Structure 
+• 4 lines 
+• 11 syllables 
+Pattern 
+⏑ – – ⏑ – ⏑ ⏑ – ⏑ – – 
+AI Identification 
+• 11 syllables 
+• Central ⏑⏑ uplifting cluster 
+• Joyful cadence 
+Example 
+प
+्
+रर् िदत  भवत  र्र् िधय  द विचत्त  िद ॥ 
+============================================ 
+101. VEDASVARĀ (िेदस्वरा) 
+(A semi-Vedic rhythmic meter) 
+Structure 
+• 4 lines 
+• 12–13 syllables 
+• Slight Vedic intonation-like up/down beats 
+Pattern (common) – ⏑ – – ⏑ – ⏑ ⏑ – – ⏑ – – 
+AI Identification 
+• Not purely classical varṇa-vṛtta 
+• Not purely Vedic (like Gāyatrī/Anuṣṭubh) 
+• Transitional intonation markings 
+Example 
+व दस्वर   प्रकिटतर्ग ण   प त  नः द वव ण ॥ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
