@@ -10,17 +10,22 @@ import {
   Animated,
   Dimensions,
   Easing,
+  ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Audio } from 'expo-av';
-import * as Speech from 'expo-speech';
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 import { AI_BACKEND_URL, aiApi } from '../../services/api';
 import { ALL_SHLOKAS } from '../../data/shlokas';
 import { BotpressChatbot } from './BotpressChatbot';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const isWeb = Platform.OS === 'web';
+const isLargeScreen = SCREEN_WIDTH > 768;
 
 // Theme Colors
 const COLORS = {
@@ -32,8 +37,8 @@ const COLORS = {
   cream: '#FFF8E7',
   darkBrown: '#2D1810',
   lightCopper: '#D4956B',
-  guruColor: '#b1151c',
-  laghuColor: '#15B14A',
+  guruColor: '#7B1F1F',
+  laghuColor: '#D4A017',
 };
 
 interface ShlokaAnalysisModalProps {
@@ -69,6 +74,9 @@ interface MeaningExtractionResponse {
   word_meanings: { [key: string]: string };
   context: string;
   notes: string;
+  manifestation_of_chandas?: string;
+  unique_facts?: string;
+  unknown_facts?: string;
 }
 
 interface AnalysisResult {
@@ -153,6 +161,91 @@ const FloatingParticle = ({ particle, initialX, initialY }: {
     >
       <Ionicons name="sparkles" size={20} color={COLORS.gold} />
     </Animated.View>
+  );
+};
+
+// Colored Syllable Text Component - Shows Guru (Red) and Laghu (Green)
+const ColoredSyllableText = ({ 
+  text, 
+  syllableBreakdown 
+}: { 
+  text: string;
+  syllableBreakdown?: SyllableBreakdown[];
+}) => {
+  if (!syllableBreakdown || syllableBreakdown.length === 0) {
+    return (
+      <Text style={{
+        color: COLORS.primaryBrown,
+        fontSize: 16,
+        lineHeight: 26,
+        textAlign: 'center',
+        fontWeight: '600',
+      }}>
+        {text}
+      </Text>
+    );
+  }
+
+  // Split text into words
+  const words = text.split(/\s+/);
+  let syllableIndex = 0;
+
+  return (
+    <Text style={{
+      fontSize: 16,
+      lineHeight: 26,
+      textAlign: 'center',
+      fontWeight: '600',
+    }}>
+      {words.map((word, wordIdx) => {
+        const wordParts: React.ReactNode[] = [];
+        let currentWord = word;
+        
+        // For each syllable in this word
+        while (currentWord.length > 0 && syllableIndex < syllableBreakdown.length) {
+          const syllable = syllableBreakdown[syllableIndex];
+          const syllableText = syllable.syllable;
+          
+          if (currentWord.startsWith(syllableText)) {
+            // Add colored syllable
+            wordParts.push(
+              <Text
+                key={`${wordIdx}-${syllableIndex}`}
+                style={{
+                  color: syllable.type === 'guru' ? COLORS.guruColor : COLORS.laghuColor,
+                  fontWeight: '700',
+                }}
+              >
+                {syllableText}
+              </Text>
+            );
+            currentWord = currentWord.slice(syllableText.length);
+            syllableIndex++;
+          } else {
+            // If syllable doesn't match, move to next
+            syllableIndex++;
+            if (syllableIndex >= syllableBreakdown.length) break;
+          }
+        }
+        
+        // Add remaining part of word if any
+        if (currentWord.length > 0) {
+          wordParts.push(
+            <Text key={`${wordIdx}-remaining`} style={{ color: COLORS.primaryBrown }}>
+              {currentWord}
+            </Text>
+          );
+        }
+        
+        // Add space after word (except last word)
+        return (
+          <Text key={wordIdx}>
+            {wordParts}
+            {wordIdx < words.length - 1 ? ' ' : ''}
+          </Text>
+        );
+      })}
+    </Text>
   );
 };
 
@@ -543,7 +636,7 @@ const SyllableChip = ({ syllable, type }: {
   return (
     <View>
       <LinearGradient
-        colors={isGuru ? [COLORS.guruColor, '#d41823'] : [COLORS.laghuColor, '#0d8a37']}
+        colors={isGuru ? [COLORS.guruColor, '#5A1515'] : [COLORS.laghuColor, '#B8860B']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={{
@@ -616,8 +709,8 @@ const PatternDisplay = ({ pattern }: { pattern: string }) => {
           >
             <LinearGradient
               colors={isGuru 
-                ? [COLORS.guruColor, '#e01b25', COLORS.guruColor] 
-                : [COLORS.laghuColor, '#17c952', COLORS.laghuColor]}
+                ? [COLORS.guruColor, '#5A1515', COLORS.guruColor] 
+                : [COLORS.laghuColor, '#B8860B', COLORS.laghuColor]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={{
@@ -804,6 +897,7 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
   const [isListening, setIsListening] = useState(false);
   const [soundObject, setSoundObject] = useState<Audio.Sound | null>(null);
   const [recordingObject, setRecordingObject] = useState<Audio.Recording | null>(null);
+  const [liveSyllables, setLiveSyllables] = useState<SyllableBreakdown[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -862,7 +956,7 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
     }
   };
 
-  // Simple voice input using Audio recording (works in Expo Go)
+  // Functional voice recording with speech-to-text
   const startVoiceRecognition = async () => {
     try {
       setIsListening(true);
@@ -882,74 +976,159 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
         playsInSilentModeIOS: true,
       });
 
-      // Show instruction dialog
+      // Start recording
+      const recording = new Audio.Recording();
+      await recording.prepareToRecordAsync({
+        android: {
+          extension: '.m4a',
+          outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+          audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+        },
+        ios: {
+          extension: '.m4a',
+          outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
+          audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+          linearPCMBitDepth: 16,
+          linearPCMIsBigEndian: false,
+          linearPCMIsFloat: false,
+        },
+      });
+      
+      await recording.startAsync();
+      setRecordingObject(recording);
+      
       Alert.alert(
-        'Voice Input',
-        'This feature uses simple voice recording. After recording, you can manually type what you spoke.\n\nFor automatic transcription, please use the keyboard.',
-        [
-          {
-            text: 'Use Keyboard',
-            onPress: () => setIsListening(false),
-            style: 'cancel',
-          },
-          {
-            text: 'Start Recording',
-            onPress: async () => {
-              try {
-                const recording = new Audio.Recording();
-                await recording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
-                await recording.startAsync();
-                setRecordingObject(recording);
-                
-                // Show recording in progress
-                Alert.alert(
-                  'Recording...',
-                  'Speak your shloka clearly. Tap "Stop" when done.',
-                  [
-                    {
-                      text: 'Stop',
-                      onPress: async () => {
-                        await recording.stopAndUnloadAsync();
-                        setRecordingObject(null);
-                        setIsListening(false);
-                        Alert.alert(
-                          'Recording Complete',
-                          'Please type the shloka you just spoke in the text box above.\n\nNote: Automatic speech-to-text for Sanskrit requires additional setup.',
-                        );
-                      },
-                    },
-                  ],
-                );
-              } catch (err) {
-                console.error('Recording error:', err);
-                setError('Could not start recording. Please try typing instead.');
-                setIsListening(false);
-              }
-            },
-          },
-        ],
+        '🎤 Recording Started',
+        'Speak your shloka clearly in Sanskrit. Tap "Stop Recording" button when finished.',
+        [{ text: 'OK' }]
       );
     } catch (error) {
       console.error('Voice recognition error:', error);
       Alert.alert(
-        'Voice Input Error',
-        'Could not access microphone. Please type the shloka manually.',
+        'Recording Error',
+        'Could not start recording. Please check microphone permissions.',
       );
       setIsListening(false);
     }
   };
 
-  // Stop recording
+  // Stop recording and transcribe
   const stopVoiceRecognition = async () => {
     try {
-      if (recordingObject) {
-        await recordingObject.stopAndUnloadAsync();
-        setRecordingObject(null);
+      if (!recordingObject) {
+        setIsListening(false);
+        return;
       }
-      setIsListening(false);
+
+      // Stop recording and get URI
+      await recordingObject.stopAndUnloadAsync();
+      const uri = recordingObject.getURI();
+      setRecordingObject(null);
+      
+      if (!uri) {
+        Alert.alert('Error', 'Recording file not found');
+        setIsListening(false);
+        return;
+      }
+
+      // Show processing message
+      Alert.alert(
+        '🔄 Processing Audio',
+        'Transcribing your speech to text... Please wait.',
+        [{ text: 'OK' }]
+      );
+
+      // Send audio to speech-to-text API
+      await transcribeAudio(uri);
+      
     } catch (error) {
       console.error('Error stopping recording:', error);
+      Alert.alert('Error', 'Failed to process recording');
       setIsListening(false);
+    }
+  };
+
+  // Transcribe audio using backend API
+  const transcribeAudio = async (audioUri: string) => {
+    try {
+      // Read audio file as base64
+      const base64Audio = await FileSystem.readAsStringAsync(audioUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      // Send to backend for transcription
+      const response = await aiApi.post('/speech/transcribe', {
+        audio_data: base64Audio,
+        language: 'sa', // Sanskrit
+        format: 'm4a',
+      });
+
+      if (response.data && response.data.text) {
+        setInputShloka(response.data.text);
+        Alert.alert(
+          '✅ Transcription Complete',
+          'Your speech has been converted to text. You can now analyze it!',
+          [{ text: 'OK' }]
+        );
+      } else {
+        Alert.alert(
+          'No Speech Detected',
+          'Could not detect any speech. Please try speaking more clearly.',
+        );
+      }
+    } catch (error: any) {
+      console.error('Transcription error:', error);
+      let errorMessage = 'Failed to transcribe audio.';
+      
+      if (error.code === 'ERR_NETWORK') {
+        errorMessage = 'Cannot connect to transcription service. Please check your backend is running.';
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      }
+      
+      Alert.alert(
+        'Transcription Failed',
+        errorMessage + '\n\nPlease type the shloka manually instead.',
+      );
+    } finally {
+      setIsListening(false);
+    }
+  };
+
+  // Pick and transcribe audio file
+  const pickAudioFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['audio/*', 'audio/mpeg', 'audio/mp3', 'audio/m4a', 'audio/wav'],
+        copyToCacheDirectory: true,
+      });
+
+      if (result.type === 'cancel') {
+        return;
+      }
+
+      if (result.type === 'success') {
+        Alert.alert(
+          '🔄 Processing Audio File',
+          'Transcribing audio to text... This may take a moment.',
+          [{ text: 'OK' }]
+        );
+
+        // Transcribe the uploaded audio file
+        await transcribeAudio(result.uri);
+      }
+    } catch (error) {
+      console.error('File picker error:', error);
+      Alert.alert(
+        'File Selection Error',
+        'Could not open file picker. Please try again.',
+      );
     }
   };
 
@@ -969,6 +1148,9 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
         verse: text.trim(),
         include_word_meanings: true,
         include_context: true,
+        include_manifestation: true,
+        include_unique_facts: true,
+        include_unknown_facts: true,
       });
       
       console.log('✅ Meaning response:', response.data);
@@ -1011,6 +1193,7 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
     setIsAnalyzing(true);
     setError(null);
     setAnalysisResult(null);
+    setLiveSyllables([]);
     fadeAnim.setValue(0);
 
     // Scroll down to show animation box
@@ -1052,6 +1235,9 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
       
       const data: ChandasAPIResponse = response.data;
       console.log('✅ Response data:', data);
+      
+      // Update live syllables for colored display
+      setLiveSyllables(data.syllable_breakdown);
       
       // Calculate stats from syllable breakdown
       const guruCount = data.syllable_breakdown.filter(s => s.type === 'guru').length;
@@ -1129,6 +1315,7 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
     setMeaningResult(null);
     setError(null);
     setAnalysisStage('idle');
+    setLiveSyllables([]);
     fadeAnim.setValue(0);
   };
 
@@ -1152,8 +1339,13 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name="leaf" size={24} color={COLORS.gold} style={{ marginRight: 10 }} />
-                <Text style={{ color: '#FFF', fontSize: 24, fontWeight: '700' }}>
+                <Ionicons name="leaf" size={isWeb && isLargeScreen ? 32 : 24} color={COLORS.gold} style={{ marginRight: 10 }} />
+                <Text style={{ 
+                  color: '#FFF', 
+                  fontSize: isWeb && isLargeScreen ? 32 : 24, 
+                  fontWeight: '800',
+                  letterSpacing: 0.5,
+                }}>
                   Chandas Identifier
                 </Text>
               </View>
@@ -1168,7 +1360,12 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
                 <Ionicons name="close" size={20} color="white" />
               </TouchableOpacity>
             </View>
-            <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 15, lineHeight: 22 }}>
+            <Text style={{ 
+              color: 'rgba(255,255,255,0.9)', 
+              fontSize: isWeb && isLargeScreen ? 18 : 15, 
+              lineHeight: isWeb && isLargeScreen ? 28 : 22,
+              marginTop: 8,
+            }}>
               Discover the prosodic meter of Sanskrit shlokas with AI-powered analysis
             </Text>
             
@@ -1177,38 +1374,69 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
               flexDirection: 'row', 
               marginTop: 20,
               backgroundColor: 'rgba(255,255,255,0.1)',
-              borderRadius: 16,
-              padding: 16,
+              borderRadius: isWeb && isLargeScreen ? 20 : 16,
+              padding: isWeb && isLargeScreen ? 24 : 16,
             }}>
               <View style={{ flex: 1, alignItems: 'center' }}>
-                <Text style={{ color: COLORS.gold, fontSize: 20, fontWeight: '700' }}>50+</Text>
-                <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>Chandas Types</Text>
+                <Ionicons name="library" size={isWeb && isLargeScreen ? 32 : 24} color={COLORS.gold} />
+                <Text style={{ 
+                  color: 'white', 
+                  fontSize: isWeb && isLargeScreen ? 28 : 20, 
+                  fontWeight: '800',
+                  marginTop: 8,
+                }}>50+</Text>
+                <Text style={{ 
+                  color: 'rgba(255,255,255,0.8)', 
+                  fontSize: isWeb && isLargeScreen ? 14 : 12,
+                  marginTop: 4,
+                }}>Chandas Types</Text>
               </View>
               <View style={{ width: 1, backgroundColor: 'rgba(255,255,255,0.2)' }} />
               <View style={{ flex: 1, alignItems: 'center' }}>
-                <Text style={{ color: COLORS.gold, fontSize: 20, fontWeight: '700' }}>AI</Text>
-                <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>Powered</Text>
+                <Ionicons name="analytics" size={isWeb && isLargeScreen ? 32 : 24} color={COLORS.gold} />
+                <Text style={{ 
+                  color: 'white', 
+                  fontSize: isWeb && isLargeScreen ? 28 : 20, 
+                  fontWeight: '800',
+                  marginTop: 8,
+                }}>AI</Text>
+                <Text style={{ 
+                  color: 'rgba(255,255,255,0.8)', 
+                  fontSize: isWeb && isLargeScreen ? 14 : 12,
+                  marginTop: 4,
+                }}>Powered</Text>
               </View>
               <View style={{ width: 1, backgroundColor: 'rgba(255,255,255,0.2)' }} />
               <View style={{ flex: 1, alignItems: 'center' }}>
-                <Text style={{ color: COLORS.gold, fontSize: 20, fontWeight: '700' }}>98%</Text>
+                <Ionicons name="flash" size={isWeb && isLargeScreen ? 32 : 24} color={COLORS.gold} />
+                <Text style={{ 
+                  color: 'white', 
+                  fontSize: isWeb && isLargeScreen ? 28 : 20, 
+                  fontWeight: '800',
+                  marginTop: 8,
+                }}>98%</Text>
                 <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>Accuracy</Text>
               </View>
             </View>
           </LinearGradient>
 
           {/* Input Section */}
-          <View style={{ padding: 20 }}>
+          <View style={{ 
+            padding: isWeb && isLargeScreen ? 40 : 20,
+            maxWidth: isWeb && isLargeScreen ? 1200 : '100%',
+            marginHorizontal: 'auto',
+            width: '100%',
+          }}>
             <View style={{ 
               flexDirection: 'row', 
               alignItems: 'center', 
-              marginBottom: 12 
+              marginBottom: isWeb && isLargeScreen ? 20 : 12,
             }}>
-              <Ionicons name="create-outline" size={20} color={COLORS.primaryBrown} />
+              <Ionicons name="create-outline" size={isWeb && isLargeScreen ? 28 : 20} color={COLORS.primaryBrown} />
               <Text style={{ 
                 color: COLORS.primaryBrown, 
-                fontSize: 18, 
-                fontWeight: '600',
+                fontSize: isWeb && isLargeScreen ? 26 : 18, 
+                fontWeight: '700',
                 marginLeft: 8,
               }}>
                 Enter Sanskrit Shloka
@@ -1217,14 +1445,14 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
             
             <View style={{ 
               backgroundColor: '#FFF', 
-              borderRadius: 20,
-              borderWidth: 2,
+              borderRadius: isWeb && isLargeScreen ? 24 : 20,
+              borderWidth: isWeb && isLargeScreen ? 3 : 2,
               borderColor: COLORS.sand,
               shadowColor: '#000',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.1,
-              shadowRadius: 8,
-              elevation: 4,
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.15,
+              shadowRadius: 12,
+              elevation: 6,
             }}>
               <TextInput
                 value={inputShloka}
@@ -1235,86 +1463,44 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
                 placeholder="टाइप करें या पेस्ट करें..."
                 placeholderTextColor={COLORS.lightCopper}
                 multiline
-                numberOfLines={5}
+                numberOfLines={isWeb && isLargeScreen ? 8 : 5}
                 style={{
-                  padding: 18,
-                  fontSize: 18,
+                  padding: isWeb && isLargeScreen ? 28 : 18,
+                  fontSize: isWeb && isLargeScreen ? 22 : 18,
                   color: COLORS.primaryBrown,
-                  lineHeight: 28,
-                  minHeight: 140,
+                  lineHeight: isWeb && isLargeScreen ? 36 : 28,
+                  minHeight: isWeb && isLargeScreen ? 200 : 140,
                   textAlignVertical: 'top',
                   fontWeight: '500',
                 }}
               />
             </View>
 
-            {/* Action Buttons */}
-            <View style={{ flexDirection: 'row', marginTop: 16, gap: 12 }}>
-              {/* AI Assistant Chatbot */}
-              <BotpressChatbot 
-                onSuggestion={(text) => {
-                  setInputShloka(text);
-                  clearResults();
-                }}
-              />
-
-              {/* Voice Input Button */}
-              <TouchableOpacity
-                onPress={isListening ? stopVoiceRecognition : startVoiceRecognition}
-                disabled={isAnalyzing}
-                style={{
-                  backgroundColor: isListening ? COLORS.saffron : COLORS.sand,
-                  paddingVertical: 14,
-                  paddingHorizontal: 16,
-                  borderRadius: 14,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minWidth: 52,
-                }}
-              >
-                {isListening ? (
-                  <>
-                    <Ionicons name="stop-circle" size={18} color="#FFF" style={{ marginRight: 6 }} />
-                    <Text style={{ color: '#FFF', fontSize: 12, fontWeight: '600' }}>Stop</Text>
-                  </>
-                ) : (
-                  <Ionicons 
-                    name="mic-outline" 
-                    size={18} 
-                    color={COLORS.copper} 
-                  />
-                )}
-              </TouchableOpacity>
-
-              {inputShloka.trim() ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    setInputShloka('');
+            {/* Action Buttons - AI Help and Analyze */}
+            <View style={{ marginTop: 16, flexDirection: 'row', gap: 12  }}>
+              {/* AI Help Button */}
+              <View style={{ flex: 1 }}>
+                <BotpressChatbot 
+                  onSuggestion={(text) => {
+                    setInputShloka(text);
                     clearResults();
                   }}
-                  style={{
-                    backgroundColor: COLORS.sand,
-                    paddingVertical: 14,
-                    paddingHorizontal: 16,
-                    borderRadius: 14,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    minWidth: 52,
-                  }}
-                >
-                  <Ionicons name="trash-outline" size={18} color={COLORS.copper} />
-                </TouchableOpacity>
-              ) : null}
-              
+                />
+              </View>
+                
+              {/* Analyze Button */}
               <TouchableOpacity
                 onPress={() => analyzeShloka(inputShloka)}
                 disabled={isAnalyzing || !inputShloka.trim()}
                 style={{
                   flex: 1,
-                  borderRadius: 14,
+                  borderRadius: 30,
                   overflow: 'hidden',
+                  shadowColor: inputShloka.trim() ? COLORS.copper : 'transparent',
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 8,
+                  elevation: inputShloka.trim() ? 5 : 0,
                 }}
               >
                 <LinearGradient
@@ -1322,71 +1508,59 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
                     ? [COLORS.sand, COLORS.sand] 
                     : [COLORS.saffron, COLORS.copper]}
                   start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
+                  end={{ x: 1, y: 1 }}
                   style={{
-                    paddingVertical: 14,
+                    height: 56,
                     paddingHorizontal: 20,
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    borderWidth: !inputShloka.trim() ? 2 : 0,
+                    borderColor: 'rgba(139, 69, 19, 0.2)',
                   }}
                 >
-                  <Ionicons 
-                    name="analytics" 
-                    size={18} 
-                    color={!inputShloka.trim() ? COLORS.copper : '#FFF'} 
-                    style={{ marginRight: 8 }} 
-                  />
+                  {isAnalyzing ? (
+                    <ActivityIndicator color="#FFF" style={{ marginRight: 8 }} />
+                  ) : (
+                    <Ionicons 
+                      name="analytics" 
+                      size={22} 
+                      color={!inputShloka.trim() ? COLORS.copper : '#FFF'} 
+                      style={{ marginRight: 8 }} 
+                    />
+                  )}
                   <Text style={{ 
                     color: !inputShloka.trim() ? COLORS.copper : '#FFF', 
-                    fontSize: 15, 
+                    fontSize: 16, 
                     fontWeight: '700',
                   }}>
                     {isAnalyzing ? 'Analyzing...' : 'Analyze'}
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
-
-              {/* Botpress AI Chatbot Button */}
-              <TouchableOpacity
-                onPress={() => setShowAIChatbot(true)}
-                disabled={isAnalyzing}
-                style={{
-                  backgroundColor: COLORS.gold,
-                  paddingVertical: 14,
-                  paddingHorizontal: 16,
-                  borderRadius: 14,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minWidth: 52,
-                  shadowColor: COLORS.gold,
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 6,
-                  elevation: 5,
-                }}
-              >
-                <Ionicons 
-                  name="chatbubble-ellipses" 
-                  size={18} 
-                  color="#FFF" 
-                />
-              </TouchableOpacity>
             </View>
+
+            {/* Note: AI Chatbot available via floating button at bottom right */}
 
             {/* Error Display */}
             {error && (
               <View style={{
                 backgroundColor: '#FEE2E2',
-                borderRadius: 12,
-                padding: 16,
+                borderRadius: isWeb && isLargeScreen ? 20 : 12,
+                padding: isWeb && isLargeScreen ? 24 : 16,
                 marginTop: 16,
                 flexDirection: 'row',
                 alignItems: 'center',
+                borderWidth: 2,
+                borderColor: '#DC2626',
               }}>
-                <Ionicons name="alert-circle" size={24} color="#DC2626" style={{ marginRight: 12 }} />
-                <Text style={{ color: '#DC2626', flex: 1 }}>{error}</Text>
+                <Ionicons name="alert-circle" size={isWeb && isLargeScreen ? 32 : 24} color="#DC2626" style={{ marginRight: 12 }} />
+                <Text style={{ 
+                  color: '#DC2626', 
+                  flex: 1,
+                  fontSize: isWeb && isLargeScreen ? 16 : 14,
+                  lineHeight: isWeb && isLargeScreen ? 24 : 20,
+                }}>{error}</Text>
               </View>
             )}
 
@@ -1413,32 +1587,32 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
                     }}
                     disabled={isAnalyzing}
                     style={{
-                      width: SCREEN_WIDTH * 0.7,
+                      width: isWeb && isLargeScreen ? 420 : SCREEN_WIDTH * 0.7,
                       marginRight: 16,
                       backgroundColor: '#FFF',
-                      borderRadius: 20,
-                      padding: 20,
+                      borderRadius: isWeb && isLargeScreen ? 24 : 20,
+                      padding: isWeb && isLargeScreen ? 28 : 20,
                       shadowColor: '#000',
-                      shadowOffset: { width: 0, height: 4 },
-                      shadowOpacity: 0.1,
-                      shadowRadius: 8,
-                      elevation: 4,
-                      borderWidth: 1,
+                      shadowOffset: { width: 0, height: 6 },
+                      shadowOpacity: 0.12,
+                      shadowRadius: 12,
+                      elevation: 6,
+                      borderWidth: isWeb && isLargeScreen ? 3 : 1,
                       borderColor: COLORS.sand,
                     }}
                     activeOpacity={0.8}
                   >
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: isWeb && isLargeScreen ? 16 : 12 }}>
                       <View style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
+                        width: isWeb && isLargeScreen ? 52 : 40,
+                        height: isWeb && isLargeScreen ? 52 : 40,
+                        borderRadius: isWeb && isLargeScreen ? 26 : 20,
                         backgroundColor: COLORS.sand,
                         justifyContent: 'center',
                         alignItems: 'center',
                         marginRight: 10,
                       }}>
-                        <Ionicons name={demo.iconName as any} size={20} color={COLORS.copper} />
+                        <Ionicons name={demo.iconName as any} size={isWeb && isLargeScreen ? 28 : 20} color={COLORS.copper} />
                       </View>
                       <View style={{ flex: 1 }}>
                         <Text style={{ 
@@ -1474,8 +1648,8 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
                     </View>
                     <Text style={{ 
                       color: COLORS.primaryBrown, 
-                      fontSize: 15,
-                      lineHeight: 24,
+                      fontSize: isWeb && isLargeScreen ? 18 : 15,
+                      lineHeight: isWeb && isLargeScreen ? 28 : 24,
                       fontWeight: '500',
                     }} numberOfLines={2}>
                       {demo.text}
@@ -1488,7 +1662,12 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
 
           {/* Mathematical Analysis Animation */}
           {isAnalyzing && analysisStage !== 'idle' && (
-            <View style={{ padding: 20 }}>
+            <View style={{ 
+              padding: isWeb && isLargeScreen ? 40 : 20,
+              maxWidth: isWeb && isLargeScreen ? 1200 : '100%',
+              marginHorizontal: 'auto',
+              width: '100%',
+            }}>
               <MathematicalAnalysisAnimation 
                 stage={analysisStage} 
                 text={inputShloka}
@@ -1499,7 +1678,10 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
           {/* Analysis Results */}
           {analysisResult && !isAnalyzing && (
             <Animated.View style={{ 
-              padding: 20, 
+              padding: isWeb && isLargeScreen ? 40 : 20,
+              maxWidth: isWeb && isLargeScreen ? 1200 : '100%',
+              marginHorizontal: 'auto',
+              width: '100%',
               opacity: fadeAnim,
               transform: [{
                 translateY: fadeAnim.interpolate({
@@ -1538,9 +1720,14 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
               <LinearGradient
                 colors={[COLORS.primaryBrown, COLORS.darkBrown]}
                 style={{
-                  borderRadius: 24,
-                  padding: 24,
-                  marginBottom: 16,
+                  borderRadius: isWeb && isLargeScreen ? 32 : 24,
+                  padding: isWeb && isLargeScreen ? 40 : 24,
+                  marginBottom: isWeb && isLargeScreen ? 24 : 16,
+                  shadowColor: COLORS.darkBrown,
+                  shadowOffset: { width: 0, height: 8 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 16,
+                  elevation: 10,
                 }}
               >
                 <View style={{ alignItems: 'center' }}>
@@ -1774,36 +1961,387 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
                       </View>
                     )}
 
-                    {/* Context */}
+                    {/* Context - Enhanced with Bold Highlighting */}
                     {meaningResult.context && (
                       <View style={{
-                        backgroundColor: `${COLORS.copper}10`,
-                        borderRadius: 16,
-                        padding: 16,
+                        backgroundColor: '#FFF',
+                        borderRadius: 20,
+                        padding: 20,
                         marginBottom: 16,
-                        borderLeftWidth: 4,
-                        borderLeftColor: COLORS.copper,
+                        borderWidth: 3,
+                        borderColor: COLORS.gold,
+                        shadowColor: COLORS.gold,
+                        shadowOffset: { width: 0, height: 6 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 10,
+                        elevation: 8,
                       }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-                          <Ionicons name="time-outline" size={18} color={COLORS.copper} />
+                        <LinearGradient
+                          colors={[COLORS.gold, COLORS.saffron]}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 0 }}
+                          style={{
+                            borderRadius: 14,
+                            padding: 14,
+                            marginBottom: 14,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <View style={{
+                            backgroundColor: 'rgba(255,255,255,0.3)',
+                            borderRadius: 12,
+                            padding: 8,
+                            marginRight: 12,
+                          }}>
+                            <Ionicons name="time-outline" size={24} color="#FFF" />
+                          </View>
+                          <View style={{ flex: 1 }}>
+                            <Text style={{
+                              color: '#FFF',
+                              fontSize: 18,
+                              fontWeight: '800',
+                              textTransform: 'uppercase',
+                              letterSpacing: 1,
+                              textShadowColor: 'rgba(0,0,0,0.2)',
+                              textShadowOffset: { width: 0, height: 1 },
+                              textShadowRadius: 2,
+                            }}>
+                              Historical Context
+                            </Text>
+                            <Text style={{
+                              color: 'rgba(255,255,255,0.9)',
+                              fontSize: 11,
+                              fontWeight: '600',
+                              marginTop: 2,
+                            }}>
+                              ऐतिहासिक संदर्भ
+                            </Text>
+                          </View>
+                        </LinearGradient>
+                        <Text style={{
+                          color: COLORS.primaryBrown,
+                          fontSize: 15,
+                          lineHeight: 24,
+                          fontWeight: '600',
+                        }}>
+                          {meaningResult.context.split(/([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*|\d{1,4}(?:\s*(?:BCE|CE|BC|AD))?|Chapter \d+|Verse \d+|Book \d+)/g).map((part, idx) => {
+                            // Bold: Proper nouns, dates, chapter/verse references
+                            const shouldBold = /^(?:[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*|\d{1,4}\s*(?:BCE|CE|BC|AD)?|Chapter \d+|Verse \d+|Book \d+)$/.test(part.trim());
+                            return shouldBold ? (
+                              <Text key={idx} style={{ fontWeight: '900', color: COLORS.copper }}>
+                                {part}
+                              </Text>
+                            ) : (
+                              part
+                            );
+                          })}
+                        </Text>
+                      </View>
+                    )}
+
+                    {/* Manifestation of Chandas - NEW SECTION */}
+                    {meaningResult.manifestation_of_chandas && (
+                      <View style={{
+                        backgroundColor: '#FFF',
+                        borderRadius: 20,
+                        padding: 20,
+                        marginBottom: 16,
+                        borderWidth: 3,
+                        borderColor: COLORS.saffron,
+                        shadowColor: COLORS.saffron,
+                        shadowOffset: { width: 0, height: 6 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 10,
+                        elevation: 8,
+                      }}>
+                        <LinearGradient
+                          colors={[COLORS.saffron, COLORS.copper]}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 0 }}
+                          style={{
+                            borderRadius: 14,
+                            padding: 14,
+                            marginBottom: 14,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <View style={{
+                            backgroundColor: 'rgba(255,255,255,0.3)',
+                            borderRadius: 12,
+                            padding: 8,
+                            marginRight: 12,
+                          }}>
+                            <Ionicons name="flower" size={24} color="#FFF" />
+                          </View>
+                          <View style={{ flex: 1 }}>
+                            <Text style={{
+                              color: '#FFF',
+                              fontSize: 18,
+                              fontWeight: '800',
+                              textTransform: 'uppercase',
+                              letterSpacing: 1,
+                              textShadowColor: 'rgba(0,0,0,0.2)',
+                              textShadowOffset: { width: 0, height: 1 },
+                              textShadowRadius: 2,
+                            }}>
+                              Manifestation of Chandas
+                            </Text>
+                            <Text style={{
+                              color: 'rgba(255,255,255,0.9)',
+                              fontSize: 11,
+                              fontWeight: '600',
+                              marginTop: 2,
+                            }}>
+                              छन्द की अभिव्यक्ति
+                            </Text>
+                          </View>
+                        </LinearGradient>
+                        
+                        {/* Decorative quote marks */}
+                        <View style={{ flexDirection: 'row', marginBottom: 12 }}>
+                          <Ionicons name="quote" size={32} color={COLORS.sand} style={{ opacity: 0.5 }} />
+                        </View>
+                        
+                        <Text style={{
+                          color: COLORS.primaryBrown,
+                          fontSize: 15,
+                          lineHeight: 26,
+                          fontWeight: '600',
+                          letterSpacing: 0.3,
+                        }}>
+                          {meaningResult.manifestation_of_chandas}
+                        </Text>
+                        
+                        {/* Decorative bottom quote */}
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 12 }}>
+                          <Ionicons 
+                            name="quote" 
+                            size={32} 
+                            color={COLORS.sand} 
+                            style={{ opacity: 0.5, transform: [{ rotate: '180deg' }] }} 
+                          />
+                        </View>
+                        
+                        {/* Info box about chandas influence */}
+                        <View style={{
+                          backgroundColor: `${COLORS.saffron}15`,
+                          borderRadius: 12,
+                          padding: 14,
+                          marginTop: 12,
+                          flexDirection: 'row',
+                          alignItems: 'flex-start',
+                        }}>
+                          <Ionicons name="information-circle" size={20} color={COLORS.saffron} style={{ marginRight: 10, marginTop: 2 }} />
                           <Text style={{
                             color: COLORS.copper,
                             fontSize: 13,
-                            fontWeight: '700',
-                            marginLeft: 8,
-                            textTransform: 'uppercase',
-                            letterSpacing: 0.5,
+                            lineHeight: 20,
+                            flex: 1,
+                            fontStyle: 'italic',
                           }}>
-                            Historical Context
+                            The rhythmic structure (chandas) of a verse influences its spiritual energy, emotional resonance, and memorability. Each meter carries unique qualities that enhance the shloka's essence.
                           </Text>
                         </View>
+                      </View>
+                    )}
+
+                    {/* Unique Facts - NEW SECTION */}
+                    {meaningResult.unique_facts && (
+                      <View style={{
+                        backgroundColor: '#FFF',
+                        borderRadius: 20,
+                        padding: 20,
+                        marginBottom: 16,
+                        borderWidth: 3,
+                        borderColor: COLORS.copper,
+                        shadowColor: COLORS.copper,
+                        shadowOffset: { width: 0, height: 6 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 10,
+                        elevation: 8,
+                      }}>
+                        <LinearGradient
+                          colors={[COLORS.copper, COLORS.saffron]}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 0 }}
+                          style={{
+                            borderRadius: 14,
+                            padding: 14,
+                            marginBottom: 14,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <View style={{
+                            backgroundColor: 'rgba(255,255,255,0.3)',
+                            borderRadius: 12,
+                            padding: 8,
+                            marginRight: 12,
+                          }}>
+                            <Ionicons name="star" size={24} color="#FFF" />
+                          </View>
+                          <View style={{ flex: 1 }}>
+                            <Text style={{
+                              color: '#FFF',
+                              fontSize: 18,
+                              fontWeight: '800',
+                              textTransform: 'uppercase',
+                              letterSpacing: 1,
+                              textShadowColor: 'rgba(0,0,0,0.2)',
+                              textShadowOffset: { width: 0, height: 1 },
+                              textShadowRadius: 2,
+                            }}>
+                              Unique Facts
+                            </Text>
+                            <Text style={{
+                              color: 'rgba(255,255,255,0.9)',
+                              fontSize: 11,
+                              fontWeight: '600',
+                              marginTop: 2,
+                            }}>
+                              विशिष्ट तथ्य
+                            </Text>
+                          </View>
+                        </LinearGradient>
+                        
+                        {/* Star decorations */}
+                        <View style={{ flexDirection: 'row', marginBottom: 12, justifyContent: 'space-around' }}>
+                          <Ionicons name="star" size={20} color={COLORS.copper} style={{ opacity: 0.6 }} />
+                          <Ionicons name="star" size={16} color={COLORS.saffron} style={{ opacity: 0.4 }} />
+                          <Ionicons name="star" size={20} color={COLORS.copper} style={{ opacity: 0.6 }} />
+                        </View>
+                        
                         <Text style={{
                           color: COLORS.primaryBrown,
-                          fontSize: 14,
-                          lineHeight: 22,
+                          fontSize: 15,
+                          lineHeight: 26,
+                          fontWeight: '600',
+                          letterSpacing: 0.3,
                         }}>
-                          {meaningResult.context}
+                          {meaningResult.unique_facts}
                         </Text>
+                        
+                        {/* Info box about unique facts */}
+                        <View style={{
+                          backgroundColor: `${COLORS.copper}15`,
+                          borderRadius: 12,
+                          padding: 14,
+                          marginTop: 12,
+                          flexDirection: 'row',
+                          alignItems: 'flex-start',
+                        }}>
+                          <Ionicons name="diamond" size={20} color={COLORS.copper} style={{ marginRight: 10, marginTop: 2 }} />
+                          <Text style={{
+                            color: COLORS.primaryBrown,
+                            fontSize: 13,
+                            lineHeight: 20,
+                            flex: 1,
+                            fontStyle: 'italic',
+                          }}>
+                            Powerful insights about the historical significance, spiritual importance, and cultural impact of this sacred verse.
+                          </Text>
+                        </View>
+                      </View>
+                    )}
+
+                    {/* Do You Know Section - Unknown Facts */}
+                    {meaningResult.unknown_facts && (
+                      <View style={{
+                        backgroundColor: '#FFF',
+                        borderRadius: 20,
+                        padding: 20,
+                        marginBottom: 16,
+                        borderWidth: 3,
+                        borderColor: COLORS.gold,
+                        shadowColor: COLORS.gold,
+                        shadowOffset: { width: 0, height: 6 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 10,
+                        elevation: 8,
+                      }}>
+                        <LinearGradient
+                          colors={[COLORS.gold, COLORS.saffron]}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 0 }}
+                          style={{
+                            borderRadius: 14,
+                            padding: 14,
+                            marginBottom: 14,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <View style={{
+                            backgroundColor: 'rgba(255,255,255,0.3)',
+                            borderRadius: 12,
+                            padding: 8,
+                            marginRight: 12,
+                          }}>
+                            <Ionicons name="bulb" size={24} color="#FFF" />
+                          </View>
+                          <View style={{ flex: 1 }}>
+                            <Text style={{
+                              color: '#FFF',
+                              fontSize: 18,
+                              fontWeight: '800',
+                              textTransform: 'uppercase',
+                              letterSpacing: 1,
+                              textShadowColor: 'rgba(0,0,0,0.2)',
+                              textShadowOffset: { width: 0, height: 1 },
+                              textShadowRadius: 2,
+                            }}>
+                              Do You Know?
+                            </Text>
+                            <Text style={{
+                              color: 'rgba(255,255,255,0.9)',
+                              fontSize: 11,
+                              fontWeight: '600',
+                              marginTop: 2,
+                            }}>
+                              क्या आप जानते हैं?
+                            </Text>
+                          </View>
+                        </LinearGradient>
+                        
+                        {/* Sparkle decorations */}
+                        <View style={{ flexDirection: 'row', marginBottom: 12, justifyContent: 'space-around' }}>
+                          <Ionicons name="sparkles" size={20} color={COLORS.gold} style={{ opacity: 0.6 }} />
+                          <Ionicons name="sparkles" size={16} color={COLORS.gold} style={{ opacity: 0.4 }} />
+                          <Ionicons name="sparkles" size={20} color={COLORS.gold} style={{ opacity: 0.6 }} />
+                        </View>
+                        
+                        <Text style={{
+                          color: COLORS.primaryBrown,
+                          fontSize: 15,
+                          lineHeight: 26,
+                          fontWeight: '600',
+                          letterSpacing: 0.3,
+                        }}>
+                          {meaningResult.unknown_facts}
+                        </Text>
+                        
+                        {/* Info box about fascinating facts */}
+                        <View style={{
+                          backgroundColor: `${COLORS.gold}15`,
+                          borderRadius: 12,
+                          padding: 14,
+                          marginTop: 12,
+                          flexDirection: 'row',
+                          alignItems: 'flex-start',
+                        }}>
+                          <Ionicons name="star" size={20} color={COLORS.gold} style={{ marginRight: 10, marginTop: 2 }} />
+                          <Text style={{
+                            color: COLORS.copper,
+                            fontSize: 13,
+                            lineHeight: 20,
+                            flex: 1,
+                            fontStyle: 'italic',
+                          }}>
+                            Fascinating insights that reveal the deeper layers of meaning, cultural significance, and hidden connections within this sacred verse.
+                          </Text>
+                        </View>
                       </View>
                     )}
 
@@ -1865,6 +2403,103 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
                 )}
               </View>
 
+              {/* Colored Shloka Text Card - NEW SECTION */}
+              <View style={{
+                backgroundColor: '#FFF',
+                borderRadius: 24,
+                padding: 20,
+                marginBottom: 16,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.1,
+                shadowRadius: 8,
+                elevation: 4,
+                borderWidth: 2,
+                borderColor: COLORS.saffron,
+              }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+                  <View style={{
+                    backgroundColor: `${COLORS.saffron}20`,
+                    borderRadius: 12,
+                    padding: 10,
+                    marginRight: 12,
+                  }}>
+                    <Ionicons name="color-palette" size={22} color={COLORS.saffron} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ color: COLORS.primaryBrown, fontSize: 18, fontWeight: '700' }}>
+                      Colored Shloka Text
+                    </Text>
+                    <Text style={{ color: COLORS.lightCopper, fontSize: 12 }}>
+                      Guru (Heavy) in Red, Laghu (Light) in Green
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Legend */}
+                <View style={{ 
+                  flexDirection: 'row', 
+                  justifyContent: 'center', 
+                  marginBottom: 16,
+                  backgroundColor: COLORS.cream,
+                  borderRadius: 12,
+                  padding: 12,
+                }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 20 }}>
+                    <View style={{ 
+                      width: 16, 
+                      height: 16, 
+                      borderRadius: 8, 
+                      backgroundColor: COLORS.guruColor,
+                      marginRight: 6,
+                    }} />
+                    <Text style={{ color: COLORS.primaryBrown, fontSize: 13, fontWeight: '600' }}>Guru (●●)</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ 
+                      width: 16, 
+                      height: 16, 
+                      borderRadius: 8, 
+                      backgroundColor: COLORS.laghuColor,
+                      marginRight: 6,
+                    }} />
+                    <Text style={{ color: COLORS.primaryBrown, fontSize: 13, fontWeight: '600' }}>Laghu (○)</Text>
+                  </View>
+                </View>
+
+                {/* Colored Shloka Text */}
+                <View style={{
+                  backgroundColor: COLORS.cream,
+                  borderRadius: 16,
+                  padding: 20,
+                  borderWidth: 1,
+                  borderColor: COLORS.sand,
+                }}>
+                  <ColoredSyllableText 
+                    text={analysisResult.inputText} 
+                    syllableBreakdown={analysisResult.syllableBreakdown} 
+                  />
+                </View>
+
+                {/* Explanation */}
+                <View style={{
+                  marginTop: 16,
+                  padding: 12,
+                  backgroundColor: `${COLORS.gold}10`,
+                  borderRadius: 12,
+                  borderLeftWidth: 3,
+                  borderLeftColor: COLORS.gold,
+                }}>
+                  <Text style={{
+                    color: COLORS.primaryBrown,
+                    fontSize: 12,
+                    lineHeight: 18,
+                  }}>
+                    💡 <Text style={{ fontWeight: '700' }}>Tip:</Text> Heavy syllables (Guru) are marked in <Text style={{ color: COLORS.guruColor, fontWeight: '700' }}>red</Text> and light syllables (Laghu) in <Text style={{ color: COLORS.laghuColor, fontWeight: '700' }}>green</Text>. This helps you understand the syllabic weight pattern of the shloka.
+                  </Text>
+                </View>
+              </View>
+
               {/* Syllable Breakdown Card */}
               <View style={{
                 backgroundColor: '#FFF',
@@ -1909,8 +2544,8 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
                     <View style={{
                       width: 16,
                       height: 16,
-                      borderRadius: 4,
-                      backgroundColor: COLORS.gold,
+                      borderRadius: 8,
+                      backgroundColor: COLORS.guruColor,
                       marginRight: 8,
                     }} />
                     <Text style={{ color: COLORS.primaryBrown, fontWeight: '600' }}>Guru (गुरु) ●●</Text>
@@ -1919,8 +2554,8 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
                     <View style={{
                       width: 16,
                       height: 16,
-                      borderRadius: 4,
-                      backgroundColor: COLORS.copper,
+                      borderRadius: 8,
+                      backgroundColor: COLORS.laghuColor,
                       marginRight: 8,
                     }} />
                     <Text style={{ color: COLORS.primaryBrown, fontWeight: '600' }}>Laghu (लघु) ○</Text>
@@ -2293,7 +2928,7 @@ export default function ShlokaAnalysisModal({ visible, onClose }: ShlokaAnalysis
         </ScrollView>
       </SafeAreaView>
 
-      {/* AI Chatbot - Opens during analysis */}
+      {/* AI Chatbot - Embedded Botpress Widget */}
       
     </Modal>
   );
