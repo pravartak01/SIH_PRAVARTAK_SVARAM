@@ -11,10 +11,20 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  Platform,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const isWeb = Platform.OS === 'web';
+const isLargeScreen = isWeb && SCREEN_WIDTH > 768;
+
+const PRIMARY_BROWN = '#4A2E1C';
+const COPPER = '#B87333';
+const SAFFRON = '#DD7A1F';
 import { Video, ResizeMode } from 'expo-av';
 import VideoPlayer from '../../../components/learn/VideoPlayer';
 import CurriculumList from '../../../components/learn/CurriculumList';
@@ -210,39 +220,97 @@ export default function CourseLearnScreen() {
   const progressPercentage = progress?.completionPercentage || 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-900">
+    <SafeAreaView className="flex-1" style={{ backgroundColor: isLargeScreen ? '#f9fafb' : '#111827' }}>
       {/* Header */}
-      <View className="bg-gray-800 px-4 py-3 flex-row items-center justify-between">
-        <TouchableOpacity onPress={() => router.back()} className="p-2">
-          <Ionicons name="arrow-back" size={24} color="white" />
-        </TouchableOpacity>
-        
-        <Text className="text-white text-base font-semibold flex-1 ml-3" numberOfLines={1}>
-          {course.title}
-        </Text>
-
-        <View className="flex-row items-center space-x-2">
-          {/* Development: Force Complete Button */}
-          <TouchableOpacity
-            onPress={handleForceComplete}
-            className="p-2 bg-green-600 rounded"
+      <View 
+        style={{ 
+          backgroundColor: isLargeScreen ? '#ffffff' : '#1f2937',
+          paddingHorizontal: isLargeScreen ? 40 : 16,
+          paddingVertical: isLargeScreen ? 20 : 12,
+          borderBottomWidth: 1,
+          borderBottomColor: isLargeScreen ? '#e5e7eb' : '#374151',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: isLargeScreen ? 0.1 : 0,
+          shadowRadius: 8,
+          elevation: isLargeScreen ? 4 : 0
+        }}
+      >
+        <View 
+          className="flex-row items-center justify-between"
+          style={{ 
+            maxWidth: isLargeScreen ? 1400 : '100%',
+            marginHorizontal: 'auto',
+            width: '100%'
+          }}
+        >
+          <TouchableOpacity 
+            onPress={() => router.back()} 
+            style={{
+              padding: isLargeScreen ? 12 : 8,
+              backgroundColor: isLargeScreen ? '#f3f4f6' : 'transparent',
+              borderRadius: 12
+            }}
           >
-            <Ionicons name="checkmark-done" size={20} color="white" />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => setShowNotes(!showNotes)}
-            className="p-2"
-          >
-            <Ionicons name="document-text-outline" size={24} color="white" />
+            <Ionicons name="arrow-back" size={isLargeScreen ? 28 : 24} color={isLargeScreen ? PRIMARY_BROWN : 'white'} />
           </TouchableOpacity>
           
-          <TouchableOpacity
-            onPress={() => setShowCurriculum(!showCurriculum)}
-            className="p-2"
+          <Text 
+            style={{ 
+              color: isLargeScreen ? PRIMARY_BROWN : 'white',
+              fontSize: isLargeScreen ? 24 : 16,
+              fontWeight: 'bold',
+              flex: 1,
+              marginLeft: isLargeScreen ? 20 : 12
+            }}
+            numberOfLines={1}
           >
-            <Ionicons name="list-outline" size={24} color="white" />
-          </TouchableOpacity>
+            {course.title}
+          </Text>
+
+          <View className="flex-row items-center" style={{ gap: isLargeScreen ? 12 : 8 }}>
+            {/* Development: Force Complete Button */}
+            <TouchableOpacity
+              onPress={handleForceComplete}
+              style={{
+                padding: isLargeScreen ? 12 : 8,
+                backgroundColor: '#10b981',
+                borderRadius: 12
+              }}
+            >
+              <Ionicons name="checkmark-done" size={isLargeScreen ? 24 : 20} color="white" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => setShowNotes(!showNotes)}
+              style={{
+                padding: isLargeScreen ? 12 : 8,
+                backgroundColor: showNotes ? SAFFRON : (isLargeScreen ? '#f3f4f6' : 'transparent'),
+                borderRadius: 12
+              }}
+            >
+              <Ionicons 
+                name="document-text-outline" 
+                size={isLargeScreen ? 28 : 24} 
+                color={showNotes ? 'white' : (isLargeScreen ? PRIMARY_BROWN : 'white')} 
+              />
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              onPress={() => setShowCurriculum(!showCurriculum)}
+              style={{
+                padding: isLargeScreen ? 12 : 8,
+                backgroundColor: showCurriculum ? SAFFRON : (isLargeScreen ? '#f3f4f6' : 'transparent'),
+                borderRadius: 12
+              }}
+            >
+              <Ionicons 
+                name="list-outline" 
+                size={isLargeScreen ? 28 : 24} 
+                color={showCurriculum ? 'white' : (isLargeScreen ? PRIMARY_BROWN : 'white')} 
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
@@ -264,7 +332,16 @@ export default function CourseLearnScreen() {
             lectureId={selectedLecture?.lecture?.lectureId}
           />
         ) : (
-          <ScrollView className="flex-1">
+          <ScrollView 
+            style={{ 
+              flex: 1,
+              backgroundColor: isLargeScreen ? '#f9fafb' : '#111827' 
+            }}
+            contentContainerStyle={{ 
+              paddingBottom: isLargeScreen ? 80 : 60
+            }}
+            showsVerticalScrollIndicator={true}
+          >
             {/* Video Player */}
             {selectedLecture?.lecture ? (
               <VideoPlayer

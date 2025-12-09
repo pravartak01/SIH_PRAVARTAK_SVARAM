@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Animated, Easing } from 'react-native';
+import { View, Text, StyleSheet, Animated, Easing, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface SplashScreenProps {
@@ -258,7 +258,11 @@ export default function SplashScreen({ onFinish, isAuthLoading }: SplashScreenPr
           ]}
         >
           <View style={styles.iconCircle}>
-            <Text style={styles.iconText}>🕉️</Text>
+            <Image 
+              source={{ uri: 'https://res.cloudinary.com/dawppjhpb/image/upload/v1765191381/Untitled_design_2_ng58oi.png' }}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
           </View>
           
           {/* Decorative rings around icon */}
@@ -387,9 +391,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconCircle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -399,9 +403,11 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 10,
     zIndex: 10,
+    overflow: 'hidden',
   },
-  iconText: {
-    fontSize: 64,
+  logoImage: {
+    width: 130,
+    height: 130,
   },
   iconRing: {
     position: 'absolute',
@@ -410,13 +416,13 @@ const styles = StyleSheet.create({
     borderColor: '#FB923C',
   },
   iconRingOuter: {
-    width: 160,
-    height: 160,
+    width: 180,
+    height: 180,
     opacity: 0.3,
   },
   iconRingMiddle: {
-    width: 140,
-    height: 140,
+    width: 160,
+    height: 160,
     opacity: 0.5,
   },
   nameContainer: {

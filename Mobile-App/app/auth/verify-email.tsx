@@ -11,6 +11,9 @@ import {
   ActivityIndicator,
   Alert,
   StatusBar,
+  Dimensions,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -90,17 +93,44 @@ export default function VerifyEmailScreen() {
     router.replace('/(tabs)');
   };
 
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
+
   if (isVerifying) {
     return (
       <SafeAreaView className="flex-1 bg-ancient-50">
         <StatusBar barStyle="dark-content" backgroundColor="#fdf6e3" />
         
-        <View className="flex-1 px-6 justify-center items-center">
+        <ScrollView 
+          className="flex-1"
+          contentContainerStyle={isWeb ? {
+            minHeight: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 40,
+          } : { flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+        <View style={isWeb && isLargeScreen ? {
+          width: '100%',
+          maxWidth: 500,
+          backgroundColor: 'white',
+          borderRadius: 24,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.1,
+          shadowRadius: 24,
+          elevation: 10,
+          padding: 40,
+          margin: 20,
+          alignItems: 'center',
+        } : { width: '100%', paddingHorizontal: 24, alignItems: 'center' }}>
           <ActivityIndicator size="large" color="#f97316" />
           <Text className="text-ancient-800 text-lg font-semibold mt-4">
             Verifying your email...
           </Text>
         </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -110,7 +140,29 @@ export default function VerifyEmailScreen() {
       <SafeAreaView className="flex-1 bg-ancient-50">
         <StatusBar barStyle="dark-content" backgroundColor="#fdf6e3" />
         
-        <View className="flex-1 px-6 justify-center items-center">
+        <ScrollView 
+          className="flex-1"
+          contentContainerStyle={isWeb ? {
+            minHeight: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 40,
+          } : { flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+        <View style={isWeb && isLargeScreen ? {
+          width: '100%',
+          maxWidth: 500,
+          backgroundColor: 'white',
+          borderRadius: 24,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.1,
+          shadowRadius: 24,
+          elevation: 10,
+          padding: 40,
+          margin: 20,
+          alignItems: 'center',
+        } : { width: '100%', paddingHorizontal: 24, alignItems: 'center' }}>
           <View className="w-24 h-24 bg-green-100 rounded-full items-center justify-center mb-6">
             <Ionicons name="checkmark-circle" size={64} color="#22c55e" />
           </View>
@@ -138,6 +190,7 @@ export default function VerifyEmailScreen() {
             </LinearGradient>
           </TouchableOpacity>
         </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -146,7 +199,28 @@ export default function VerifyEmailScreen() {
     <SafeAreaView className="flex-1 bg-ancient-50">
       <StatusBar barStyle="dark-content" backgroundColor="#fdf6e3" />
       
-      <View className="flex-1 px-6 justify-center items-center">
+      <ScrollView 
+        className="flex-1"
+        contentContainerStyle={isWeb ? {
+          minHeight: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingVertical: 40,
+        } : { flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}
+      >
+      <View style={isWeb && isLargeScreen ? {
+        width: '100%',
+        maxWidth: 500,
+        backgroundColor: 'white',
+        borderRadius: 24,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.1,
+        shadowRadius: 24,
+        elevation: 10,
+        padding: 40,
+        margin: 20,
+      } : { width: '100%', paddingHorizontal: 24 }}>
         {verificationStatus === 'error' ? (
           <>
             <View className="w-24 h-24 bg-red-100 rounded-full items-center justify-center mb-6">
@@ -241,6 +315,7 @@ export default function VerifyEmailScreen() {
           </TouchableOpacity>
         )}
       </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

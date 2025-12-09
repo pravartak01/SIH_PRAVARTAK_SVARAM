@@ -45,25 +45,47 @@ export default function CertificateScreen() {
   const certificateRef = useRef<View>(null);
 
   useEffect(() => {
-    loadCertificateAndCourse();
+    loadCourseAndGenerateCertificate();
   }, [id]);
 
-  const loadCertificateAndCourse = async () => {
+  const loadCourseAndGenerateCertificate = async () => {
     try {
       setLoading(true);
       
-      // Load certificate
-      const certResponse = await courseService.getCertificate(id as string);
-      const certData = certResponse.data?.certificate;
-      setCertificate(certData);
-      
-      // Load course details
+      // Load course details only (no backend certificate call)
       const courseResponse = await courseService.getCourseById(id as string);
       const courseData = courseResponse.data?.course || courseResponse.course;
       setCourse(courseData);
       
+      // Generate static certificate data
+      const generatedCertificate = {
+        certificateId: `SHYK-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+        studentName: user?.name || 'Student Name',
+        courseName: courseData?.title || 'Course Name',
+        instructorName: courseData?.instructor?.name || 'Instructor',
+        completedAt: new Date().toISOString(),
+        totalLectures: courseData?.structure?.units?.reduce((acc: number, unit: any) => 
+          acc + unit.lessons.reduce((sum: number, lesson: any) => sum + lesson.lectures.length, 0), 0) || 0,
+        courseDuration: courseData?.metadata?.duration?.split(' ')[0] || 'N/A',
+        level: courseData?.level || 'All Levels',
+      };
+      
+      setCertificate(generatedCertificate);
+      
     } catch (error) {
       console.error('Error loading certificate:', error);
+      // Even if course load fails, generate basic certificate
+      const fallbackCertificate = {
+        certificateId: `SHYK-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+        studentName: user?.name || 'Student Name',
+        courseName: 'Sanskrit Learning Course',
+        instructorName: 'ShlokaYug Instructor',
+        completedAt: new Date().toISOString(),
+        totalLectures: 0,
+        courseDuration: 'N/A',
+        level: 'All Levels',
+      };
+      setCertificate(fallbackCertificate);
     } finally {
       setLoading(false);
     }
@@ -103,12 +125,35 @@ export default function CertificateScreen() {
     }
   };
 
-  const handleDownload = () => {
-    Alert.alert(
-      'Download Certificate',
-      'Certificate download feature coming soon! You can share it for now.',
-      [{ text: 'OK' }]
-    );
+  const handleDownload = async () => {
+    try {
+      // Install packages: npx expo install react-native-view-shot expo-media-library expo-file-system
+      // For now, just share the certificate details
+      const certificateText = 
+        `🎓 CERTIFICATE OF COMPLETION 🎓\n\n` +
+        `This certifies that\n` +
+        `${certificate?.studentName || user?.name}\n\n` +
+        `has successfully completed\n` +
+        `"${course?.title || certificate?.courseName}"\n\n` +
+        `Instructor: ${course?.instructor?.name || certificate?.instructorName}\n` +
+        `Completion Date: ${formatDate(certificate?.completedAt || new Date())}\n` +
+        `Certificate ID: ${certificate?.certificateId}\n\n` +
+        `Verified by ShlokaYug 🕉️`;
+      
+      await Share.share({
+        message: certificateText,
+        title: 'Course Completion Certificate',
+      });
+      
+      Alert.alert(
+        '✅ Certificate Ready!',
+        'Certificate details copied to share. Professional PDF download feature coming soon!',
+        [{ text: 'OK' }]
+      );
+    } catch (error) {
+      console.error('Download error:', error);
+      Alert.alert('Error', 'Failed to process certificate. Please try again.');
+    }
   };
 
   const formatDate = (date: string | Date) => {
@@ -164,12 +209,17 @@ export default function CertificateScreen() {
       {/* Header */}
       <SafeAreaView style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <TouchableOpacity onPress={() => router.back()} style={{ padding: 8 }}>
+          <TouchableOpacity onPress={() => router.back()} style={{ padding: 8, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 12 }}>
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
-          <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
-            Your Certificate
-          </Text>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', letterSpacing: 0.5 }}>
+              🎓 Your Certificate
+            </Text>
+            <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 2 }}>
+              Congratulations on your achievement!
+            </Text>
+          </View>
           <View style={{ width: 40 }} />
         </View>
       </SafeAreaView>
@@ -187,6 +237,20 @@ export default function CertificateScreen() {
             {/* Decorative Border */}
             <View style={styles.borderOuter}>
               <View style={styles.borderInner}>
+                {/* Corner Decorations */}
+                <View style={{ position: 'absolute', top: 12, left: 12 }}>
+                  <MaterialCommunityIcons name="flower" size={28} color={COLORS.gold} />
+                </View>
+                <View style={{ position: 'absolute', top: 12, right: 12 }}>
+                  <MaterialCommunityIcons name="flower" size={28} color={COLORS.gold} />
+                </View>
+                <View style={{ position: 'absolute', bottom: 12, left: 12 }}>
+                  <MaterialCommunityIcons name="flower" size={28} color={COLORS.gold} />
+                </View>
+                <View style={{ position: 'absolute', bottom: 12, right: 12 }}>
+                  <MaterialCommunityIcons name="flower" size={28} color={COLORS.gold} />
+                </View>
+
                 {/* Top Ornament */}
                 <View style={styles.ornamentTop}>
                   <View style={styles.ornamentLine} />
@@ -284,6 +348,42 @@ export default function CertificateScreen() {
             </View>
           </LinearGradient>
         </View>
+
+        {/* Achievement Badge */}
+        <LinearGradient
+          colors={[COLORS.gold, COLORS.darkGold]}
+          style={{
+            borderRadius: 20,
+            padding: 20,
+            marginBottom: 20,
+            shadowColor: COLORS.gold,
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.5,
+            shadowRadius: 12,
+            elevation: 10,
+          }}
+        >
+          <View style={{ alignItems: 'center' }}>
+            <MaterialCommunityIcons name="seal" size={48} color="white" />
+            <Text style={{ color: 'white', fontSize: 22, fontWeight: '800', marginTop: 12, letterSpacing: 1 }}>
+              Course Mastered
+            </Text>
+            <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 14, textAlign: 'center', marginTop: 8, lineHeight: 20 }}>
+              You have successfully completed all lectures and earned this certificate of completion
+            </Text>
+            <View style={{ flexDirection: 'row', marginTop: 16, gap: 8 }}>
+              <View style={{ backgroundColor: 'rgba(255,255,255,0.25)', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 12 }}>
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: '700' }}>✨ Excellence</Text>
+              </View>
+              <View style={{ backgroundColor: 'rgba(255,255,255,0.25)', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 12 }}>
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: '700' }}>🎯 Dedication</Text>
+              </View>
+              <View style={{ backgroundColor: 'rgba(255,255,255,0.25)', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 12 }}>
+                <Text style={{ color: 'white', fontSize: 12, fontWeight: '700' }}>🏆 Success</Text>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
 
         {/* Social Share Card */}
         <LinearGradient
@@ -398,349 +498,415 @@ export default function CertificateScreen() {
 // Styles
 const styles = StyleSheet.create({
   certificate: {
-    borderRadius: 16,
-    padding: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 10,
+    borderRadius: 20,
+    padding: 6,
+    shadowColor: COLORS.gold,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.5,
+    shadowRadius: 20,
+    elevation: 15,
   },
   borderOuter: {
-    borderWidth: 3,
+    borderWidth: 4,
     borderColor: COLORS.gold,
-    borderRadius: 12,
-    padding: 4,
+    borderRadius: 16,
+    padding: 6,
+    backgroundColor: 'rgba(212, 175, 55, 0.05)',
   },
   borderInner: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: COLORS.darkGold,
-    borderRadius: 8,
-    padding: 24,
+    borderRadius: 12,
+    padding: 28,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
   },
   ornamentTop: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   ornamentLine: {
-    height: 1,
-    width: 40,
+    height: 2,
+    width: 50,
     backgroundColor: COLORS.gold,
-    marginHorizontal: 12,
+    marginHorizontal: 16,
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   logo: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 90,
+    height: 90,
+    borderRadius: 45,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: COLORS.gold,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 6,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
+    borderWidth: 3,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   certTitle: {
-    fontSize: 32,
-    fontWeight: '800',
+    fontSize: 36,
+    fontWeight: '900',
     color: COLORS.brown,
     textAlign: 'center',
-    letterSpacing: 3,
+    letterSpacing: 5,
+    textShadowColor: 'rgba(212, 175, 55, 0.2)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
   },
   certSubtitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
     color: COLORS.copper,
     textAlign: 'center',
-    marginTop: 4,
-    letterSpacing: 1,
+    marginTop: 6,
+    letterSpacing: 2,
+    fontStyle: 'italic',
   },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
+    marginVertical: 24,
   },
   dividerLine: {
-    height: 1,
-    width: 60,
+    height: 2,
+    width: 70,
     backgroundColor: COLORS.gold,
-    marginHorizontal: 8,
+    marginHorizontal: 10,
   },
   recipientLabel: {
-    fontSize: 14,
+    fontSize: 15,
     color: COLORS.copper,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
+    letterSpacing: 1,
+    fontWeight: '500',
   },
   recipientName: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: 32,
+    fontWeight: '800',
     color: COLORS.brown,
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
+    letterSpacing: 1,
+    textDecorationLine: 'underline',
+    textDecorationColor: COLORS.gold,
+    textDecorationStyle: 'solid',
   },
   achievementText: {
-    fontSize: 14,
+    fontSize: 15,
     color: COLORS.copper,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
+    letterSpacing: 0.5,
   },
   challengeName: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 22,
+    fontWeight: '700',
     color: COLORS.saffron,
     textAlign: 'center',
-    marginBottom: 20,
-    paddingHorizontal: 16,
+    marginBottom: 24,
+    paddingHorizontal: 20,
+    lineHeight: 30,
   },
   instructorSection: {
     alignItems: 'center',
-    marginBottom: 20,
-    paddingVertical: 12,
-    backgroundColor: `${COLORS.gold}15`,
-    borderRadius: 12,
+    marginBottom: 24,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    backgroundColor: `${COLORS.gold}20`,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: `${COLORS.gold}40`,
   },
   instructorLabel: {
-    fontSize: 12,
+    fontSize: 13,
     color: COLORS.copper,
-    marginBottom: 4,
+    marginBottom: 6,
+    letterSpacing: 1,
+    fontWeight: '500',
   },
   instructorName: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
     color: COLORS.brown,
+    letterSpacing: 0.5,
   },
   statsSection: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 20,
-    paddingVertical: 16,
-    backgroundColor: `${COLORS.copper}10`,
-    borderRadius: 12,
+    marginBottom: 24,
+    paddingVertical: 20,
+    backgroundColor: `${COLORS.copper}15`,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: `${COLORS.copper}30`,
   },
   statBox: {
     alignItems: 'center',
   },
   statValue: {
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: 28,
+    fontWeight: '800',
     color: COLORS.saffron,
+    textShadowColor: 'rgba(221, 122, 31, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
   },
   statLabel: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.copper,
-    marginTop: 2,
+    marginTop: 4,
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
   dateSection: {
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   dateLabel: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.copper,
-    marginBottom: 4,
+    marginBottom: 6,
+    letterSpacing: 1,
+    fontWeight: '500',
   },
   dateValue: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '700',
     color: COLORS.brown,
+    letterSpacing: 0.5,
   },
   certNumber: {
-    fontSize: 10,
+    fontSize: 11,
     color: COLORS.copper,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 24,
     fontFamily: 'monospace',
+    letterSpacing: 1,
+    fontWeight: '600',
   },
   ornamentBottom: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 12,
+    marginTop: 16,
   },
   watermark: {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: [{ translateX: -60 }, { translateY: -20 }, { rotate: '-45deg' }],
-    opacity: 0.05,
+    transform: [{ translateX: -80 }, { translateY: -30 }, { rotate: '-45deg' }],
+    opacity: 0.04,
   },
   watermarkText: {
-    fontSize: 48,
+    fontSize: 64,
     fontWeight: '900',
     color: COLORS.gold,
+    letterSpacing: 3,
   },
   socialCard: {
-    borderRadius: 20,
-    padding: 20,
+    borderRadius: 24,
+    padding: 24,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
+    shadowColor: COLORS.saffron,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 12,
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   socialCardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   socialCardTitle: {
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 24,
+    fontWeight: '800',
     color: 'white',
     marginLeft: 12,
+    letterSpacing: 0.5,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
   },
   socialCardBody: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   achievementRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   achievementText2: {
-    fontSize: 14,
+    fontSize: 15,
     color: 'white',
-    marginLeft: 8,
-    opacity: 0.9,
+    marginLeft: 10,
+    opacity: 0.95,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
   socialCardCourse: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
     color: 'white',
-    marginBottom: 16,
+    marginBottom: 20,
+    lineHeight: 28,
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   socialStatsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 12,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: 12,
+    paddingVertical: 16,
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   socialStat: {
     alignItems: 'center',
     flex: 1,
   },
   socialStatValue: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 22,
+    fontWeight: '800',
     color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   socialStatLabel: {
-    fontSize: 10,
+    fontSize: 11,
     color: 'white',
-    opacity: 0.8,
-    marginTop: 2,
+    opacity: 0.9,
+    marginTop: 4,
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
   socialStatDivider: {
     width: 1,
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: 'rgba(255,255,255,0.4)',
   },
   socialCardFooter: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 12,
-    borderTopWidth: 1,
+    paddingTop: 16,
+    borderTopWidth: 2,
     borderTopColor: 'rgba(255,255,255,0.3)',
   },
   socialCardBrand: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
     color: 'white',
-    marginLeft: 8,
+    marginLeft: 10,
+    letterSpacing: 1,
   },
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 5,
+    paddingVertical: 18,
+    borderRadius: 16,
+    shadowColor: '#4CAF50',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
+    elevation: 8,
   },
   actionButtonText: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: '700',
-    marginLeft: 8,
+    fontSize: 17,
+    fontWeight: '800',
+    marginLeft: 10,
+    letterSpacing: 0.5,
   },
   shareTitle: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
     textAlign: 'center',
-    marginVertical: 16,
+    marginVertical: 20,
+    letterSpacing: 0.5,
   },
   shareButtonsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 12,
-    gap: 8,
+    marginBottom: 16,
+    gap: 10,
   },
   socialButton: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 14,
-    paddingHorizontal: 8,
-    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 10,
+    borderRadius: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
   socialButtonText: {
     color: 'white',
-    fontSize: 11,
-    fontWeight: '600',
-    marginTop: 4,
+    fontSize: 12,
+    fontWeight: '700',
+    marginTop: 6,
+    letterSpacing: 0.3,
   },
   moreShareButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 14,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: 12,
-    borderWidth: 1,
+    paddingVertical: 16,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 16,
+    borderWidth: 2,
     borderColor: 'rgba(255,255,255,0.3)',
   },
   moreShareText: {
     color: 'white',
-    fontSize: 14,
-    fontWeight: '600',
-    marginLeft: 8,
+    fontSize: 15,
+    fontWeight: '700',
+    marginLeft: 10,
+    letterSpacing: 0.5,
   },
   verifyBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(212,175,55,0.15)',
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
+    backgroundColor: 'rgba(212,175,55,0.2)',
+    padding: 20,
+    borderRadius: 16,
+    borderWidth: 2,
     borderColor: COLORS.gold,
-    marginTop: 16,
+    marginTop: 20,
+    shadowColor: COLORS.gold,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
   },
   verifyTitle: {
     color: COLORS.gold,
-    fontSize: 14,
-    fontWeight: '700',
-    marginBottom: 4,
+    fontSize: 16,
+    fontWeight: '800',
+    marginBottom: 6,
+    letterSpacing: 0.5,
   },
   verifyText: {
-    color: 'rgba(255,255,255,0.7)',
-    fontSize: 12,
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 13,
+    lineHeight: 18,
   },
 });

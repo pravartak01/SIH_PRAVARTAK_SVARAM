@@ -5,9 +5,10 @@ export interface ShlokaWord {
   id: string;
   text: string;
   transliteration: string;
-  startTime: number; // in milliseconds
+  startTime: number; 
   endTime: number;
 }
+
 
 export interface ShlokaLine {
   id: string;
@@ -37,81 +38,88 @@ export interface ShlokaData {
   rating: number;
 }
 
-// Gayatri Mantra - Most popular Vedic mantra
-export const GAYATRI_MANTRA: ShlokaData = {
+export const BHADRAM_KARNEBHII_SHLOKA: ShlokaData = {
+  id: 'bhadram-karnebhih',
+  title: 'Bhadram Karnebhih Shloka',
+  subtitle: 'ॐ भद्रं कर्णेभिः शृणुयाम देवाः',
+  source: 'Rigveda 1.89.8',
+  category: 'Vedic Mantras',
+  difficulty: 'intermediate',
+  duration: 55,
+  audioFile: 'bhadram_karnebhih.mp3',
+  thumbnailColor: '#3C8DAD',
+  description:
+    'A sacred peace invocation from the Rigveda, prayed for auspicious hearing, vision, strength, and a righteous long life under divine grace.',
+  meaning:
+    'O gods, may we hear only what is auspicious. O worshipful ones, may we see what is auspicious. With steady limbs and bodies, may we praise you and live the full span ordained by heaven.',
   
-  "id": "gayatri-mantra",
-  "title": "Gayatri Mantra",
-  "subtitle": "गायत्री मंत्र",
-  "source": "Rigveda 3.62.10",
-  "category": "Vedic Mantras",
-  "difficulty": "beginner",
-  "duration": 45,
-  "audioFile": null,
-  "thumbnailColor": "#FF6B35",
-  "description": "The Gayatri Mantra is a highly revered mantra from the Vedas, dedicated to Savitr, the Sun deity.",
-  "meaning": "We meditate on the glory of the Creator who has created the Universe, who is worthy of worship, who is the embodiment of Knowledge and Light, who is the remover of all ignorance. May He enlighten our intellect.",
-  "lines": [
+  lines: [
     {
-      "id": "line-1",
-      "text": "ॐ भूर्भुवः स्वः",
-      "transliteration": "Om Bhur Bhuvah Svah",
-      "translation": "Om, Earth, Atmosphere, Heaven",
-      "startTime": 0,
-      "endTime": 5850,
-      "words": [
-        { "id": "w1", "text": "ॐ", "transliteration": "Om", "startTime": 0, "endTime": 585 },
-        { "id": "w2", "text": "भूर्", "transliteration": "Bhur", "startTime": 585, "endTime": 1150 },
-        { "id": "w3", "text": "भुवः", "transliteration": "Bhuvah", "startTime": 1150, "endTime": 2900 },
-        { "id": "w4", "text": "स्वः", "transliteration": "Svah", "startTime": 2900, "endTime": 5850 }
-      ]
+      id: 'line-1',
+      text: 'ॐ भद्रं कर्णेभिः शृणुयाम देवाः',
+      transliteration: 'Om Bhadram Karnebhih Shrunuyaama Devaah',
+      translation: 'Om, O gods, may we hear only what is auspicious',
+      startTime: 0,
+      endTime: 9000,
+      words: [
+        { id: 'w1', text: 'ॐ', transliteration: 'Om', startTime: 0, endTime: 2000 },
+        { id: 'w2', text: 'भद्रं', transliteration: 'Bhadram', startTime: 2000, endTime: 3500 },
+        { id: 'w3', text: 'कर्णेभिः', transliteration: 'Karnebhih', startTime: 3500, endTime: 5500 },
+        { id: 'w4', text: 'शृणुयाम', transliteration: 'Shrunuyaama', startTime: 5500, endTime: 7500 },
+        { id: 'w5', text: 'देवाः', transliteration: 'Devaah', startTime: 7500, endTime: 9000 },
+      ],
     },
+
     {
-      "id": "line-2",
-      "text": "तत्सवितुर्वरेण्यं",
-      "transliteration": "Tat Savitur Varenyam",
-      "translation": "That Creator, most adorable",
-      "startTime": 5850,
-      "endTime": 10330,
-      "words": [
-        { "id": "w5", "text": "तत्", "transliteration": "Tat", "startTime": 5850, "endTime": 6800 },
-        { "id": "w6", "text": "सवितुर्", "transliteration": "Savitur", "startTime": 6800, "endTime": 8200 },
-        { "id": "w7", "text": "वरेण्यं", "transliteration": "Varenyam", "startTime": 8200, "endTime": 10330 }
-      ]
+      id: 'line-2',
+      text: 'भद्रं पश्येमाक्षभिर्यजत्राः',
+      transliteration: 'Bhadram Pashyemaakshabhiryajataraah',
+      translation: 'O worshipful ones, may we see only what is auspicious',
+      startTime: 9000,
+      endTime: 16000,
+      words: [
+        { id: 'w6', text: 'भद्रं', transliteration: 'Bhadram', startTime: 9000, endTime: 11000 },
+        { id: 'w7', text: 'पश्येम', transliteration: 'Pashyema', startTime: 11000, endTime: 13000 },
+        { id: 'w8', text: 'अक्षभिः', transliteration: 'Akshabhih', startTime: 13000, endTime: 14500 },
+        { id: 'w9', text: 'यजत्राः', transliteration: 'Yajatraah', startTime: 14500, endTime: 16000 },
+      ],
     },
+
     {
-      "id": "line-3",
-      "text": "भर्गो देवस्य धीमहि",
-      "transliteration": "Bhargo Devasya Dhimahi",
-      "translation": "The divine light, we meditate upon",
-      "startTime": 10330,
-      "endTime": 15500,
-      "words": [
-        { "id": "w8", "text": "भर्गो", "transliteration": "Bhargo", "startTime": 10330, "endTime": 11500 },
-        { "id": "w9", "text": "देवस्य", "transliteration": "Devasya", "startTime": 11500, "endTime": 13200 },
-        { "id": "w10", "text": "धीमहि", "transliteration": "Dhimahi", "startTime": 13200, "endTime": 15500 }
-      ]
+      id: 'line-3',
+      text: 'स्थिरैरङ्गैस्तुष्टुवागँसस्तनूभिः',
+      transliteration: 'Sthirair Angais Tushtuvaam Sah Stanuubhih',
+      translation:
+        'With steady limbs and strong bodies may we offer praises',
+      startTime: 16000,
+      endTime: 23000,
+      words: [
+        { id: 'w10', text: 'स्थिरैः', transliteration: 'Sthiraih', startTime: 16000, endTime: 18000 },
+        { id: 'w11', text: 'अङ्गैः', transliteration: 'Angaih', startTime: 18000, endTime: 19500 },
+        { id: 'w12', text: 'तुष्टुवागँसः', transliteration: 'Tushtuvaagansah', startTime: 19500, endTime: 21500 },
+        { id: 'w13', text: 'तनूभिः', transliteration: 'Tanuubhih', startTime: 21500, endTime: 23000 },
+      ],
     },
+
     {
-      "id": "line-4",
-      "text": "धियो यो नः प्रचोदयात्",
-      "transliteration": "Dhiyo Yo Nah Prachodayat",
-      "translation": "May He inspire our intellect",
-      "startTime": 15500,
-      "endTime": 20700,
-      "words": [
-        { "id": "w11", "text": "धियो", "transliteration": "Dhiyo", "startTime": 15500, "endTime": 16600 },
-        { "id": "w12", "text": "यो", "transliteration": "Yo", "startTime": 16600, "endTime": 17300 },
-        { "id": "w13", "text": "नः", "transliteration": "Nah", "startTime": 17300, "endTime": 18000 },
-        { "id": "w14", "text": "प्रचोदयात्", "transliteration": "Prachodayat", "startTime": 18000, "endTime": 20700 }
-      ]
-    }
+      id: 'line-4',
+      text: 'व्यशेम देवहितं यदायूः',
+      transliteration: 'Vyashema Devahitam Yadaayuh',
+      translation: 'May we spend our ordained lifespan in service of the divine',
+      startTime: 23000,
+      endTime: 31000,
+      words: [
+        { id: 'w14', text: 'व्यशेम', transliteration: 'Vyashema', startTime: 23000, endTime: 26000 },
+        { id: 'w15', text: 'देवहितम्', transliteration: 'Devahitam', startTime: 26000, endTime: 28500 },
+        { id: 'w16', text: 'यद्', transliteration: 'Yad', startTime: 28500, endTime: 29500 },
+        { id: 'w17', text: 'आयुः', transliteration: 'Aayuh', startTime: 29500, endTime: 31000 },
+      ],
+    },
   ],
-  "tags": ["Vedic", "Meditation", "Sun", "Wisdom"],
-  "practiceCount": 15420,
-  "rating": 4.9
 
-
+  tags: ['Vedic', 'Peace', 'Auspiciousness', 'Well-being'],
+  practiceCount: 8650,
+  rating: 4.9,
 };
 
 // Mahamrityunjaya Mantra
@@ -124,7 +132,7 @@ export const MAHAMRITYUNJAYA_MANTRA: ShlokaData = {
   difficulty: 'intermediate',
   duration: 50,
   // audioFile: require('../../assets/audio/shlokas/mahamrityunjaya-mantra.mp3'),
-  audioFile: null, // TODO: Add audio file
+  audioFile: 'mahamrityunjay_mantra.mp3',
   thumbnailColor: '#6B5CE7',
   description: 'The Mahamrityunjaya Mantra is a verse of the Rigveda addressed to Tryambaka "the three-eyed one", an epithet of Rudra.',
   meaning: 'We worship the three-eyed One who is fragrant and who nourishes all beings. May He liberate us from death for the sake of immortality, just as the cucumber is severed from its bondage to the vine.',
@@ -195,7 +203,7 @@ export const SHANTI_MANTRA: ShlokaData = {
   difficulty: 'beginner',
   duration: 35,
   // audioFile: require('../../assets/audio/shlokas/shanti-mantra.mp3'),
-  audioFile: null, // TODO: Add audio file
+  audioFile: 'shanti mantra.mp3',
   thumbnailColor: '#00BFA5',
   description: 'The Shanti Mantra is a prayer for peace recited at the beginning and end of religious rituals and discourses.',
   meaning: 'Om, May all be happy. May all be free from illness. May all see what is auspicious. May no one suffer. Om Peace, Peace, Peace.',
@@ -283,7 +291,7 @@ export const VAKRATUNDA_SHLOKA: ShlokaData = {
   difficulty: 'beginner',
   duration: 30,
   // audioFile: require('../../assets/audio/shlokas/vakratunda-shloka.mp3'),
-  audioFile: null, // TODO: Add audio file
+  audioFile: 'vakratunda.mp3',
   thumbnailColor: '#FF9800',
   description: 'A popular shloka dedicated to Lord Ganesha, often recited before starting any new venture or worship.',
   meaning: 'O Lord with curved trunk, large body, whose brilliance equals that of a crore suns, please make all my work free of obstacles, always.',
@@ -354,7 +362,7 @@ export const ASATO_MA_MANTRA: ShlokaData = {
   difficulty: 'beginner',
   duration: 40,
   // audioFile: require('../../assets/audio/shlokas/asato-ma-mantra.mp3'),
-  audioFile: null, // TODO: Add audio file
+  audioFile: 'astoma.mp3',
   thumbnailColor: '#9C27B0',
   description: 'This ancient prayer from the Upanishads asks for guidance from untruth to truth, from darkness to light, and from death to immortality.',
   meaning: 'Lead me from the unreal to the real, from darkness to light, from death to immortality. Om Peace, Peace, Peace.',
@@ -429,7 +437,7 @@ export const SARASWATI_VANDANA: ShlokaData = {
   difficulty: 'intermediate',
   duration: 35,
   // audioFile: require('../../assets/audio/shlokas/saraswati-vandana.mp3'),
-  audioFile: null, // TODO: Add audio file
+  audioFile: 'Saraswati vandana.mp3',
   thumbnailColor: '#2196F3',
   description: 'A prayer to Goddess Saraswati, the deity of knowledge, music, and arts.',
   meaning: 'O Goddess Saraswati, who is fair as the jasmine moon, who is adorned with pure white garments, whose hands are adorned with the divine veena, who is seated on a white lotus, who is always worshipped by Brahma, Vishnu, Shiva and other Gods, protect me. O Goddess, remove my mental dullness.',
@@ -513,7 +521,7 @@ export const OM_NAMAH_SHIVAYA: ShlokaData = {
   category: 'Devotional',
   difficulty: 'beginner',
   duration: 25,
-  audioFile: null,
+  audioFile: 'om namah shivaya.mp3',
   thumbnailColor: '#607D8B',
   description: 'The Panchakshari Mantra, one of the most powerful mantras dedicated to Lord Shiva.',
   meaning: 'I bow to Lord Shiva, the auspicious one, the supreme consciousness.',
@@ -572,7 +580,7 @@ export const GURU_BRAHMA: ShlokaData = {
   category: 'Devotional',
   difficulty: 'beginner',
   duration: 35,
-  audioFile: null,
+  audioFile: 'Guru bramha.mp3',
   thumbnailColor: '#795548',
   description: 'A shloka in praise of the Guru, equating the teacher with the holy trinity.',
   meaning: 'Guru is Brahma, Guru is Vishnu, Guru is Shiva. Guru is the Supreme Brahman. Salutations to that Guru.',
@@ -644,7 +652,7 @@ export const HARE_KRISHNA_MANTRA: ShlokaData = {
   category: 'Devotional',
   difficulty: 'beginner',
   duration: 40,
-  audioFile: null,
+  audioFile: 'hare krishna.mp3',
   thumbnailColor: '#E91E63',
   description: 'The Hare Krishna Mahamantra is a 16-word Vaishnava mantra for achieving the highest state of consciousness.',
   meaning: 'O Lord Krishna, O Energy of the Lord, please engage me in Your devotional service.',
@@ -720,7 +728,7 @@ export const HANUMAN_CHALISA_OPENING: ShlokaData = {
   category: 'Devotional',
   difficulty: 'intermediate',
   duration: 45,
-  audioFile: null,
+  audioFile: 'hanuman chalisa.mp3',
   thumbnailColor: '#FF5722',
   description: 'The opening verses of Hanuman Chalisa, a devotional hymn dedicated to Lord Hanuman.',
   meaning: 'With the dust of Guru\'s lotus feet, I clean the mirror of my mind and then narrate the pure fame of Shri Ram, which bestows the four fruits of life.',
@@ -826,7 +834,7 @@ export const LAKSHMI_MANTRA: ShlokaData = {
   category: 'Devotional',
   difficulty: 'beginner',
   duration: 30,
-  audioFile: null,
+  audioFile: 'Mahalaxmi .mp3',
   thumbnailColor: '#FFD700',
   description: 'A powerful mantra dedicated to Goddess Lakshmi for wealth, prosperity, and abundance.',
   meaning: 'Om, I bow to the great Goddess Lakshmi who bestows wealth and prosperity.',
@@ -879,6 +887,82 @@ export const LAKSHMI_MANTRA: ShlokaData = {
   rating: 4.8,
 };
 
+
+export const GAYATRI_MANTRA: ShlokaData = {
+  "id": "gayatri-mantra",
+  "title": "Gayatri Mantra",
+  "subtitle": "गायत्री मंत्र",
+  "source": "Rigveda 3.62.10",
+  "category": "Vedic Mantras",
+  "difficulty": "beginner",
+  "duration": 45,
+  "audioFile": null,
+  "thumbnailColor": "#FF6B35",
+  "description": "The Gayatri Mantra is a highly revered mantra from the Vedas, dedicated to Savitr, the Sun deity.",
+  "meaning": "We meditate on the glory of the Creator who has created the Universe, who is worthy of worship, who is the embodiment of Knowledge and Light, who is the remover of all ignorance. May He enlighten our intellect.",
+  "lines": [
+    {
+      "id": "line-1",
+      "text": "ॐ भूर्भुवः स्वः",
+      "transliteration": "Om Bhur Bhuvah Svah",
+      "translation": "Om, Earth, Atmosphere, Heaven",
+      "startTime": 0,
+      "endTime": 5850,
+      "words": [
+        { "id": "w1", "text": "ॐ", "transliteration": "Om", "startTime": 0, "endTime": 585 },
+        { "id": "w2", "text": "भूर्", "transliteration": "Bhur", "startTime": 585, "endTime": 1150 },
+        { "id": "w3", "text": "भुवः", "transliteration": "Bhuvah", "startTime": 1150, "endTime": 2900 },
+        { "id": "w4", "text": "स्वः", "transliteration": "Svah", "startTime": 2900, "endTime": 5850 }
+      ]
+    },
+    {
+      "id": "line-2",
+      "text": "तत्सवितुर्वरेण्यं",
+      "transliteration": "Tat Savitur Varenyam",
+      "translation": "That Creator, most adorable",
+      "startTime": 5850,
+      "endTime": 10330,
+      "words": [
+        { "id": "w5", "text": "तत्", "transliteration": "Tat", "startTime": 5850, "endTime": 6800 },
+        { "id": "w6", "text": "सवितुर्", "transliteration": "Savitur", "startTime": 6800, "endTime": 8200 },
+        { "id": "w7", "text": "वरेण्यं", "transliteration": "Varenyam", "startTime": 8200, "endTime": 10330 }
+      ]
+    },
+    {
+      "id": "line-3",
+      "text": "भर्गो देवस्य धीमहि",
+      "transliteration": "Bhargo Devasya Dhimahi",
+      "translation": "The divine light, we meditate upon",
+      "startTime": 10330,
+      "endTime": 15500,
+      "words": [
+        { "id": "w8", "text": "भर्गो", "transliteration": "Bhargo", "startTime": 10330, "endTime": 11500 },
+        { "id": "w9", "text": "देवस्य", "transliteration": "Devasya", "startTime": 11500, "endTime": 13200 },
+        { "id": "w10", "text": "धीमहि", "transliteration": "Dhimahi", "startTime": 13200, "endTime": 15500 }
+      ]
+    },
+    {
+      "id": "line-4",
+      "text": "धियो यो नः प्रचोदयात्",
+      "transliteration": "Dhiyo Yo Nah Prachodayat",
+      "translation": "May He inspire our intellect",
+      "startTime": 15500,
+      "endTime": 20700,
+      "words": [
+        { "id": "w11", "text": "धियो", "transliteration": "Dhiyo", "startTime": 15500, "endTime": 16600 },
+        { "id": "w12", "text": "यो", "transliteration": "Yo", "startTime": 16600, "endTime": 17300 },
+        { "id": "w13", "text": "नः", "transliteration": "Nah", "startTime": 17300, "endTime": 18000 },
+        { "id": "w14", "text": "प्रचोदयात्", "transliteration": "Prachodayat", "startTime": 18000, "endTime": 20700 }
+      ]
+    }
+  ],
+  "tags": ["Vedic", "Meditation", "Sun", "Wisdom"],
+  "practiceCount": 15420,
+  "rating": 4.9
+
+
+};
+
 // 12. Durga Mantra
 export const DURGA_MANTRA: ShlokaData = {
   id: 'durga-mantra',
@@ -888,7 +972,7 @@ export const DURGA_MANTRA: ShlokaData = {
   category: 'Devotional',
   difficulty: 'intermediate',
   duration: 40,
-  audioFile: null,
+  audioFile: 'durga mantra.mp3',
   thumbnailColor: '#C62828',
   description: 'A powerful shloka invoking Goddess Durga, the divine mother who destroys evil and protects devotees.',
   meaning: 'O auspicious one, who bestows auspiciousness, O one who fulfills all desires, O one who provides refuge, O three-eyed Goddess Gauri, salutations to you.',
@@ -959,7 +1043,7 @@ export const VISHNU_MANTRA: ShlokaData = {
   category: 'Devotional',
   difficulty: 'intermediate',
   duration: 45,
-  audioFile: null,
+  audioFile: 'vishnu shloka.mp3',
   thumbnailColor: '#1565C0',
   description: 'A beautiful dhyana shloka describing Lord Vishnu in his cosmic form.',
   meaning: 'He who has a peaceful form, who rests on a serpent, who has a lotus in his navel, who is the lord of gods, who supports the universe, who is like the sky, who has the color of clouds, who has beautiful limbs.',
@@ -1040,7 +1124,7 @@ export const YA_DEVI_MANTRA: ShlokaData = {
   category: 'Devotional',
   difficulty: 'beginner',
   duration: 35,
-  audioFile: null,
+  audioFile: 'Ya devi.mp3',
   thumbnailColor: '#AD1457',
   description: 'A beautiful hymn from Durga Saptashati, invoking the Goddess who resides in all beings.',
   meaning: 'To that Goddess who resides in all beings in the form of consciousness, salutations to her, salutations to her, salutations to her repeatedly.',
@@ -1208,7 +1292,7 @@ export const AUM_MANTRA: ShlokaData = {
   category: 'Vedic Mantras',
   difficulty: 'beginner',
   duration: 30,
-  audioFile: null,
+  audioFile: 'Aum mantra.mp3',
   thumbnailColor: '#311B92',
   description: 'The sacred syllable Aum (Om) is the primordial sound, representing the essence of the ultimate reality.',
   meaning: 'Om is the sound of the universe. It represents creation, preservation, and transformation. It is the past, present, and future unified.',
@@ -2020,9 +2104,65 @@ export const KARPUR_GAURAM: ShlokaData = {
   practiceCount: 10780,
   rating: 4.8,
 };
+export const INDRA_SHAKRA_DASYUN: ShlokaData = {
+  id: 'indra-shakra-dasyun',
+  title: 'Indra — Victory over Enemies',
+  subtitle: 'इन्द्रः शत्रूंरज्यसीन् रज्यसीन् रज्यसीन्।\nविश्वा वर्तानि जहि शक्र दस्यून्।',
+  source: 'Rigvedic tradition',
+  category: 'Vedic Mantras / Hymns',
+  difficulty: 'intermediate',
+  duration: 30,
+  audioFile: 'indra_shakra_dasyun.mp3',
+  thumbnailColor: '#C94C4C',
+  description:
+    'A short Vedic invocation praising Indra (Śakra) for overthrowing foes and beseeching him to destroy hostile tribes (dasyus) that roam about.',
+  meaning:
+    'Indra has overpowered the enemies — he has vanquished them again and again. O Śakra (Indra), slay the hostile bands that roam everywhere.',
+  lines: [
+    {
+      id: 'line-1',
+      text: 'इन्द्रः शत्रूंरज्यसीन् रज्यसीन् रज्यसीन्।',
+      transliteration: 'Indraḥ śatrūn rajyasīn rajyasīn rajyasīn',
+      translation: 'Indra has subdued the enemies — he conquered, conquered, conquered.',
+      startTime: 0,
+      endTime: 12000,
+      words: [
+        { id: 'w1', text: 'इन्द्रः', transliteration: 'Indraḥ', startTime: 0, endTime: 2000 },
+        { id: 'w2', text: 'शत्रून्', transliteration: 'śatrūn', startTime: 2000, endTime: 4500 },
+        { id: 'w3', text: 'रज्यसीन्', transliteration: 'rajyasīn', startTime: 4500, endTime: 7000 },
+        { id: 'w4', text: 'रज्यसीन्', transliteration: 'rajyasīn', startTime: 7000, endTime: 9500 },
+        { id: 'w5', text: 'रज्यसीन्', transliteration: 'rajyasīn', startTime: 9500, endTime: 12000 },
+      ],
+    },
+    {
+      id: 'line-2',
+      text: 'विश्वा वर्तानि जहि शक्र दस्यून्।',
+      transliteration: 'Viśvā vartāni jahi Śakra daśyūn',
+      translation: 'O Śakra, strike down the hostile tribes that move about everywhere.',
+      startTime: 12000,
+      endTime: 30000,
+      words: [
+        { id: 'w6', text: 'विश्वा', transliteration: 'Viśvā', startTime: 12000, endTime: 14000 },
+        { id: 'w7', text: 'वर्तानि', transliteration: 'vartāni', startTime: 14000, endTime: 17000 },
+        { id: 'w8', text: 'जहि', transliteration: 'jahi', startTime: 17000, endTime: 19000 },
+        { id: 'w9', text: 'शक्र', transliteration: 'Śakra', startTime: 19000, endTime: 21500 },
+        { id: 'w10', text: 'दस्यून्', transliteration: 'daśyūn', startTime: 21500, endTime: 30000 },
+      ],
+    },
+  ],
+  tags: ['Vedic', 'War-cry', 'Indra', 'Protection'],
+  practiceCount: 4320,
+  rating: 4.7,
+};
 
 // All Shlokas Collection
 export const ALL_SHLOKAS: ShlokaData[] = [
+  BHADRAM_KARNEBHII_SHLOKA,
+  INDRA_SHAKRA_DASYUN,
+  LAKSHMI_NAMASTHESTHU,
+  MANOJAVAM_HANUMAN,
+  VASUDEVA_SUTAM,
+  KARPUR_GAURAM,
   GAYATRI_MANTRA,
   MAHAMRITYUNJAYA_MANTRA,
   SHANTI_MANTRA,
@@ -2049,10 +2189,7 @@ export const ALL_SHLOKAS: ShlokaData[] = [
   BG_KARMA_YOGA,
   SHANTAKARAM_VISHNU,
   SUKLAM_BHARADHARAM,
-  LAKSHMI_NAMASTHESTHU,
-  MANOJAVAM_HANUMAN,
-  VASUDEVA_SUTAM,
-  KARPUR_GAURAM,
+  
 ];
 
 // Categories

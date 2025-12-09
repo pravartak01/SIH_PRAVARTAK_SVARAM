@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, Animated, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { getHinduDate, getDailySanskritQuote, getFormattedDate, fetchPanchangData, PanchangData } from './utils';
@@ -112,6 +112,11 @@ export default function Header({ children }: HeaderProps) {
 
   const timeAccent = getTimeAccent();
 
+  // Web-specific styling
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
+
   useEffect(() => {
     // Staggered entrance animation
     Animated.sequence([
@@ -205,7 +210,19 @@ export default function Header({ children }: HeaderProps) {
         onClose={() => setIsLanguageSelectorVisible(false)}
       />
 
-      <View className="bg-white px-5 pt-3 pb-4">
+      <View className="bg-white px-5 pt-3 pb-4" style={isWeb && isLargeScreen ? {
+        paddingHorizontal: 60,
+        paddingTop: 24,
+        paddingBottom: 32,
+        backgroundColor: '#FDF8E8',
+        borderBottomLeftRadius: 24,
+        borderBottomRightRadius: 24,
+        shadowColor: '#B87333',
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.15,
+        shadowRadius: 20,
+        elevation: 8,
+      } : {}}>
         {/* Top Row - User Info & Actions */}
         <Animated.View 
           className="flex-row items-center justify-between mb-4"
@@ -215,115 +232,281 @@ export default function Header({ children }: HeaderProps) {
           }}
         >
           {/* Menu & User Info */}
-          <View className="flex-row items-center flex-1">
-            <TouchableOpacity 
-              className="w-12 h-12 bg-gray-50 rounded-2xl items-center justify-center mr-3"
-              onPress={() => setIsDrawerVisible(true)}
-              activeOpacity={0.7}
-              style={{
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
-              <Ionicons name="menu" size={24} color="#374151" />
-            </TouchableOpacity>
+          <View className="flex-row items-center flex-1 mr-2">
+            {/* Menu button - Mobile only */}
+            {(!isWeb || !isLargeScreen) && (
+              <TouchableOpacity 
+                className="w-12 h-12 bg-gray-50 rounded-2xl items-center justify-center mr-3"
+                onPress={() => setIsDrawerVisible(true)}
+                activeOpacity={0.7}
+                style={{
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.05,
+                  shadowRadius: 4,
+                  elevation: 2,
+                }}
+              >
+                <Ionicons name="menu" size={24} color="#374151" />
+              </TouchableOpacity>
+            )}
             
-            <View className="flex-1">
+            <View className="flex-1 pr-2">
               <View className="flex-row items-center mb-0.5">
-                <Ionicons name={getGreetingIcon()} size={16} color={timeAccent.primary} />
-                <Text className="text-gray-500 text-sm ml-1.5 font-poppins-medium">{getGreeting()}</Text>
+                <Ionicons name={getGreetingIcon()} size={isWeb && isLargeScreen ? 20 : 16} color={timeAccent.primary} />
+                <Text 
+                  className="text-gray-500 ml-1.5 font-poppins-medium flex-1" 
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={isWeb && isLargeScreen ? { fontSize: 18 } : { fontSize: 14 }}
+                >
+                  {getGreeting()}
+                </Text>
               </View>
-              <Text className="text-gray-900 text-xl font-playfair-bold tracking-tight">
+              <Text 
+                className="text-gray-900 font-playfair-bold tracking-tight"
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={isWeb && isLargeScreen ? { fontSize: 32, fontWeight: '700' } : { fontSize: 20 }}
+              >
                 {user?.profile?.firstName || user?.username || t('header.guest')}
               </Text>
             </View>
           </View>
           
-          {/* Action Buttons */}
+          {/* Action Buttons - Right Side */}
           <View className="flex-row items-center gap-3">
-            <TouchableOpacity 
-              className="w-12 h-12 bg-gray-50 rounded-2xl items-center justify-center"
-              onPress={() => setIsLanguageSelectorVisible(true)}
-              activeOpacity={0.7}
-              style={{
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
-              <Ionicons name="language" size={24} color="#374151" />
-            </TouchableOpacity>
-            <TouchableOpacity 
-              className="w-12 h-12 bg-gray-50 rounded-2xl items-center justify-center"
-              activeOpacity={0.7}
-              style={{
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 4,
-                elevation: 2,
-              }}
-            >
-              <View className="relative">
-                <Ionicons name="notifications" size={24} color="#374151" />
-                <Animated.View 
-                  className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"
-                  style={{ transform: [{ scale: pulseAnim }] }}
-                />
+            {(!isWeb || !isLargeScreen) ? (
+              <View className="flex-row items-center gap-3">
+                <TouchableOpacity 
+                  className="w-12 h-12 bg-gray-50 rounded-2xl items-center justify-center"
+                  onPress={() => setIsLanguageSelectorVisible(true)}
+                  activeOpacity={0.7}
+                  style={{
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.05,
+                    shadowRadius: 4,
+                    elevation: 2,
+                  }}
+                >
+                  <Ionicons name="language" size={24} color="#374151" />
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  className="w-12 h-12 bg-gray-50 rounded-2xl items-center justify-center"
+                  activeOpacity={0.7}
+                  style={{
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.05,
+                    shadowRadius: 4,
+                    elevation: 2,
+                  }}
+                >
+                  <View className="relative">
+                    <Ionicons name="notifications" size={24} color="#374151" />
+                    <Animated.View 
+                      className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"
+                      style={{ transform: [{ scale: pulseAnim }] }}
+                    />
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  className="w-12 h-12 rounded-2xl items-center justify-center overflow-hidden"
+                  onPress={() => router.push('/profile')}
+                  activeOpacity={0.7}
+                  style={{
+                    backgroundColor: timeAccent.secondary,
+                    shadowColor: timeAccent.primary,
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.15,
+                    shadowRadius: 4,
+                    elevation: 3,
+                  }}
+                >
+                  <Ionicons name="person" size={22} color={timeAccent.primary} />
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              className="w-12 h-12 rounded-2xl items-center justify-center overflow-hidden"
-              onPress={() => router.push('/profile')}
-              activeOpacity={0.7}
-              style={{
-                backgroundColor: timeAccent.secondary,
-                shadowColor: timeAccent.primary,
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.15,
-                shadowRadius: 4,
-                elevation: 3,
-              }}
-            >
-              <Ionicons name="person" size={22} color={timeAccent.primary} />
-            </TouchableOpacity>
+            ) : (
+              /* Web Action Buttons - Larger & More Attractive */
+              <>
+                <TouchableOpacity 
+                  className="w-14 h-14 rounded-2xl items-center justify-center"
+                  onPress={() => setIsLanguageSelectorVisible(true)}
+                  activeOpacity={0.7}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    shadowColor: '#B87333',
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 16,
+                    elevation: 6,
+                    borderWidth: 2,
+                    borderColor: '#F3E4C8',
+                  }}
+                >
+                  <Ionicons name="language" size={28} color="#B87333" />
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  className="w-14 h-14 rounded-2xl items-center justify-center"
+                  activeOpacity={0.7}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    shadowColor: '#DD7A1F',
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 16,
+                    elevation: 6,
+                    borderWidth: 2,
+                    borderColor: '#FEF3E8',
+                  }}
+                >
+                  <View className="relative">
+                    <Ionicons name="notifications" size={28} color="#DD7A1F" />
+                    <Animated.View 
+                      style={{
+                        position: 'absolute',
+                        top: -2,
+                        right: -2,
+                        width: 12,
+                        height: 12,
+                        backgroundColor: '#EF4444',
+                        borderRadius: 6,
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF',
+                        transform: [{ scale: pulseAnim }],
+                      }}
+                    />
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  className="w-14 h-14 rounded-2xl items-center justify-center overflow-hidden"
+                  onPress={() => router.push('/profile')}
+                  activeOpacity={0.7}
+                  style={{
+                    backgroundColor: timeAccent.secondary,
+                    shadowColor: timeAccent.primary,
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 16,
+                    elevation: 8,
+                    borderWidth: 3,
+                    borderColor: timeAccent.primary,
+                  }}
+                >
+                  <Ionicons name="person" size={26} color={timeAccent.primary} />
+                </TouchableOpacity>
+                {/* Sidebar Menu Button - Last on Right */}
+                <TouchableOpacity 
+                  className="w-14 h-14 rounded-2xl items-center justify-center"
+                  onPress={() => setIsDrawerVisible(true)}
+                  activeOpacity={0.7}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    shadowColor: '#4A2E1C',
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 16,
+                    elevation: 8,
+                    borderWidth: 3,
+                    borderColor: '#F3E4C8',
+                  }}
+                >
+                  <Ionicons name="menu" size={28} color="#4A2E1C" />
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         </Animated.View>
 
         {/* Compact Date & Panchang Row */}
         <Animated.View 
-          className="flex-row items-center justify-between mb-4 bg-gray-50 rounded-2xl px-4 py-3"
-          style={{
+          className="flex-row items-center justify-between bg-gray-50 rounded-2xl px-4 py-3"
+          style={isWeb && isLargeScreen ? {
             opacity: fadeAnim,
             transform: [{ translateY: slideAnim }],
+            paddingHorizontal: 32,
+            paddingVertical: 20,
+            borderRadius: 24,
+            backgroundColor: '#FFFFFF',
+            shadowColor: '#B87333',
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.15,
+            shadowRadius: 20,
+            elevation: 6,
+            borderWidth: 2,
+            borderColor: '#F3E4C8',
+            marginBottom: 24,
+            marginTop: 8,
+          } : {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }],
+            marginBottom: 16,
           }}
         >
           <View className="flex-row items-center flex-1">
             <View 
-              className="w-9 h-9 rounded-xl items-center justify-center mr-3"
-              style={{ backgroundColor: timeAccent.secondary }}
+              className="rounded-xl items-center justify-center mr-3"
+              style={isWeb && isLargeScreen ? {
+                width: 52,
+                height: 52,
+                backgroundColor: timeAccent.secondary,
+                borderWidth: 2,
+                borderColor: timeAccent.primary,
+              } : {
+                width: 36,
+                height: 36,
+                backgroundColor: timeAccent.secondary,
+              }}
             >
-              <Ionicons name="calendar" size={18} color={timeAccent.primary} />
+              <Ionicons name="calendar" size={isWeb && isLargeScreen ? 26 : 18} color={timeAccent.primary} />
             </View>
             <View className="flex-1">
-              <Text className="text-gray-800 text-sm font-poppins-semibold">{formattedDate}</Text>
-              <Text className="text-gray-500 text-xs mt-0.5 font-poppins">
+              <Text 
+                className="text-gray-800 font-poppins-semibold"
+                style={isWeb && isLargeScreen ? { fontSize: 20, fontWeight: '600' } : { fontSize: 14 }}
+              >
+                {formattedDate}
+              </Text>
+              <Text 
+                className="text-gray-500 mt-0.5 font-poppins"
+                style={isWeb && isLargeScreen ? { fontSize: 16 } : { fontSize: 12 }}
+              >
                 {loading ? t('header.loading') : (panchangData?.tithi || hinduDate.tithi)}
               </Text>
             </View>
           </View>
           
           {/* Panchang badge */}
-          <View className="bg-white rounded-xl px-3 py-1.5 border border-gray-100">
+          <View 
+            className="rounded-xl border"
+            style={isWeb && isLargeScreen ? {
+              backgroundColor: timeAccent.secondary,
+              paddingHorizontal: 20,
+              paddingVertical: 12,
+              borderColor: timeAccent.primary,
+              borderWidth: 2,
+            } : {
+              backgroundColor: '#FFFFFF',
+              paddingHorizontal: 12,
+              paddingVertical: 6,
+              borderColor: '#E5E7EB',
+            }}
+          >
             {loading ? (
-              <ActivityIndicator size="small" color={timeAccent.primary} />
+              <ActivityIndicator size={isWeb && isLargeScreen ? "large" : "small"} color={timeAccent.primary} />
             ) : (
-              <Text className="text-xs font-poppins-semibold" style={{ color: timeAccent.primary }}>
+              <Text 
+                className="font-poppins-semibold" 
+                style={isWeb && isLargeScreen ? {
+                  fontSize: 18,
+                  color: timeAccent.primary,
+                  fontWeight: '700',
+                } : {
+                  fontSize: 12,
+                  color: timeAccent.primary,
+                }}
+              >
                 {panchangData?.nakshatra || hinduDate.paksha}
               </Text>
             )}
@@ -332,7 +515,11 @@ export default function Header({ children }: HeaderProps) {
 
         {/* Daily Quote Card - Modern Glassmorphism Style */}
         <Animated.View 
-          style={{
+          style={isWeb && isLargeScreen ? {
+            opacity: quoteFade,
+            transform: [{ translateY: quoteSlide }],
+            marginBottom: 24,
+          } : {
             opacity: quoteFade,
             transform: [{ translateY: quoteSlide }],
           }}
@@ -343,7 +530,16 @@ export default function Header({ children }: HeaderProps) {
           >
             <View 
               className="rounded-3xl overflow-hidden"
-              style={{
+              style={isWeb && isLargeScreen ? {
+                backgroundColor: '#FFFCF5',
+                borderWidth: 1,
+                borderColor: '#E8D9CF',
+                shadowColor: '#4A2E1C',
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.12,
+                shadowRadius: 24,
+                elevation: 6,
+              } : {
                 backgroundColor: '#FFFCF5',
                 borderWidth: 1,
                 borderColor: '#E8D9CF',
@@ -367,16 +563,32 @@ export default function Header({ children }: HeaderProps) {
                 <View className="flex-row items-center justify-between mb-3">
                   <View className="flex-row items-center">
                     <View 
-                      className="w-8 h-8 rounded-lg items-center justify-center mr-2"
-                      style={{ backgroundColor: timeAccent.secondary }}
+                      className="rounded-lg items-center justify-center mr-2"
+                      style={isWeb && isLargeScreen ? {
+                        width: 48,
+                        height: 48,
+                        backgroundColor: timeAccent.secondary,
+                        borderWidth: 2,
+                        borderColor: timeAccent.primary,
+                      } : {
+                        width: 32,
+                        height: 32,
+                        backgroundColor: timeAccent.secondary,
+                      }}
                     >
-                      <Ionicons name="book" size={16} color={timeAccent.primary} />
+                      <Ionicons name="book" size={isWeb && isLargeScreen ? 24 : 16} color={timeAccent.primary} />
                     </View>
                     <View>
-                      <Text className="text-gray-900 text-xs font-poppins-bold uppercase tracking-wider">
+                      <Text 
+                        className="text-gray-900 font-poppins-bold uppercase tracking-wider"
+                        style={isWeb && isLargeScreen ? { fontSize: 16, fontWeight: '700' } : { fontSize: 12 }}
+                      >
                         {t('header.quoteOfTheDay')}
                       </Text>
-                      <Text className="text-gray-400 text-[10px] font-poppins-medium">
+                      <Text 
+                        className="text-gray-400 font-poppins-medium"
+                        style={isWeb && isLargeScreen ? { fontSize: 14 } : { fontSize: 10 }}
+                      >
                         {dailyQuote.source}
                       </Text>
                     </View>
@@ -384,23 +596,34 @@ export default function Header({ children }: HeaderProps) {
                   <View className="flex-row items-center">
                     <Ionicons 
                       name={quoteExpanded ? 'chevron-up' : 'chevron-down'} 
-                      size={16} 
+                      size={isWeb && isLargeScreen ? 24 : 16} 
                       color="#9ca3af" 
                     />
                   </View>
                 </View>
                 
                 {/* Sanskrit Text */}
-                <View className="bg-white rounded-xl p-3 mb-3 border border-gray-100">
-                  <Text className="text-gray-800 text-base font-sanskrit-medium leading-6 text-center">
+                <View 
+                  className="bg-white rounded-xl mb-3 border border-gray-100"
+                  style={isWeb && isLargeScreen ? {
+                    padding: 20,
+                    borderWidth: 2,
+                    borderColor: '#E8D9CF',
+                  } : { padding: 12 }}
+                >
+                  <Text 
+                    className="text-gray-800 font-sanskrit-medium text-center"
+                    style={isWeb && isLargeScreen ? { fontSize: 22, lineHeight: 34 } : { fontSize: 16, lineHeight: 24 }}
+                  >
                     {dailyQuote.sanskrit}
                   </Text>
                 </View>
                 
                 {/* Translation/Meaning */}
                 <Text 
-                  className="text-gray-600 text-sm leading-5 font-poppins"
+                  className="text-gray-600 font-poppins"
                   numberOfLines={quoteExpanded ? undefined : 2}
+                  style={isWeb && isLargeScreen ? { fontSize: 18, lineHeight: 28 } : { fontSize: 14, lineHeight: 20 }}
                 >
                   {dailyQuote.translation}
                 </Text>

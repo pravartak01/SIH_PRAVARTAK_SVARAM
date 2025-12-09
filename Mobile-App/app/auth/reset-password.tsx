@@ -15,6 +15,7 @@ import {
   Platform,
   Alert,
   StatusBar,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -111,6 +112,10 @@ export default function ResetPasswordScreen() {
     }
   };
 
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
+
   if (!token) {
     return null;
   }
@@ -127,9 +132,27 @@ export default function ResetPasswordScreen() {
           className="flex-1"
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
+          contentContainerStyle={isWeb ? {
+            alignItems: 'center',
+            paddingVertical: 40,
+          } : {}}
         >
+          <View style={isWeb && isLargeScreen ? {
+            width: '100%',
+            maxWidth: 500,
+            minHeight: 400,
+            backgroundColor: 'white',
+            borderRadius: 24,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.1,
+            shadowRadius: 24,
+            elevation: 10,
+            padding: 40,
+            margin: 20,
+          } : { width: '100%' }}>
           {/* Header */}
-          <View className="px-6 pt-8 pb-6">
+          <View className={isWeb && isLargeScreen ? "pb-6" : "px-6 pt-8 pb-6"}>
             <Text className="text-4xl font-bold text-ancient-800 mb-2">
               Reset Password 🔐
             </Text>
@@ -139,14 +162,16 @@ export default function ResetPasswordScreen() {
           </View>
 
           {/* Illustration */}
+          {!(isWeb && isLargeScreen) && (
           <View className="items-center justify-center py-8">
             <View className="w-32 h-32 bg-saffron-100 rounded-full items-center justify-center">
               <Ionicons name="shield-checkmark-outline" size={64} color="#f97316" />
             </View>
           </View>
+          )}
 
           {/* Form */}
-          <View className="px-6">
+          <View className={isWeb && isLargeScreen ? "" : "px-6"}>
             {/* New Password Input */}
             <View className="mb-4">
               <Text className="text-ancient-800 font-semibold mb-2">New Password</Text>
@@ -280,6 +305,7 @@ export default function ResetPasswordScreen() {
                 <Text className="text-saffron-600 font-bold">Sign In</Text>
               </TouchableOpacity>
             </View>
+          </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

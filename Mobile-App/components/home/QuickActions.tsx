@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Animated, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface QuickAction {
@@ -164,6 +164,10 @@ const AnimatedCard = ({ action, index, onPress }: { action: QuickAction; index: 
 };
 
 export default function QuickActions({ onAnalyze, onHeal, onKaraoke, onSpeech, onGames, onAI }: QuickActionsProps) {
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
+
   const getActionHandler = (id: string) => {
     switch (id) {
       case 'heal': return onHeal;
@@ -177,34 +181,78 @@ export default function QuickActions({ onAnalyze, onHeal, onKaraoke, onSpeech, o
   };
 
   return (
-    <View className="py-5 bg-white">
+    <View className="py-5 bg-white" style={isWeb && isLargeScreen ? {
+      paddingVertical: 64,
+      paddingHorizontal: 60,
+      marginBottom: 16,
+    } : {}}>
       {/* Section Header */}
-      <View className="px-5 mb-4 flex-row items-center justify-between">
+      <View className="px-5 mb-4 flex-row items-center justify-between" style={isWeb && isLargeScreen ? {
+        paddingHorizontal: 0,
+        marginBottom: 40,
+      } : {}}>
         <View>
-          <Text className="text-gray-900 text-lg font-playfair-bold">Quick Actions</Text>
-          <Text className="text-gray-500 text-sm mt-0.5 font-poppins">Explore our core features</Text>
+          <Text 
+            className="text-gray-900 font-playfair-bold"
+            style={isWeb && isLargeScreen ? { fontSize: 32, fontWeight: '700', color: '#4A2E1C' } : { fontSize: 18 }}
+          >
+            Quick Actions
+          </Text>
+          <Text 
+            className="text-gray-500 mt-0.5 font-poppins"
+            style={isWeb && isLargeScreen ? { fontSize: 18, marginTop: 8, color: '#B87333' } : { fontSize: 14 }}
+          >
+            Explore our core features
+          </Text>
         </View>
-        <View className="flex-row items-center bg-gray-50 px-3 py-1.5 rounded-full">
-          <Ionicons name="grid-outline" size={12} color="#6b7280" />
-          <Text className="text-gray-600 text-xs font-poppins-medium ml-1.5">{quickActionsData.length} tools</Text>
+        <View className="flex-row items-center px-3 py-1.5 rounded-full" style={isWeb && isLargeScreen ? {
+          backgroundColor: '#FDF8E8',
+          borderWidth: 2,
+          borderColor: '#F0E4C0',
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+        } : { backgroundColor: '#f9fafb' }}>
+          <Ionicons name="grid-outline" size={isWeb && isLargeScreen ? 18 : 12} color="#D4A017" />
+          <Text 
+            className="font-poppins-medium ml-1.5"
+            style={isWeb && isLargeScreen ? { fontSize: 16, color: '#D4A017', fontWeight: '600' } : { fontSize: 12, color: '#6b7280' }}
+          >
+            {quickActionsData.length} tools
+          </Text>
         </View>
       </View>
 
       {/* Horizontal Scroll Actions */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
-      >
-        {quickActionsData.map((action, index) => (
-          <AnimatedCard 
-            key={action.id} 
-            action={action} 
-            index={index}
-            onPress={getActionHandler(action.id)}
-          />
-        ))}
-      </ScrollView>
+      {isWeb && isLargeScreen ? (
+        <View className="px-5" style={{ paddingHorizontal: 0 }}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 24, justifyContent: 'flex-start' }}>
+            {quickActionsData.map((action, index) => (
+              <View key={action.id} style={{ minWidth: 180, maxWidth: 240, flex: 1 }}>
+                <AnimatedCard 
+                  action={action} 
+                  index={index}
+                  onPress={getActionHandler(action.id)}
+                />
+              </View>
+            ))}
+          </View>
+        </View>
+      ) : (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+        >
+          {quickActionsData.map((action, index) => (
+            <AnimatedCard 
+              key={action.id} 
+              action={action} 
+              index={index}
+              onPress={getActionHandler(action.id)}
+            />
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 }

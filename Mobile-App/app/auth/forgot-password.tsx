@@ -15,6 +15,7 @@ import {
   Platform,
   Alert,
   StatusBar,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -64,12 +65,37 @@ export default function ForgotPasswordScreen() {
     }
   };
 
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
+
   if (emailSent) {
     return (
       <SafeAreaView className="flex-1 bg-ancient-50">
         <StatusBar barStyle="dark-content" backgroundColor="#fdf6e3" />
         
-        <View className="flex-1 px-6 justify-center items-center">
+        <ScrollView 
+          className="flex-1"
+          contentContainerStyle={isWeb ? {
+            minHeight: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 40,
+          } : { flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+        <View style={isWeb && isLargeScreen ? {
+          width: '100%',
+          maxWidth: 500,
+          backgroundColor: 'white',
+          borderRadius: 24,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.1,
+          shadowRadius: 24,
+          elevation: 10,
+          padding: 40,
+          margin: 20,
+        } : { width: '100%', paddingHorizontal: 24 }}>
           <View className="w-20 h-20 bg-saffron-100 rounded-full items-center justify-center mb-6">
             <Ionicons name="mail-outline" size={40} color="#f97316" />
           </View>
@@ -116,6 +142,7 @@ export default function ForgotPasswordScreen() {
             </Text>
           </TouchableOpacity>
         </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -132,16 +159,35 @@ export default function ForgotPasswordScreen() {
           className="flex-1"
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={isWeb ? {
+            alignItems: 'center',
+            paddingVertical: 40,
+          } : { flexGrow: 1 }}
         >
+          <View style={isWeb && isLargeScreen ? {
+            width: '100%',
+            maxWidth: 500,
+            minHeight: 400,
+            backgroundColor: 'white',
+            borderRadius: 24,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.1,
+            shadowRadius: 24,
+            elevation: 10,
+            padding: 40,
+            margin: 20,
+          } : { width: '100%' }}>
           {/* Header */}
-          <View className="px-6 pt-8 pb-6">
-            <TouchableOpacity
-              onPress={() => router.back()}
-              className="w-10 h-10 bg-white rounded-full items-center justify-center mb-6 border border-ancient-200"
-            >
-              <Ionicons name="arrow-back" size={24} color="#996f0a" />
-            </TouchableOpacity>
+          <View className={isWeb && isLargeScreen ? "pb-6" : "px-6 pt-8 pb-6"}>
+            {!(isWeb && isLargeScreen) && (
+              <TouchableOpacity
+                onPress={() => router.back()}
+                className="w-10 h-10 bg-white rounded-full items-center justify-center mb-6 border border-ancient-200"
+              >
+                <Ionicons name="arrow-back" size={24} color="#996f0a" />
+              </TouchableOpacity>
+            )}
 
             <Text className="text-4xl font-bold text-ancient-800 mb-2">
               Forgot Password? 🔒
@@ -152,14 +198,16 @@ export default function ForgotPasswordScreen() {
           </View>
 
           {/* Illustration */}
+          {!(isWeb && isLargeScreen) && (
           <View className="items-center justify-center py-8">
             <View className="w-32 h-32 bg-saffron-100 rounded-full items-center justify-center">
               <Ionicons name="key-outline" size={64} color="#f97316" />
             </View>
           </View>
+          )}
 
           {/* Form */}
-          <View className="px-6 flex-1 justify-between">
+          <View className={isWeb && isLargeScreen ? "flex-1 justify-between" : "px-6 flex-1 justify-between"}>
             <View>
               {/* Email Input */}
               <View className="mb-6">
@@ -227,6 +275,7 @@ export default function ForgotPasswordScreen() {
                 <Text className="text-saffron-600 font-bold">Sign In</Text>
               </TouchableOpacity>
             </View>
+          </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

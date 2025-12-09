@@ -11,9 +11,18 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Platform,
+  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const isWeb = Platform.OS === 'web';
+const isLargeScreen = isWeb && SCREEN_WIDTH > 768;
+
+const PRIMARY_BROWN = '#4A2E1C';
+const SAFFRON = '#DD7A1F';
 
 interface NotesSectionProps {
   courseId: string;
@@ -128,13 +137,57 @@ export default function NotesSection({ courseId, lectureId }: NotesSectionProps)
   };
 
   return (
-    <ScrollView className="flex-1 bg-gray-800 p-4">
-      <Text className="text-white text-xl font-bold mb-4">Notes</Text>
+    <ScrollView 
+      style={{ 
+        flex: 1,
+        backgroundColor: isLargeScreen ? '#f9fafb' : '#1f2937' 
+      }}
+      contentContainerStyle={{
+        paddingHorizontal: isLargeScreen ? 40 : 16,
+        paddingVertical: isLargeScreen ? 32 : 16,
+        paddingBottom: isLargeScreen ? 120 : 80
+      }}
+      showsVerticalScrollIndicator={true}
+    >
+      <Text 
+        style={{ 
+          color: isLargeScreen ? PRIMARY_BROWN : 'white',
+          fontSize: isLargeScreen ? 32 : 20,
+          fontWeight: 'bold',
+          marginBottom: isLargeScreen ? 32 : 16
+        }}
+      >
+        Notes
+      </Text>
 
       {/* Note Input */}
-      <View className="bg-gray-700 rounded-lg p-4 mb-4">
+      <View 
+        style={{
+          backgroundColor: isLargeScreen ? '#ffffff' : '#374151',
+          borderRadius: isLargeScreen ? 16 : 12,
+          padding: isLargeScreen ? 24 : 16,
+          marginBottom: isLargeScreen ? 32 : 16,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: isLargeScreen ? 0.08 : 0,
+          shadowRadius: 12,
+          elevation: isLargeScreen ? 4 : 0,
+          borderWidth: isLargeScreen ? 1 : 0,
+          borderColor: '#e5e7eb'
+        }}
+      >
         <TextInput
-          className="bg-gray-600 text-white rounded-lg p-3 min-h-[120px] mb-3"
+          style={{
+            backgroundColor: isLargeScreen ? '#f9fafb' : '#4b5563',
+            color: isLargeScreen ? '#1f2937' : 'white',
+            borderRadius: isLargeScreen ? 12 : 8,
+            padding: isLargeScreen ? 16 : 12,
+            minHeight: isLargeScreen ? 160 : 120,
+            marginBottom: isLargeScreen ? 16 : 12,
+            fontSize: isLargeScreen ? 16 : 14,
+            borderWidth: isLargeScreen ? 1 : 0,
+            borderColor: '#e5e7eb'
+          }}
           placeholder="Take a note..."
           placeholderTextColor="#9ca3af"
           multiline

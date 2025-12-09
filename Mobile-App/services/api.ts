@@ -1,7 +1,7 @@
-/**
+/*
  * API Configuration
  * Central configuration for all API calls
- */
+*/
 
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosError } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,6 +9,7 @@ import { Platform } from 'react-native';
 
 // Your machine's local IP address - Update this when your IP changes
 const LOCAL_IP = '10.245.97.46';
+// const LOCAL_IP = 'localhost';
 
 // For Android Emulator, use 10.0.2.2 to reach host's localhost
 // For physical devices, use LOCAL_IP

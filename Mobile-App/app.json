@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ShlokaYug",
-    "slug": "shlokayug-app",
+    "name": "Svaram",
+    "slug": "Svaram-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -21,11 +21,12 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "usesCleartextTraffic": true,
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.shantanu_kulkarni.Svaramapp"
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "https://res.cloudinary.com/dawppjhpb/image/upload/v1765191381/Untitled_design_2_ng58oi.png"
     },
     "plugins": [
       "expo-router",
@@ -45,6 +46,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "32033719-8522-4d3c-a72a-276253796ff5"
+      }
     }
   }
 }

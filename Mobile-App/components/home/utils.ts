@@ -40,8 +40,9 @@ export const fetchPanchangData = async (): Promise<PanchangData | null> => {
 
     // You need to replace these with your actual API credentials
     // Get them from https://astrologyapi.com/
-    const userId = '647637'; // Replace with your user ID
-    const apiKey = '691d72c84ccb8ac7a0402c1903fa5133ac29d119'; // Replace with your API key
+    const userId = '648189'; // Replace with your user ID
+    const apiKey = '07a40302a91b9b28a2d22c7a6fdc8fd9c3110c60'; 
+    // Replace with your API key
     
     const credentials = btoa(`${userId}:${apiKey}`);
     

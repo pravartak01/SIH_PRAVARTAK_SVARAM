@@ -89,9 +89,9 @@ const ShlokaList: React.FC<ShlokaListProps> = ({ onSelectShloka }) => {
         shouldDuckAndroid: true,
       });
 
-      // Load and play audio from URL
+      // Load and play audio from asset (audioUrl is actually an asset from getAudioUrl)
       const { sound } = await Audio.Sound.createAsync(
-        { uri: audioUrl },
+        audioUrl,
         { shouldPlay: true },
         (status) => {
           if (status.isLoaded && status.didJustFinish) {

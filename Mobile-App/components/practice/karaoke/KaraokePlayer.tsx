@@ -125,13 +125,20 @@ const KaraokePlayer: React.FC<KaraokePlayerProps> = ({
   // Load reference audio
   const loadReferenceAudio = async () => {
     try {
-      const audioUrl = getAudioUrl(shloka.id);
-      if (!audioUrl) return;
+      const audioAsset = getAudioUrl(shloka.id);
+      if (!audioAsset) {
+        console.log('No audio asset available for shloka:', shloka.id);
+        setHasReferenceAudio(false);
+        return;
+      }
 
-      const { sound } = await Audio.Sound.createAsync({ uri: audioUrl });
+      // Use the require() asset directly, not as a URI
+      const { sound } = await Audio.Sound.createAsync(audioAsset);
       setReferenceSound(sound);
     } catch (error) {
-      console.error('Error loading reference audio:', error);
+      console.log('Audio not available for this shloka. Error:', error);
+      setHasReferenceAudio(false);
+      setReferenceSound(null);
     }
   };
 

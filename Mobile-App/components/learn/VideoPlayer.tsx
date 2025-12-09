@@ -33,10 +33,19 @@ export default function VideoPlayer({ lecture, onComplete }: VideoPlayerProps) {
   }
 
   // Get the actual video URL from lecture content
-  const videoUrl = lecture?.content?.videoUrl || lecture?.videoUrl || null;
+  // Backend structure: lecture.content.videoUrl
+  // Filter out empty strings - treat them as null
+  const rawVideoUrl = lecture?.content?.videoUrl || lecture?.videoUrl || null;
+  const videoUrl = rawVideoUrl && rawVideoUrl.trim() !== '' ? rawVideoUrl : null;
   
-  console.log('VideoPlayer - Lecture data:', lecture);
-  console.log('VideoPlayer - Video URL:', videoUrl);
+  console.log('VideoPlayer - Lecture:', {
+    id: lecture?.lectureId,
+    title: lecture?.title,
+    hasContent: !!lecture?.content,
+    rawVideoUrl: rawVideoUrl,
+    videoUrl: videoUrl,
+    isEmpty: rawVideoUrl === '',
+  });
 
   const handlePlaybackStatusUpdate = (playbackStatus: AVPlaybackStatus) => {
     if (!playbackStatus.isLoaded) return;

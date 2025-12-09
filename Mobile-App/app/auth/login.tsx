@@ -15,6 +15,7 @@ import {
   Platform,
   Alert,
   StatusBar,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -75,6 +76,10 @@ export default function LoginScreen() {
     }
   };
 
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
+
   return (
     <SafeAreaView className="flex-1 bg-ancient-50">
       <StatusBar barStyle="dark-content" backgroundColor="#fdf6e3" />
@@ -87,18 +92,38 @@ export default function LoginScreen() {
           className="flex-1"
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
+          contentContainerStyle={isWeb ? {
+            alignItems: 'center',
+            paddingVertical: 40,
+          } : {}}
         >
+          <View style={isWeb && isLargeScreen ? {
+            width: '100%',
+            maxWidth: 500,
+            minHeight: 400,
+            backgroundColor: 'white',
+            borderRadius: 24,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.1,
+            shadowRadius: 24,
+            elevation: 10,
+            padding: 40,
+            margin: 20,
+          } : { width: '100%' }}>
           {/* Header */}
-          <View className="px-6 pt-8 pb-6">
-            <TouchableOpacity
-              onPress={() => router.back()}
-              className="w-10 h-10 bg-white rounded-full items-center justify-center mb-6 border border-ancient-200"
-            >
-              <Ionicons name="arrow-back" size={24} color="#996f0a" />
-            </TouchableOpacity>
+          <View className={isWeb && isLargeScreen ? "pb-6" : "px-6 pt-8 pb-6"}>
+            {!(isWeb && isLargeScreen) && (
+              <TouchableOpacity
+                onPress={() => router.back()}
+                className="w-10 h-10 bg-white rounded-full items-center justify-center mb-6 border border-ancient-200"
+              >
+                <Ionicons name="arrow-back" size={24} color="#996f0a" />
+              </TouchableOpacity>
+            )}
 
             <Text className="text-4xl font-bold text-ancient-800 mb-2">
-              Welcome Back 🙏
+              Welcome Back 
             </Text>
             <Text className="text-base text-ancient-600">
               Sign in to continue your Sanskrit learning journey
@@ -106,7 +131,7 @@ export default function LoginScreen() {
           </View>
 
           {/* Login Form */}
-          <View className="px-6">
+          <View className={isWeb && isLargeScreen ? "" : "px-6"}>
             {/* Email/Username Input */}
             <View className="mb-4">
               <Text className="text-ancient-800 font-semibold mb-2">
@@ -254,6 +279,7 @@ export default function LoginScreen() {
                 <Text className="text-saffron-600 font-bold">Sign Up</Text>
               </TouchableOpacity>
             </View>
+          </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

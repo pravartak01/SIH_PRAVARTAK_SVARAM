@@ -181,6 +181,10 @@ export default function WelcomePopup({ userName = 'Friend' }: WelcomePopupProps)
   const slideAnim = useRef(new Animated.Value(50)).current;
   const iconRotate = useRef(new Animated.Value(0)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  
+  // Refs to store running animations for cleanup
+  const iconAnimRef = useRef<Animated.CompositeAnimation | null>(null);
+  const pulseAnimRef = useRef<Animated.CompositeAnimation | null>(null);
 
   const checkAndShowPopup = async () => {
     try {
@@ -215,8 +219,8 @@ export default function WelcomePopup({ userName = 'Friend' }: WelcomePopupProps)
           }),
         ]).start();
 
-        // Icon animation
-        Animated.loop(
+        // Icon animation - store reference for cleanup
+        iconAnimRef.current = Animated.loop(
           Animated.sequence([
             Animated.timing(iconRotate, {
               toValue: 1,
@@ -229,10 +233,11 @@ export default function WelcomePopup({ userName = 'Friend' }: WelcomePopupProps)
               useNativeDriver: true,
             }),
           ])
-        ).start();
+        );
+        iconAnimRef.current.start();
 
-        // Pulse animation for CTA
-        Animated.loop(
+        // Pulse animation for CTA - store reference for cleanup
+        pulseAnimRef.current = Animated.loop(
           Animated.sequence([
             Animated.timing(pulseAnim, {
               toValue: 1.05,
@@ -245,7 +250,8 @@ export default function WelcomePopup({ userName = 'Friend' }: WelcomePopupProps)
               useNativeDriver: true,
             }),
           ])
-        ).start();
+        );
+        pulseAnimRef.current.start();
       }
     } catch (error) {
       console.log('Error checking popup status:', error);
@@ -254,10 +260,28 @@ export default function WelcomePopup({ userName = 'Friend' }: WelcomePopupProps)
 
   useEffect(() => {
     checkAndShowPopup();
+    
+    // Cleanup function to stop all animations
+    return () => {
+      if (iconAnimRef.current) {
+        iconAnimRef.current.stop();
+      }
+      if (pulseAnimRef.current) {
+        pulseAnimRef.current.stop();
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleClose = () => {
+  const handleClose = async () => {
+    // Stop all running animations
+    if (iconAnimRef.current) {
+      iconAnimRef.current.stop();
+    }
+    if (pulseAnimRef.current) {
+      pulseAnimRef.current.stop();
+    }
+    
     Animated.parallel([
       Animated.timing(scaleAnim, {
         toValue: 0.8,

@@ -4,10 +4,14 @@
  */
 
 import React, { useRef } from 'react';
-import { View, Text, TouchableOpacity, Image, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Animated, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Course } from '../../services/courseService';
 import { getFullImageUrl } from '../../services/api';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const isWeb = Platform.OS === 'web';
+const isLargeScreen = isWeb && SCREEN_WIDTH > 768;
 
 // Theme colors - Vintage Brown with Gold/Saffron/Copper highlights
 const PRIMARY_BROWN = '#4A2E1C';    // Vintage brown for theme
@@ -79,19 +83,28 @@ export default function CourseCard({ course, onPress }: CourseCardProps) {
   const thumbnailUrl = getFullImageUrl(course.thumbnail);
 
   return (
-    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+    <Animated.View 
+      style={{ 
+        transform: [{ scale: scaleAnim }],
+        maxWidth: isLargeScreen ? 600 : '100%',
+        width: '100%',
+        marginHorizontal: 'auto'
+      }}
+    >
       <TouchableOpacity
         onPress={() => onPress(course)}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         activeOpacity={1}
-        className="bg-white rounded-3xl mb-4 overflow-hidden"
+        className="bg-white rounded-3xl overflow-hidden"
         style={{
           shadowColor: PRIMARY_BROWN,
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.1,
-          shadowRadius: 12,
-          elevation: 5,
+          shadowOffset: { width: 0, height: isLargeScreen ? 8 : 4 },
+          shadowOpacity: isLargeScreen ? 0.15 : 0.1,
+          shadowRadius: isLargeScreen ? 20 : 12,
+          elevation: isLargeScreen ? 8 : 5,
+          marginBottom: isLargeScreen ? 32 : 16,
+          borderRadius: isLargeScreen ? 24 : 20
         }}
       >
         {/* Thumbnail */}
@@ -99,13 +112,22 @@ export default function CourseCard({ course, onPress }: CourseCardProps) {
           {thumbnailUrl ? (
             <Image
               source={{ uri: thumbnailUrl }}
-              className="w-full h-56"
+              style={{ width: '100%', height: isLargeScreen ? 320 : 224 }}
               resizeMode="cover"
             />
           ) : (
-            <View className="w-full h-56 bg-[#F3E4C8] items-center justify-center">
-              <View className="w-20 h-20 bg-[#E5D1AF] rounded-full items-center justify-center">
-                <Ionicons name="book" size={40} color={PRIMARY_BROWN} />
+            <View 
+              className="w-full bg-[#F3E4C8] items-center justify-center"
+              style={{ height: isLargeScreen ? 320 : 224 }}
+            >
+              <View 
+                className="bg-[#E5D1AF] rounded-full items-center justify-center"
+                style={{ 
+                  width: isLargeScreen ? 100 : 80, 
+                  height: isLargeScreen ? 100 : 80 
+                }}
+              >
+                <Ionicons name="book" size={isLargeScreen ? 52 : 40} color={PRIMARY_BROWN} />
               </View>
             </View>
           )}
@@ -118,74 +140,156 @@ export default function CourseCard({ course, onPress }: CourseCardProps) {
 
           {/* Enrolled Badge */}
           {course.isEnrolled && (
-            <View className="absolute top-3 left-3 bg-emerald-500 px-3 py-1.5 rounded-full flex-row items-center">
-              <Ionicons name="checkmark-circle" size={14} color="#ffffff" />
-              <Text className="text-white text-xs font-bold ml-1">Already Enrolled</Text>
+            <View 
+              className="absolute bg-emerald-500 rounded-full flex-row items-center"
+              style={{
+                top: isLargeScreen ? 20 : 12,
+                left: isLargeScreen ? 20 : 12,
+                paddingHorizontal: isLargeScreen ? 16 : 12,
+                paddingVertical: isLargeScreen ? 10 : 6
+              }}
+            >
+              <Ionicons name="checkmark-circle" size={isLargeScreen ? 18 : 14} color="#ffffff" />
+              <Text 
+                className="text-white font-bold ml-1"
+                style={{ fontSize: isLargeScreen ? 14 : 12 }}
+              >
+                Already Enrolled
+              </Text>
             </View>
           )}
 
           {/* Price Badge */}
           <View 
-            className="absolute top-3 right-3 px-3 py-1.5 rounded-full"
-            style={{ backgroundColor: priceInfo.isFree ? '#10b981' : SAFFRON }}
+            className="absolute rounded-full"
+            style={{ 
+              backgroundColor: priceInfo.isFree ? '#10b981' : SAFFRON,
+              top: isLargeScreen ? 20 : 12,
+              right: isLargeScreen ? 20 : 12,
+              paddingHorizontal: isLargeScreen ? 16 : 12,
+              paddingVertical: isLargeScreen ? 10 : 6
+            }}
           >
-            <Text className="text-white text-sm font-bold">
+            <Text 
+              className="text-white font-bold"
+              style={{ fontSize: isLargeScreen ? 16 : 14 }}
+            >
               {priceInfo.text}
             </Text>
           </View>
 
           {/* Rating on thumbnail */}
-          <View className="absolute bottom-3 left-3 flex-row items-center bg-black/50 px-2.5 py-1 rounded-full">
-            <Ionicons name="star" size={14} color="#fbbf24" />
-            <Text className="text-white text-sm font-bold ml-1">
+          <View 
+            className="absolute flex-row items-center bg-black/50 rounded-full"
+            style={{
+              bottom: isLargeScreen ? 20 : 12,
+              left: isLargeScreen ? 20 : 12,
+              paddingHorizontal: isLargeScreen ? 14 : 10,
+              paddingVertical: isLargeScreen ? 8 : 4
+            }}
+          >
+            <Ionicons name="star" size={isLargeScreen ? 18 : 14} color="#fbbf24" />
+            <Text 
+              className="text-white font-bold ml-1"
+              style={{ fontSize: isLargeScreen ? 16 : 14 }}
+            >
               {rating.toFixed(1)}
             </Text>
-            <Text className="text-white/70 text-xs ml-1">
+            <Text 
+              className="text-white/70 ml-1"
+              style={{ fontSize: isLargeScreen ? 14 : 12 }}
+            >
               ({reviews})
             </Text>
           </View>
 
           {/* Duration/Lessons badge */}
-          <View className="absolute bottom-3 right-3 bg-black/50 px-2.5 py-1 rounded-full flex-row items-center">
-            <Ionicons name="videocam" size={14} color="#ffffff" />
-            <Text className="text-white text-sm font-medium ml-1">
+          <View 
+            className="absolute bg-black/50 rounded-full flex-row items-center"
+            style={{
+              bottom: isLargeScreen ? 20 : 12,
+              right: isLargeScreen ? 20 : 12,
+              paddingHorizontal: isLargeScreen ? 14 : 10,
+              paddingVertical: isLargeScreen ? 8 : 4
+            }}
+          >
+            <Ionicons name="videocam" size={isLargeScreen ? 18 : 14} color="#ffffff" />
+            <Text 
+              className="text-white font-medium ml-1"
+              style={{ fontSize: isLargeScreen ? 16 : 14 }}
+            >
               {totalLessons} Lessons
             </Text>
           </View>
         </View>
 
         {/* Content */}
-        <View className="p-4">
+        <View style={{ padding: isLargeScreen ? 28 : 16 }}>
           {/* Title */}
-          <Text className="text-gray-900 text-lg font-bold mb-2" numberOfLines={2}>
+          <Text 
+            className="text-gray-900 font-bold"
+            style={{ 
+              fontSize: isLargeScreen ? 24 : 18,
+              lineHeight: isLargeScreen ? 32 : 24,
+              marginBottom: isLargeScreen ? 16 : 8
+            }}
+            numberOfLines={2}
+          >
             {course.title}
           </Text>
 
           {/* Instructor */}
-          <View className="flex-row items-center mb-3">
-            <View className="w-7 h-7 bg-[#F9F0E6] rounded-full items-center justify-center">
-              <Ionicons name="person" size={14} color={COPPER} />
+          <View 
+            className="flex-row items-center"
+            style={{ marginBottom: isLargeScreen ? 20 : 12 }}
+          >
+            <View 
+              className="bg-[#F9F0E6] rounded-full items-center justify-center"
+              style={{ 
+                width: isLargeScreen ? 36 : 28, 
+                height: isLargeScreen ? 36 : 28 
+              }}
+            >
+              <Ionicons name="person" size={isLargeScreen ? 18 : 14} color={COPPER} />
             </View>
-            <Text className="text-gray-600 text-sm ml-2 font-medium" numberOfLines={1}>
+            <Text 
+              className="text-gray-600 font-medium" 
+              style={{ 
+                fontSize: isLargeScreen ? 16 : 14,
+                marginLeft: isLargeScreen ? 12 : 8
+              }}
+              numberOfLines={1}
+            >
               {course.instructor.name}
             </Text>
           </View>
 
           {/* Meta Info Row */}
-          <View className="flex-row items-center justify-between">
+          <View 
+            className="flex-row items-center justify-between"
+            style={{ marginBottom: isLargeScreen ? 24 : 16 }}
+          >
             {/* Difficulty Badge */}
             <View 
-              className="px-3 py-1.5 rounded-xl flex-row items-center"
-              style={{ backgroundColor: difficultyConfig.bg }}
+              className="rounded-xl flex-row items-center"
+              style={{ 
+                backgroundColor: difficultyConfig.bg,
+                paddingHorizontal: isLargeScreen ? 16 : 12,
+                paddingVertical: isLargeScreen ? 10 : 6
+              }}
             >
               <Ionicons 
                 name={difficultyConfig.icon as any} 
-                size={14} 
+                size={isLargeScreen ? 18 : 14} 
                 color={difficultyConfig.color} 
               />
               <Text 
-                className="text-xs font-bold ml-1"
-                style={{ color: difficultyConfig.color }}
+                className="font-bold"
+                style={{ 
+                  color: difficultyConfig.color,
+                  fontSize: isLargeScreen ? 14 : 12,
+                  marginLeft: isLargeScreen ? 8 : 4
+                }}
               >
                 {difficultyConfig.label}
               </Text>
@@ -193,10 +297,22 @@ export default function CourseCard({ course, onPress }: CourseCardProps) {
 
             {/* Enrollments */}
             <View className="flex-row items-center">
-              <View className="w-6 h-6 bg-[#FDF8E8] rounded-full items-center justify-center">
-                <Ionicons name="people" size={12} color={GOLD} />
+              <View 
+                className="bg-[#FDF8E8] rounded-full items-center justify-center"
+                style={{ 
+                  width: isLargeScreen ? 32 : 24, 
+                  height: isLargeScreen ? 32 : 24 
+                }}
+              >
+                <Ionicons name="people" size={isLargeScreen ? 16 : 12} color={GOLD} />
               </View>
-              <Text className="text-gray-600 text-sm ml-1.5 font-medium">
+              <Text 
+                className="text-gray-600 font-medium"
+                style={{ 
+                  fontSize: isLargeScreen ? 16 : 14,
+                  marginLeft: isLargeScreen ? 10 : 6
+                }}
+              >
                 {enrollments > 1000 ? `${(enrollments/1000).toFixed(1)}K` : enrollments}+ learners
               </Text>
             </View>
@@ -205,16 +321,26 @@ export default function CourseCard({ course, onPress }: CourseCardProps) {
           {/* Enroll Button */}
           <TouchableOpacity
             onPress={() => onPress(course)}
-            className="mt-4 py-3.5 rounded-2xl items-center flex-row justify-center"
-            style={{ backgroundColor: course.isEnrolled ? '#10b981' : SAFFRON }}
+            className="rounded-2xl items-center flex-row justify-center"
+            style={{ 
+              backgroundColor: course.isEnrolled ? '#10b981' : SAFFRON,
+              paddingVertical: isLargeScreen ? 18 : 14,
+              borderRadius: isLargeScreen ? 16 : 12
+            }}
             activeOpacity={0.8}
           >
             <Ionicons 
               name={course.isEnrolled ? 'book' : 'play-circle'} 
-              size={18} 
+              size={isLargeScreen ? 24 : 18} 
               color="#ffffff" 
             />
-            <Text className="text-white font-bold ml-2">
+            <Text 
+              className="text-white font-bold"
+              style={{ 
+                fontSize: isLargeScreen ? 18 : 16,
+                marginLeft: isLargeScreen ? 12 : 8
+              }}
+            >
               {course.isEnrolled ? 'Study Now' : 'View Course'}
             </Text>
           </TouchableOpacity>

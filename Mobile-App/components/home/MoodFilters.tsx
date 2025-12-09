@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Animated, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
@@ -205,53 +205,115 @@ export default function MoodFilters() {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const selectedMoodData = moodData.find(m => m.id === selectedMood);
   const router = useRouter();
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
 
   const handleStartListening = () => {
     router.push('/heal');
   };
 
   return (
-    <View className="py-6 bg-white">
+    <View className="py-6 bg-white" style={isWeb && isLargeScreen ? {
+      paddingVertical: 64,
+      paddingHorizontal: 60,
+      backgroundColor: '#FAFAF9',
+      marginBottom: 16,
+    } : {}}>
       {/* Section Header with Featured Badge */}
-      <View className="px-5 mb-4">
-        <View className="flex-row items-center justify-between mb-1">
+      <View className="px-5 mb-4" style={isWeb && isLargeScreen ? {
+        paddingHorizontal: 0,
+        marginBottom: 40,
+      } : {}}>
+        <View className="flex-row items-center justify-between mb-1" style={isWeb && isLargeScreen ? {
+          marginBottom: 12,
+        } : {}}>
           <View className="flex-row items-center">
-            <View className="bg-[#DD7A1F] px-2.5 py-1 rounded-lg mr-2 flex-row items-center">
-              <Ionicons name="heart-circle" size={12} color="white" />
-              <Text className="text-white text-xs font-bold ml-1">USP</Text>
+            <View className="bg-[#DD7A1F] rounded-lg mr-2 flex-row items-center" style={isWeb && isLargeScreen ? {
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+            } : {
+              paddingHorizontal: 10,
+              paddingVertical: 4,
+            }}>
+              <Ionicons name="heart-circle" size={isWeb && isLargeScreen ? 18 : 12} color="white" />
+              <Text 
+                className="text-white font-bold ml-1"
+                style={isWeb && isLargeScreen ? { fontSize: 14 } : { fontSize: 12 }}
+              >
+                USP
+              </Text>
             </View>
-            <Text className="text-gray-900 text-lg font-bold">Heal with Shlokas</Text>
+            <Text 
+              className="text-gray-900 font-bold"
+              style={isWeb && isLargeScreen ? { fontSize: 32, fontWeight: '700', color: '#4A2E1C', fontFamily: 'Playfair Display' } : { fontSize: 18 }}
+            >
+              Heal with Shlokas
+            </Text>
           </View>
           <TouchableOpacity 
             onPress={handleStartListening}
             className="flex-row items-center"
+            style={isWeb && isLargeScreen ? {
+              backgroundColor: '#FDF8E8',
+              paddingHorizontal: 20,
+              paddingVertical: 12,
+              borderRadius: 16,
+              borderWidth: 2,
+              borderColor: '#F0E4C0',
+            } : {}}
           >
-            <Text className="text-[#4A2E1C] text-sm font-semibold mr-1">View All</Text>
-            <Ionicons name="chevron-forward" size={16} color="#4A2E1C" />
+            <Text 
+              className="text-[#4A2E1C] font-semibold mr-1"
+              style={isWeb && isLargeScreen ? { fontSize: 16, fontWeight: '600' } : { fontSize: 14 }}
+            >
+              View All
+            </Text>
+            <Ionicons name="chevron-forward" size={isWeb && isLargeScreen ? 18 : 16} color="#4A2E1C" />
           </TouchableOpacity>
         </View>
-        <Text className="text-gray-500 text-sm">
+        <Text 
+          className="text-gray-500"
+          style={isWeb && isLargeScreen ? { fontSize: 18, color: '#B87333', marginTop: 8 } : { fontSize: 14 }}
+        >
           Choose your current mood & find the perfect shloka
         </Text>
       </View>
 
       {/* Mood Cards Horizontal Scroll */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
-        className="mb-4"
-      >
-        {moodData.map((mood, index) => (
-          <MoodCard
-            key={mood.id}
-            mood={mood}
-            isSelected={selectedMood === mood.id}
-            onPress={() => setSelectedMood(selectedMood === mood.id ? null : mood.id)}
-            index={index}
-          />
-        ))}
-      </ScrollView>
+      {isWeb && isLargeScreen ? (
+        <View className="px-5 mb-4" style={{ paddingHorizontal: 0, marginBottom: 40 }}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 24 }}>
+            {moodData.map((mood, index) => (
+              <View key={mood.id} style={{ minWidth: 140 }}>
+                <MoodCard
+                  mood={mood}
+                  isSelected={selectedMood === mood.id}
+                  onPress={() => setSelectedMood(selectedMood === mood.id ? null : mood.id)}
+                  index={index}
+                />
+              </View>
+            ))}
+          </View>
+        </View>
+      ) : (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+          className="mb-4"
+        >
+          {moodData.map((mood, index) => (
+            <MoodCard
+              key={mood.id}
+              mood={mood}
+              isSelected={selectedMood === mood.id}
+              onPress={() => setSelectedMood(selectedMood === mood.id ? null : mood.id)}
+              index={index}
+            />
+          ))}
+        </ScrollView>
+      )}
 
       {/* Selected Mood Preview */}
       {selectedMoodData && (

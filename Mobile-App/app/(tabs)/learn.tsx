@@ -9,6 +9,7 @@ import {
   Image,
   Animated,
   Dimensions,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
@@ -20,6 +21,8 @@ import courseService, { Course, CourseFilters } from '../../services/courseServi
 import { getFullImageUrl } from '../../services/api';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const isWeb = Platform.OS === 'web';
+const isLargeScreen = isWeb && SCREEN_WIDTH > 768;
 
 // Theme colors - Vintage Brown with Gold/Saffron/Copper highlights
 const PRIMARY_BROWN = '#4A2E1C';    // Vintage brown for theme
@@ -45,16 +48,21 @@ const AnimatedTabButton = ({
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.8} className="flex-1">
       <View
-        className={`py-3 px-4 rounded-xl flex-row items-center justify-center`}
-        style={{ backgroundColor: active ? SAFFRON : '#f3f4f6' }}
+        className={`rounded-xl flex-row items-center justify-center`}
+        style={{ 
+          backgroundColor: active ? SAFFRON : '#f3f4f6',
+          paddingVertical: isLargeScreen ? 16 : 12,
+          paddingHorizontal: isLargeScreen ? 24 : 16
+        }}
       >
         <Ionicons 
           name={active ? icon : `${icon}-outline` as any} 
-          size={18} 
+          size={isLargeScreen ? 24 : 18} 
           color={active ? '#ffffff' : '#6b7280'} 
         />
         <Text
-          className={`ml-2 font-semibold ${active ? 'text-white' : 'text-gray-600'}`}
+          className={`ml-2 font-bold ${active ? 'text-white' : 'text-gray-600'}`}
+          style={isLargeScreen ? { fontSize: 20 } : { fontSize: 14 }}
         >
           {label}
         </Text>
@@ -88,21 +96,27 @@ const FilterChip = ({
   return (
     <TouchableOpacity onPress={handlePress} activeOpacity={0.8}>
       <Animated.View
-        className={`px-4 py-2 rounded-full flex-row items-center mr-2 ${!active && 'bg-gray-100 border border-gray-200'}`}
+        className={`rounded-full flex-row items-center ${!active && 'bg-gray-100 border border-gray-200'}`}
         style={{ 
           transform: [{ scale: scaleAnim }],
-          backgroundColor: active ? COPPER : undefined
+          backgroundColor: active ? COPPER : undefined,
+          paddingHorizontal: isLargeScreen ? 24 : 16,
+          paddingVertical: isLargeScreen ? 12 : 8,
+          marginRight: isLargeScreen ? 16 : 8
         }}
       >
         {icon && (
           <Ionicons 
             name={icon} 
-            size={14} 
+            size={isLargeScreen ? 20 : 14} 
             color={active ? '#ffffff' : '#6b7280'} 
-            style={{ marginRight: 4 }}
+            style={{ marginRight: isLargeScreen ? 8 : 4 }}
           />
         )}
-        <Text className={`font-medium text-sm ${active ? 'text-white' : 'text-gray-700'}`}>
+        <Text 
+          className={`font-bold ${active ? 'text-white' : 'text-gray-700'}`}
+          style={isLargeScreen ? { fontSize: 18 } : { fontSize: 14 }}
+        >
           {label}
         </Text>
       </Animated.View>
@@ -205,13 +219,17 @@ const EnrolledCourseCard = ({
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         activeOpacity={1}
-        className="bg-white rounded-3xl overflow-hidden mb-4 mx-4"
+        className="bg-white rounded-3xl overflow-hidden"
         style={{
           shadowColor: PRIMARY_BROWN,
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.1,
-          shadowRadius: 12,
-          elevation: 5,
+          shadowOffset: { width: 0, height: isLargeScreen ? 8 : 4 },
+          shadowOpacity: isLargeScreen ? 0.15 : 0.1,
+          shadowRadius: isLargeScreen ? 20 : 12,
+          elevation: isLargeScreen ? 8 : 5,
+          marginBottom: isLargeScreen ? 32 : 16,
+          marginHorizontal: isLargeScreen ? 0 : 16,
+          maxWidth: isLargeScreen ? 500 : undefined,
+          borderRadius: isLargeScreen ? 24 : 20,
         }}
       >
         {/* Course Thumbnail */}
@@ -219,13 +237,23 @@ const EnrolledCourseCard = ({
           {thumbnailUrl ? (
             <Image
               source={{ uri: thumbnailUrl }}
-              className="w-full h-56"
+              className="w-full"
+              style={{ height: isLargeScreen ? 360 : 224 }}
               resizeMode="cover"
             />
           ) : (
-            <View className="w-full h-56 bg-[#F3E4C8] items-center justify-center">
-              <View className="w-20 h-20 bg-[#E5D1AF] rounded-full items-center justify-center">
-                <Ionicons name="book" size={40} color={PRIMARY_BROWN} />
+            <View 
+              className="w-full bg-[#F3E4C8] items-center justify-center"
+              style={{ height: isLargeScreen ? 360 : 224 }}
+            >
+              <View 
+                className="bg-[#E5D1AF] rounded-full items-center justify-center"
+                style={{ 
+                  width: isLargeScreen ? 100 : 80, 
+                  height: isLargeScreen ? 100 : 80 
+                }}
+              >
+                <Ionicons name="book" size={isLargeScreen ? 56 : 40} color={PRIMARY_BROWN} />
               </View>
             </View>
           )}
@@ -239,18 +267,51 @@ const EnrolledCourseCard = ({
           />
 
           {/* Status Badge */}
-          <View className={`absolute top-3 right-3 ${statusConfig.bg} px-3 py-1.5 rounded-full flex-row items-center`}>
-            <Ionicons name={statusConfig.icon as any} size={14} color="#ffffff" />
-            <Text className="text-white text-xs font-bold ml-1">{statusConfig.label}</Text>
+          <View 
+            className={`absolute ${statusConfig.bg} rounded-full flex-row items-center`}
+            style={{
+              top: isLargeScreen ? 20 : 12,
+              right: isLargeScreen ? 20 : 12,
+              paddingHorizontal: isLargeScreen ? 20 : 12,
+              paddingVertical: isLargeScreen ? 10 : 6
+            }}
+          >
+            <Ionicons name={statusConfig.icon as any} size={isLargeScreen ? 20 : 14} color="#ffffff" />
+            <Text 
+              className="text-white font-bold ml-1"
+              style={isLargeScreen ? { fontSize: 16 } : { fontSize: 12 }}
+            >
+              {statusConfig.label}
+            </Text>
           </View>
 
           {/* Progress on image */}
-          <View className="absolute bottom-3 left-3 right-3">
+          <View 
+            className="absolute"
+            style={{
+              bottom: isLargeScreen ? 20 : 12,
+              left: isLargeScreen ? 20 : 12,
+              right: isLargeScreen ? 20 : 12
+            }}
+          >
             <View className="flex-row items-center justify-between mb-1">
-              <Text className="text-white text-xs font-medium">Your Progress</Text>
-              <Text className="text-white text-xs font-bold">{progress}%</Text>
+              <Text 
+                className="text-white font-bold"
+                style={isLargeScreen ? { fontSize: 16 } : { fontSize: 12 }}
+              >
+                Your Progress
+              </Text>
+              <Text 
+                className="text-white font-bold"
+                style={isLargeScreen ? { fontSize: 16 } : { fontSize: 12 }}
+              >
+                {progress}%
+              </Text>
             </View>
-            <View className="h-1.5 bg-white/30 rounded-full overflow-hidden">
+            <View 
+              className="bg-white/30 rounded-full overflow-hidden"
+              style={{ height: isLargeScreen ? 8 : 6 }}
+            >
               <View
                 className="h-full rounded-full"
                 style={{ width: `${progress}%`, backgroundColor: statusConfig.color }}
@@ -260,30 +321,55 @@ const EnrolledCourseCard = ({
         </View>
 
         {/* Content */}
-        <View className="p-4">
+        <View style={{ padding: isLargeScreen ? 28 : 16 }}>
           {/* Title */}
-          <Text className="text-gray-900 text-lg font-bold mb-2" numberOfLines={2}>
+          <Text 
+            className="text-gray-900 font-bold mb-2" 
+            style={isLargeScreen ? { fontSize: 28, lineHeight: 36 } : { fontSize: 18, lineHeight: 24 }}
+            numberOfLines={2}
+          >
             {course.basic?.title || course.title || 'Untitled Course'}
           </Text>
 
           {/* Meta info */}
-          <View className="flex-row items-center flex-wrap mb-3">
+          <View 
+            className="flex-row items-center flex-wrap"
+            style={{ marginBottom: isLargeScreen ? 20 : 12 }}
+          >
             {/* Instructor */}
-            <View className="flex-row items-center mr-4 mb-1">
-              <View className="w-6 h-6 bg-[#F9F0E6] rounded-full items-center justify-center">
-                <Ionicons name="person" size={12} color={COPPER} />
+            <View className="flex-row items-center mb-1" style={{ marginRight: isLargeScreen ? 24 : 16 }}>
+              <View 
+                className="bg-[#F9F0E6] rounded-full items-center justify-center"
+                style={{ 
+                  width: isLargeScreen ? 36 : 24, 
+                  height: isLargeScreen ? 36 : 24 
+                }}
+              >
+                <Ionicons name="person" size={isLargeScreen ? 18 : 12} color={COPPER} />
               </View>
-              <Text className="text-gray-600 text-sm ml-1.5">
+              <Text 
+                className="text-gray-600 font-medium"
+                style={isLargeScreen ? { fontSize: 18, marginLeft: 10 } : { fontSize: 14, marginLeft: 6 }}
+              >
                 {course.basic?.instructor || course.instructor?.name || 'Instructor'}
               </Text>
             </View>
 
             {/* Duration */}
             <View className="flex-row items-center mb-1">
-              <View className="w-6 h-6 bg-[#FDF8E8] rounded-full items-center justify-center">
-                <Ionicons name="time" size={12} color={GOLD} />
+              <View 
+                className="bg-[#FDF8E8] rounded-full items-center justify-center"
+                style={{ 
+                  width: isLargeScreen ? 36 : 24, 
+                  height: isLargeScreen ? 36 : 24 
+                }}
+              >
+                <Ionicons name="time" size={isLargeScreen ? 18 : 12} color={GOLD} />
               </View>
-              <Text className="text-gray-600 text-sm ml-1.5">
+              <Text 
+                className="text-gray-600 font-medium"
+                style={isLargeScreen ? { fontSize: 18, marginLeft: 10 } : { fontSize: 14, marginLeft: 6 }}
+              >
                 {course.metadata?.duration || '10+ Hours'}
               </Text>
             </View>
@@ -292,16 +378,23 @@ const EnrolledCourseCard = ({
           {/* Action Button */}
           <TouchableOpacity
             onPress={onPress}
-            className="py-3.5 rounded-2xl items-center flex-row justify-center"
-            style={{ backgroundColor: statusConfig.color }}
+            className="rounded-2xl items-center flex-row justify-center"
+            style={{ 
+              backgroundColor: statusConfig.color,
+              paddingVertical: isLargeScreen ? 18 : 14,
+              borderRadius: isLargeScreen ? 16 : 12
+            }}
             activeOpacity={0.8}
           >
             <Ionicons 
               name={status === 'completed' ? 'trophy' : status === 'in-progress' ? 'play' : 'rocket'} 
-              size={18} 
+              size={isLargeScreen ? 24 : 18} 
               color="#ffffff" 
             />
-            <Text className="text-white font-bold ml-2">
+            <Text 
+              className="text-white font-bold ml-2"
+              style={isLargeScreen ? { fontSize: 20 } : { fontSize: 14 }}
+            >
               {status === 'completed' ? 'Review Course' : status === 'in-progress' ? 'Continue Learning' : 'Start Your Journey'}
             </Text>
           </TouchableOpacity>
@@ -521,68 +614,144 @@ export default function LearnScreen() {
   });
 
   const renderEmptyState = () => (
-    <View className="flex-1 items-center justify-center py-16 px-6">
-      <View className="w-24 h-24 bg-[#F3E4C8] rounded-full items-center justify-center mb-4">
-        <Ionicons name="search" size={40} color={PRIMARY_BROWN} />
+    <View 
+      className="flex-1 items-center justify-center px-6"
+      style={{ paddingVertical: isLargeScreen ? 100 : 64 }}
+    >
+      <View 
+        className="bg-[#F3E4C8] rounded-full items-center justify-center mb-4"
+        style={{ 
+          width: isLargeScreen ? 120 : 96, 
+          height: isLargeScreen ? 120 : 96 
+        }}
+      >
+        <Ionicons name="search" size={isLargeScreen ? 64 : 40} color={PRIMARY_BROWN} />
       </View>
-      <Text className="text-gray-800 text-xl font-bold text-center mb-2">
+      <Text 
+        className="text-gray-800 font-bold text-center mb-2"
+        style={isLargeScreen ? { fontSize: 32 } : { fontSize: 20 }}
+      >
         No Courses Found
       </Text>
-      <Text className="text-gray-500 text-sm text-center leading-5">
+      <Text 
+        className="text-gray-500 text-center leading-5"
+        style={isLargeScreen ? { fontSize: 18, maxWidth: 500 } : { fontSize: 14 }}
+      >
         Try adjusting your search or filters to discover amazing courses
       </Text>
     </View>
   );
 
   const renderMyLearningEmpty = () => (
-    <View className="flex-1 items-center justify-center py-16 px-6">
-      <View className="w-24 h-24 bg-[#F3E4C8] rounded-full items-center justify-center mb-4">
-        <Ionicons name="school" size={40} color={PRIMARY_BROWN} />
+    <View 
+      className="flex-1 items-center justify-center px-6"
+      style={{ paddingVertical: isLargeScreen ? 100 : 64 }}
+    >
+      <View 
+        className="bg-[#F3E4C8] rounded-full items-center justify-center mb-4"
+        style={{ 
+          width: isLargeScreen ? 120 : 96, 
+          height: isLargeScreen ? 120 : 96 
+        }}
+      >
+        <Ionicons name="school" size={isLargeScreen ? 64 : 40} color={PRIMARY_BROWN} />
       </View>
-      <Text className="text-gray-800 text-xl font-bold text-center mb-2">
+      <Text 
+        className="text-gray-800 font-bold text-center mb-2"
+        style={isLargeScreen ? { fontSize: 32 } : { fontSize: 20 }}
+      >
         Start Your Learning Journey
       </Text>
-      <Text className="text-gray-500 text-sm text-center leading-5 mb-6">
+      <Text 
+        className="text-gray-500 text-center leading-5"
+        style={isLargeScreen ? { 
+          fontSize: 18, 
+          marginBottom: 32,
+          maxWidth: 500 
+        } : { 
+          fontSize: 14, 
+          marginBottom: 24 
+        }}
+      >
         Explore our courses and begin mastering Sanskrit wisdom today
       </Text>
       <TouchableOpacity
         onPress={() => setActiveTab('browse')}
-        style={{ backgroundColor: SAFFRON }}
-        className="px-6 py-3 rounded-xl flex-row items-center"
+        style={{ 
+          backgroundColor: SAFFRON,
+          paddingHorizontal: isLargeScreen ? 32 : 24,
+          paddingVertical: isLargeScreen ? 16 : 12,
+          borderRadius: isLargeScreen ? 16 : 12
+        }}
+        className="flex-row items-center"
         activeOpacity={0.8}
       >
-        <Ionicons name="compass" size={18} color="#ffffff" />
-        <Text className="text-white font-bold ml-2">Explore Courses</Text>
+        <Ionicons name="compass" size={isLargeScreen ? 24 : 18} color="#ffffff" />
+        <Text 
+          className="text-white font-bold ml-2"
+          style={isLargeScreen ? { fontSize: 20 } : { fontSize: 14 }}
+        >
+          Explore Courses
+        </Text>
       </TouchableOpacity>
     </View>
   );
 
   const renderHeader = () => (
     <Animated.View 
-      className="bg-white px-4 pt-4 pb-2"
+      className="bg-white"
       style={{
         opacity: headerFade,
         transform: [{ translateY: headerSlide }],
+        paddingHorizontal: isLargeScreen ? 60 : 16,
+        paddingTop: isLargeScreen ? 120 : 16,
+        paddingBottom: isLargeScreen ? 20 : 8
       }}
     >
       {/* Page Title */}
-      <View className="flex-row items-center justify-between mb-4">
+      <View 
+        className="flex-row items-center justify-between"
+        style={{ marginBottom: isLargeScreen ? 28 : 16 }}
+      >
         <View>
-          <Text className="text-gray-400 text-sm font-medium">Discover & Learn</Text>
-          <Text className="text-gray-900 text-2xl font-bold">Sanskrit Courses</Text>
+          <Text 
+            className="text-gray-400 font-medium"
+            style={isLargeScreen ? { fontSize: 18 } : { fontSize: 14 }}
+          >
+            Discover & Learn
+          </Text>
+          <Text 
+            className="text-gray-900 font-bold"
+            style={isLargeScreen ? { fontSize: 36, fontFamily: 'Playfair Display' } : { fontSize: 28 }}
+          >
+            Sanskrit Courses
+          </Text>
         </View>
         <View className="flex-row items-center">
           <TouchableOpacity 
-            className="w-11 h-11 bg-[#FDF8E8] rounded-xl items-center justify-center"
+            className="bg-[#FDF8E8] rounded-xl items-center justify-center"
+            style={{ 
+              width: isLargeScreen ? 56 : 44, 
+              height: isLargeScreen ? 56 : 44 
+            }}
             activeOpacity={0.7}
           >
-            <Ionicons name="bookmark" size={20} color={GOLD} />
+            <Ionicons name="bookmark" size={isLargeScreen ? 28 : 20} color={GOLD} />
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Tab Switcher */}
-      <View className="flex-row mb-4 bg-gray-100 p-1.5 rounded-2xl gap-2">
+      <View 
+        className="flex-row bg-gray-100 rounded-2xl"
+        style={{ 
+          marginBottom: isLargeScreen ? 28 : 16,
+          padding: isLargeScreen ? 8 : 6,
+          gap: isLargeScreen ? 12 : 8,
+          maxWidth: isLargeScreen ? 600 : undefined,
+          marginHorizontal: isLargeScreen ? 'auto' : 0
+        }}
+      >
         <AnimatedTabButton
           active={activeTab === 'browse'}
           onPress={() => setActiveTab('browse')}
@@ -600,32 +769,85 @@ export default function LearnScreen() {
       {activeTab === 'browse' ? (
         <>
           {/* Stats Row */}
-          <View className="flex-row items-center justify-between bg-[#F3E4C8] rounded-2xl p-4 mb-4">
+          <View 
+            className="flex-row items-center justify-between bg-[#F3E4C8] rounded-2xl"
+            style={{ 
+              padding: isLargeScreen ? 28 : 16,
+              marginBottom: isLargeScreen ? 28 : 16,
+              borderRadius: isLargeScreen ? 20 : 16
+            }}
+          >
             <View className="flex-row items-center">
-              <View className="w-10 h-10 rounded-xl items-center justify-center" style={{ backgroundColor: SAFFRON }}>
-                <Ionicons name="library" size={20} color="#ffffff" />
+              <View 
+                className="rounded-xl items-center justify-center" 
+                style={{ 
+                  backgroundColor: SAFFRON,
+                  width: isLargeScreen ? 56 : 40,
+                  height: isLargeScreen ? 56 : 40
+                }}
+              >
+                <Ionicons name="library" size={isLargeScreen ? 28 : 20} color="#ffffff" />
               </View>
-              <View className="ml-3">
-                <Text className="text-[#4A2E1C] text-lg font-bold">{filteredCourses.length}</Text>
-                <Text className="text-[#8A5E44] text-xs">Courses Available</Text>
+              <View style={{ marginLeft: isLargeScreen ? 16 : 12 }}>
+                <Text 
+                  className="text-[#4A2E1C] font-bold"
+                  style={isLargeScreen ? { fontSize: 32 } : { fontSize: 18 }}
+                >
+                  {filteredCourses.length}
+                </Text>
+                <Text 
+                  className="text-[#8A5E44]"
+                  style={isLargeScreen ? { fontSize: 16 } : { fontSize: 12 }}
+                >
+                  Courses Available
+                </Text>
               </View>
             </View>
-            <View className="h-10 w-px bg-[#E5D1AF]" />
+            <View 
+              className="bg-[#E5D1AF]"
+              style={{ 
+                height: isLargeScreen ? 56 : 40, 
+                width: 1 
+              }}
+            />
             <View className="flex-row items-center">
-              <View className="w-10 h-10 bg-emerald-500 rounded-xl items-center justify-center">
-                <Ionicons name="people" size={20} color="#ffffff" />
+              <View 
+                className="bg-emerald-500 rounded-xl items-center justify-center"
+                style={{ 
+                  width: isLargeScreen ? 56 : 40,
+                  height: isLargeScreen ? 56 : 40
+                }}
+              >
+                <Ionicons name="people" size={isLargeScreen ? 28 : 20} color="#ffffff" />
               </View>
-              <View className="ml-3">
-                <Text className="text-[#4A2E1C] text-lg font-bold">1.2K+</Text>
-                <Text className="text-[#8A5E44] text-xs">Active Learners</Text>
+              <View style={{ marginLeft: isLargeScreen ? 16 : 12 }}>
+                <Text 
+                  className="text-[#4A2E1C] font-bold"
+                  style={isLargeScreen ? { fontSize: 32 } : { fontSize: 18 }}
+                >
+                  1.2K+
+                </Text>
+                <Text 
+                  className="text-[#8A5E44]"
+                  style={isLargeScreen ? { fontSize: 16 } : { fontSize: 12 }}
+                >
+                  Active Learners
+                </Text>
               </View>
             </View>
           </View>
 
           {/* Search Bar */}
-          <View className="mb-3">
-            <View className="flex-row items-center bg-gray-50 rounded-2xl px-4 py-3 border border-gray-100">
-              <Ionicons name="search" size={20} color="#9ca3af" />
+          <View style={{ marginBottom: isLargeScreen ? 20 : 12 }}>
+            <View 
+              className="flex-row items-center bg-gray-50 rounded-2xl border border-gray-100"
+              style={{ 
+                paddingHorizontal: isLargeScreen ? 24 : 16,
+                paddingVertical: isLargeScreen ? 18 : 12,
+                borderRadius: isLargeScreen ? 16 : 12
+              }}
+            >
+              <Ionicons name="search" size={isLargeScreen ? 28 : 20} color="#9ca3af" />
               <SearchBar
                 value={searchQuery}
                 onChangeText={setSearchQuery}
@@ -635,24 +857,62 @@ export default function LearnScreen() {
           </View>
 
           {/* Filter Row */}
-          <View className="flex-row items-center justify-between mb-2">
+          <View 
+            className="flex-row items-center justify-between"
+            style={{ marginBottom: isLargeScreen ? 20 : 8 }}
+          >
             <TouchableOpacity
               onPress={() => setShowFilters(true)}
-              className="flex-row items-center bg-[#F9F0E6] px-4 py-2.5 rounded-xl border border-[#E8D5C4]"
+              className="flex-row items-center bg-[#F9F0E6] rounded-xl border border-[#E8D5C4]"
+              style={{
+                paddingHorizontal: isLargeScreen ? 24 : 16,
+                paddingVertical: isLargeScreen ? 14 : 10,
+                borderRadius: isLargeScreen ? 14 : 12
+              }}
               activeOpacity={0.7}
             >
-              <Ionicons name="options" size={18} color={COPPER} />
-              <Text className="text-[#8A5626] font-semibold ml-2">Filters</Text>
+              <Ionicons name="options" size={isLargeScreen ? 24 : 18} color={COPPER} />
+              <Text 
+                className="text-[#8A5626] font-bold ml-2"
+                style={isLargeScreen ? { fontSize: 18 } : { fontSize: 14 }}
+              >
+                Filters
+              </Text>
               {getActiveFilterCount() > 0 && (
-                <View className="rounded-full w-5 h-5 items-center justify-center ml-2" style={{ backgroundColor: COPPER }}>
-                  <Text className="text-white text-xs font-bold">{getActiveFilterCount()}</Text>
+                <View 
+                  className="rounded-full items-center justify-center ml-2" 
+                  style={{ 
+                    backgroundColor: COPPER,
+                    width: isLargeScreen ? 28 : 20,
+                    height: isLargeScreen ? 28 : 20
+                  }}
+                >
+                  <Text 
+                    className="text-white font-bold"
+                    style={isLargeScreen ? { fontSize: 14 } : { fontSize: 10 }}
+                  >
+                    {getActiveFilterCount()}
+                  </Text>
                 </View>
               )}
             </TouchableOpacity>
 
-            <View className="flex-row items-center bg-gray-50 px-3 py-2 rounded-xl">
-              <Ionicons name="funnel" size={14} color="#6b7280" />
-              <Text className="text-gray-600 text-sm font-medium ml-1.5 capitalize">
+            <View 
+              className="flex-row items-center bg-gray-50 rounded-xl"
+              style={{
+                paddingHorizontal: isLargeScreen ? 20 : 12,
+                paddingVertical: isLargeScreen ? 12 : 8,
+                borderRadius: isLargeScreen ? 12 : 8
+              }}
+            >
+              <Ionicons name="funnel" size={isLargeScreen ? 20 : 14} color="#6b7280" />
+              <Text 
+                className="text-gray-600 font-semibold capitalize"
+                style={{ 
+                  fontSize: isLargeScreen ? 16 : 14,
+                  marginLeft: isLargeScreen ? 8 : 6
+                }}
+              >
                 {activeFilters.sort?.replace('-', ' ')}
               </Text>
             </View>
@@ -661,16 +921,38 @@ export default function LearnScreen() {
       ) : (
         <>
           {/* My Learning Header */}
-          <View className="bg-[#F3E4C8] rounded-2xl p-4 mb-4">
+          <View 
+            className="bg-[#F3E4C8] rounded-2xl"
+            style={{
+              padding: isLargeScreen ? 28 : 16,
+              marginBottom: isLargeScreen ? 28 : 16,
+              borderRadius: isLargeScreen ? 20 : 16
+            }}
+          >
             <View className="flex-row items-center">
-              <View className="w-12 h-12 rounded-xl items-center justify-center" style={{ backgroundColor: GOLD }}>
-                <Ionicons name="trophy" size={24} color="#ffffff" />
+              <View 
+                className="rounded-xl items-center justify-center" 
+                style={{ 
+                  backgroundColor: GOLD,
+                  width: isLargeScreen ? 60 : 48,
+                  height: isLargeScreen ? 60 : 48
+                }}
+              >
+                <Ionicons name="trophy" size={isLargeScreen ? 32 : 24} color="#ffffff" />
               </View>
-              <View className="ml-3 flex-1">
-                <Text className="text-[#4A2E1C] text-lg font-bold">
+              <View style={{ marginLeft: isLargeScreen ? 20 : 12, flex: 1 }}>
+                <Text 
+                  className="text-[#4A2E1C] font-bold"
+                  style={isLargeScreen ? { fontSize: 28 } : { fontSize: 18 }}
+                >
                   {filteredEnrolledCourses.length} Course{filteredEnrolledCourses.length !== 1 ? 's' : ''} Enrolled
                 </Text>
-                <Text className="text-[#8A5E44] text-sm">Keep up the great work!</Text>
+                <Text 
+                  className="text-[#8A5E44]"
+                  style={isLargeScreen ? { fontSize: 16 } : { fontSize: 14 }}
+                >
+                  Keep up the great work!
+                </Text>
               </View>
             </View>
           </View>
@@ -705,11 +987,27 @@ export default function LearnScreen() {
     return (
       <SafeAreaView className="flex-1 bg-white">
         <View className="flex-1 items-center justify-center">
-          <View className="w-16 h-16 bg-[#F3E4C8] rounded-full items-center justify-center mb-4">
+          <View 
+            className="bg-[#F3E4C8] rounded-full items-center justify-center mb-4"
+            style={{
+              width: isLargeScreen ? 100 : 64,
+              height: isLargeScreen ? 100 : 64
+            }}
+          >
             <ActivityIndicator size="large" color={PRIMARY_BROWN} />
           </View>
-          <Text className="text-gray-600 font-medium">Loading courses...</Text>
-          <Text className="text-gray-400 text-sm mt-1">Preparing your learning experience</Text>
+          <Text 
+            className="text-gray-600 font-semibold"
+            style={isLargeScreen ? { fontSize: 24 } : { fontSize: 16 }}
+          >
+            Loading courses...
+          </Text>
+          <Text 
+            className="text-gray-400 mt-1"
+            style={isLargeScreen ? { fontSize: 18 } : { fontSize: 14 }}
+          >
+            Preparing your learning experience
+          </Text>
         </View>
       </SafeAreaView>
     );
@@ -723,30 +1021,45 @@ export default function LearnScreen() {
         renderItem={activeTab === 'browse' ? 
           ({ item, index }) => (
             <Animated.View 
-              className="px-4"
               style={{
                 opacity: headerFade,
+                paddingHorizontal: isLargeScreen ? 0 : 16,
+                maxWidth: isLargeScreen ? 1440 : '100%',
+                width: '100%',
+                alignSelf: 'center'
               }}
             >
               <CourseCard course={item} onPress={handleCoursePress} />
             </Animated.View>
           ) :
           ({ item, index }) => (
-            <EnrolledCourseCard
-              item={item}
-              index={index}
-              onPress={() => {
-                const courseId = (item.courseId || item.course)?._id;
-                console.log('🎓 Navigating to course learn:', courseId);
-                router.push(`/courses/${courseId}/learn`);
+            <View
+              style={{
+                maxWidth: isLargeScreen ? 1440 : '100%',
+                width: '100%',
+                alignSelf: 'center',
+                paddingHorizontal: isLargeScreen ? 0 : 16
               }}
-            />
+            >
+              <EnrolledCourseCard
+                item={item}
+                index={index}
+                onPress={() => {
+                  const courseId = (item.courseId || item.course)?._id;
+                  console.log('🎓 Navigating to course learn:', courseId);
+                  router.push(`/courses/${courseId}/learn`);
+                }}
+              />
+            </View>
           )
         }
         keyExtractor={(item) => 
           activeTab === 'browse' ? item._id : (item.courseId?._id || item.course?._id || item._id)
         }
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ 
+          paddingBottom: isLargeScreen ? 120 : 100,
+          paddingHorizontal: isLargeScreen ? 60 : 0
+        }}
         ListEmptyComponent={activeTab === 'browse' ? renderEmptyState : renderMyLearningEmpty}
         refreshControl={
           <RefreshControl

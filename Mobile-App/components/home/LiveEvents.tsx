@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface LiveSession {
@@ -44,11 +44,21 @@ const liveSessions: LiveSession[] = [
 export default function LiveEvents() {
   const liveNow = liveSessions.filter(s => s.isLive);
   const upcoming = liveSessions.filter(s => !s.isLive);
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
 
   return (
-    <View className="py-6 bg-white">
+    <View className="py-6 bg-white" style={isWeb && isLargeScreen ? {
+      paddingVertical: 56,
+      paddingHorizontal: 60,
+      backgroundColor: '#FAFAF9',
+    } : {}}>
       {/* Section Header */}
-      <View className="px-5 mb-4 flex-row items-center justify-between">
+      <View className="px-5 mb-4 flex-row items-center justify-between" style={isWeb && isLargeScreen ? {
+        paddingHorizontal: 0,
+        marginBottom: 32,
+      } : {}}>
         <View className="flex-row items-center">
           <View className="w-2.5 h-2.5 bg-red-500 rounded-full mr-2" />
           <Text className="text-gray-900 text-lg font-bold">Live & Upcoming</Text>
@@ -104,9 +114,15 @@ export default function LiveEvents() {
 
       {/* Upcoming Sessions */}
       <ScrollView
-        horizontal
+        horizontal={!isWeb || !isLargeScreen}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
+        contentContainerStyle={isWeb && isLargeScreen ? { 
+          paddingHorizontal: 0,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: 20,
+          justifyContent: 'flex-start',
+        } : { paddingHorizontal: 20 }}
       >
         {upcoming.map((session) => (
           <TouchableOpacity

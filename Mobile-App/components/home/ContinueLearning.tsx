@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface LearningProgress {
@@ -79,8 +79,16 @@ export default function ContinueLearning() {
   
   const activityStyle = getActivityIcon(progress.lastActivity.type);
 
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
+
   return (
-    <View className="px-5 py-6">
+    <View className="px-5 py-6" style={isWeb && isLargeScreen ? {
+      paddingVertical: 56,
+      paddingHorizontal: 60,
+      backgroundColor: '#FFFFFF',
+    } : {}}>
       {/* Section Header */}
       <View className="flex-row items-center justify-between mb-5">
         <View>

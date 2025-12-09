@@ -7,10 +7,35 @@ export interface AudioMapping {
   displayName: string;
 }
 
-// Base URL for audio files (GitHub raw URL)
-// NOTE: The ShlokaAudios folder must be committed and pushed to GitHub for this to work!
-// Run: git add ShlokaAudios/ && git commit -m "Add audio files" && git push
-const AUDIO_BASE_URL = 'https://raw.githubusercontent.com/pravartak01/ShlokaYug/main/ShlokaAudios/';
+// Audio assets loaded via require() for local files
+// This ensures audio files are bundled with the app
+// NOTE: First, copy ShlokaAudios to Mobile-App/assets/audio/ or create a junction:
+// PowerShell: Copy-Item -Path ".\ShlokaAudios" -Destination ".\Mobile-App\assets\audio" -Recurse
+// OR (as Admin): New-Item -ItemType Junction -Path ".\Mobile-App\assets\audio" -Target ".\ShlokaAudios"
+const AUDIO_ASSETS: Record<string, any> = {
+  'gayaytri mantra.mp3': require('../assets/audio/gayaytri mantra.mp3'),
+  'mahamrityunjay_mantra.mp3': require('../assets/audio/mahamrityunjay_mantra.mp3'),
+  'shanti mantra.mp3': require('../assets/audio/shanti mantra.mp3'),
+  'vakratunda.mp3': require('../assets/audio/vakratunda.mp3'),
+  'astoma.mp3': require('../assets/audio/astoma.mp3'),
+  'Saraswati vandana.mp3': require('../assets/audio/Saraswati vandana.mp3'),
+  'om namah shivaya.mp3': require('../assets/audio/om namah shivaya.mp3'),
+  'Guru bramha.mp3': require('../assets/audio/Guru bramha.mp3'),
+  'hare krishna.mp3': require('../assets/audio/hare krishna.mp3'),
+  'hanuman chalisa.mp3': require('../assets/audio/hanuman chalisa.mp3'),
+  'Mahalaxmi .mp3': require('../assets/audio/Mahalaxmi .mp3'),
+  'durga mantra.mp3': require('../assets/audio/durga mantra.mp3'),
+  'vishnu mantra.mp3': require('../assets/audio/vishnu mantra.mp3'),
+  'vishnu shanti mantra.mp3': require('../assets/audio/vishnu shanti mantra.mp3'),
+  'Ya devi.mp3': require('../assets/audio/Ya devi.mp3'),
+  'Aum mantra.mp3': require('../assets/audio/Aum mantra.mp3'),
+  'vishnu shloka.mp3': require('../assets/audio/vishnu shloka.mp3'),
+  'dhanvantri mantra.mp3': require('../assets/audio/dhanvantri mantra.mp3'),
+  'om namo narayanay.mp3': require('../assets/audio/om namo narayanay.mp3'),
+  'loka samastha.mp3': require('../assets/audio/loka samastha.mp3'),
+  'medha suktam.mp3': require('../assets/audio/medha suktam.mp3'),
+  'ganesh mantra.mp3': require('../assets/audio/ganesh mantra.mp3'),
+};
 
 // Map shloka IDs to audio file names
 export const SHLOKA_AUDIO_MAP: Record<string, string> = {
@@ -37,25 +62,33 @@ export const getAudioForShloka = (shlokaId: string): string | null => {
   return SHLOKA_AUDIO_MAP[shlokaId] || null;
 };
 
-// Get full audio URL for a shloka (for streaming)
-export const getAudioUrl = (shlokaId: string): string | null => {
+// Get audio asset (require object) for a shloka - USE THIS for Audio.Sound.createAsync
+export const getAudioAsset = (shlokaId: string): any => {
   const fileName = SHLOKA_AUDIO_MAP[shlokaId];
   if (!fileName) return null;
-  // URL encode the filename for proper URL handling
-  return AUDIO_BASE_URL + encodeURIComponent(fileName);
+  return AUDIO_ASSETS[fileName] || null;
 };
 
-// Get audio URL from filename directly (for healing shlokas)
-export const getAudioUrlFromFilename = (audioFile: string): string => {
+// Get audio asset from filename directly (for healing shlokas) - USE THIS for Audio.Sound.createAsync
+export const getAudioAssetFromFilename = (audioFile: string): any => {
   // Remove any path prefix like ../../ShlokaAudios/
   const fileName = audioFile.replace(/^.*[\/\\]/, '');
-  // URL encode the filename for proper URL handling
-  return AUDIO_BASE_URL + encodeURIComponent(fileName);
+  return AUDIO_ASSETS[fileName] || null;
+};
+
+// Legacy function - kept for backward compatibility but returns asset instead of URL
+export const getAudioUrl = (shlokaId: string): any => {
+  return getAudioAsset(shlokaId);
+};
+
+// Legacy function - kept for backward compatibility but returns asset instead of URL
+export const getAudioUrlFromFilename = (audioFile: string): any => {
+  return getAudioAssetFromFilename(audioFile);
 };
 
 // Check if audio is available for a shloka
 export const hasAudio = (shlokaId: string): boolean => {
-  return shlokaId in SHLOKA_AUDIO_MAP;
+  return shlokaId in SHLOKA_AUDIO_MAP && !!AUDIO_ASSETS[SHLOKA_AUDIO_MAP[shlokaId]];
 };
 
 // All available audio files for reference

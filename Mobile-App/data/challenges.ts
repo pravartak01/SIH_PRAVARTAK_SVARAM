@@ -735,7 +735,7 @@ export const CHALLENGES: Challenge[] = [
     isLocked: true,
     requiredLevel: 15,
     completedBy: 45,
-    icon: 'brain',
+    icon: 'head-outline',
     gradient: ['#f5af19', '#f12711'] as const,
     questions: [
       {

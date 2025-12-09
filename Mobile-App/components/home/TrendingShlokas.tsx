@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Animated, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface TrendingShloka {
@@ -88,6 +88,9 @@ const trendingShlokas: TrendingShloka[] = [
 const TrendingCard = ({ shloka, index }: { shloka: TrendingShloka; index: number }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
 
   useEffect(() => {
     Animated.parallel([
@@ -132,7 +135,7 @@ const TrendingCard = ({ shloka, index }: { shloka: TrendingShloka; index: number
     >
       <TouchableOpacity
         className="mr-4"
-        style={{ width: 260 }}
+        style={{ width: isWeb && isLargeScreen ? 320 : 260 }}
         activeOpacity={0.8}
       >
         <View 
@@ -218,14 +221,36 @@ const TrendingCard = ({ shloka, index }: { shloka: TrendingShloka; index: number
 };
 
 export default function TrendingShlokas() {
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
+
   return (
-    <View className="py-6 bg-gray-50">
+    <View className="py-6 bg-gray-50" style={isWeb && isLargeScreen ? {
+      paddingVertical: 64,
+      paddingHorizontal: 60,
+      backgroundColor: '#F9FAFB',
+      marginBottom: 16,
+    } : {}}>
       {/* Section Header */}
-      <View className="px-5 mb-4">
+      <View className="px-5 mb-4" style={isWeb && isLargeScreen ? {
+        paddingHorizontal: 0,
+        marginBottom: 40,
+      } : {}}>
         <View className="flex-row items-center justify-between">
           <View>
-            <Text className="text-gray-900 text-lg font-bold">Trending Now</Text>
-            <Text className="text-gray-500 text-sm">Most popular this week</Text>
+            <Text 
+              className="text-gray-900 font-bold"
+              style={isWeb && isLargeScreen ? { fontSize: 32, fontWeight: '700', color: '#4A2E1C', fontFamily: 'Playfair Display' } : { fontSize: 18 }}
+            >
+              Trending Now
+            </Text>
+            <Text 
+              className="text-gray-500"
+              style={isWeb && isLargeScreen ? { fontSize: 18, marginTop: 8, color: '#B87333' } : { fontSize: 14 }}
+            >
+              Most popular this week
+            </Text>
           </View>
           <TouchableOpacity className="flex-row items-center bg-red-50 px-3 py-1.5 rounded-full">
             <Ionicons name="flame" size={14} color="#ef4444" />
@@ -236,9 +261,15 @@ export default function TrendingShlokas() {
 
       {/* Trending Carousel */}
       <ScrollView
-        horizontal
+        horizontal={!isWeb || !isLargeScreen}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
+        contentContainerStyle={isWeb && isLargeScreen ? { 
+          paddingHorizontal: 0,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: 24,
+          justifyContent: 'flex-start',
+        } : { paddingHorizontal: 20 }}
       >
         {trendingShlokas.map((shloka, index) => (
           <TrendingCard key={shloka.id} shloka={shloka} index={index} />

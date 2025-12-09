@@ -44,7 +44,7 @@ export const moodCategories: MoodCategory[] = [
         meaning: 'We pray for inner strength and emotional protection. May fear and suffering be replaced with peace and stability.',
         source: 'Rigveda 7.59.12',
         benefit: 'Emotional resilience & grounding',
-        audioFile: '../../ShlokaAudios/mahamrityunjay mantra.mp3',
+        audioFile: 'mahamrityunjay_mantra.mp3',
         duration: '5:30',
       },
       {
@@ -406,7 +406,7 @@ export const moodCategories: MoodCategory[] = [
     id: 'mind-control',
     name: 'Mind Control',
     nameHindi: 'मन नियंत्रण',
-    icon: 'brain',
+    icon: 'head-outline',
     color: '#8b5cf6',
     bgColor: '#f5f3ff',
     description: 'Master your mind and thoughts',

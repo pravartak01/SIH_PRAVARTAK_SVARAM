@@ -8,6 +8,9 @@ import {
   Dimensions,
   ActivityIndicator,
   Platform,
+  TextInput,
+  Modal,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,8 +19,76 @@ import { Audio } from 'expo-av';
 import { moodCategories, MoodCategory, HealingShloka, getRandomShloka } from '../data/healingShlokas';
 import { getAudioUrlFromFilename } from '../data/shlokaAudioMap';
 import Slider from '@react-native-community/slider';
+import { LinearGradient } from 'expo-linear-gradient';
+import { aiApi } from '../services/api';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+// Theme Colors
+const COLORS = {
+  primaryBrown: '#4A2E1C',
+  copper: '#B87333',
+  gold: '#D4A017',
+  saffron: '#DD7A1F',
+  sand: '#F3E4C8',
+  cream: '#FFF8E7',
+  darkBrown: '#2D1810',
+  lightCopper: '#D4956B',
+  mediumBrown: '#8B6F47',
+  lightBrown: '#F5E6D3',
+};
+
+// Search Bar Component
+const SearchBar = ({
+  value,
+  onChangeText,
+  onClear,
+}: {
+  value: string;
+  onChangeText: (text: string) => void;
+  onClear: () => void;
+}) => {
+  return (
+    <View
+      style={{
+        backgroundColor: '#ffffff',
+        borderRadius: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        marginBottom: 20,
+        borderWidth: 2,
+        borderColor: value ? COLORS.copper : COLORS.sand,
+        shadowColor: COLORS.primaryBrown,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+      }}
+    >
+      <Ionicons name="search" size={20} color={COLORS.copper} />
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        placeholder="Search by mood, benefit, or keyword..."
+        placeholderTextColor={COLORS.lightCopper}
+        style={{
+          flex: 1,
+          marginLeft: 10,
+          fontSize: 15,
+          color: COLORS.primaryBrown,
+          fontWeight: '500',
+        }}
+      />
+      {value !== '' && (
+        <TouchableOpacity onPress={onClear}>
+          <Ionicons name="close-circle" size={20} color={COLORS.copper} />
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+};
 
 // Mood Category Card Component
 const MoodCard = ({ 
@@ -155,12 +226,14 @@ const ShlokaCard = ({
   onPlay,
   isPlaying,
   categoryColor,
+  onViewDetails,
 }: {
   shloka: HealingShloka;
   index: number;
   onPlay: () => void;
   isPlaying: boolean;
   categoryColor: string;
+  onViewDetails: (shloka: HealingShloka) => void;
 }) => {
   const slideAnim = useRef(new Animated.Value(50)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
@@ -352,6 +425,33 @@ const ShlokaCard = ({
               </View>
             )}
           </View>
+
+          {/* Why This Works Button */}
+          <TouchableOpacity
+            onPress={() => onViewDetails(shloka)}
+            style={{
+              marginTop: 12,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: categoryColor,
+              paddingVertical: 10,
+              paddingHorizontal: 16,
+              borderRadius: 10,
+            }}
+          >
+            <Ionicons name="information-circle-outline" size={16} color="#ffffff" />
+            <Text
+              style={{
+                fontSize: 13,
+                fontWeight: '600',
+                color: '#ffffff',
+                marginLeft: 6,
+              }}
+            >
+              Why this works for you
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Animated.View>
@@ -418,12 +518,14 @@ const AudioPlayer = ({
         paddingBottom: 8,
       }}
     >
-      <View
+      <LinearGradient
+        colors={[COLORS.primaryBrown, COLORS.darkBrown]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
         style={{
-          backgroundColor: categoryColor,
           borderRadius: 20,
           padding: 16,
-          shadowColor: categoryColor,
+          shadowColor: COLORS.primaryBrown,
           shadowOffset: { width: 0, height: 8 },
           shadowOpacity: 0.4,
           shadowRadius: 16,
@@ -516,8 +618,169 @@ const AudioPlayer = ({
             </View>
           </View>
         </View>
-      </View>
+      </LinearGradient>
     </Animated.View>
+  );
+};
+
+// Chandas Details Modal Component
+const ChandasModal = ({
+  visible,
+  onClose,
+  shloka,
+  mood,
+}: {
+  visible: boolean;
+  onClose: () => void;
+  shloka: HealingShloka | null;
+  mood: string;
+}) => {
+  const [loading, setLoading] = useState(false);
+  const [chandasInfo, setChandasInfo] = useState<any>(null);
+  const [meaningInfo, setMeaningInfo] = useState<any>(null);
+
+  useEffect(() => {
+    if (visible && shloka) {
+      loadInfo();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible, shloka]);
+
+  const loadInfo = async () => {
+    if (!shloka) return;
+    
+    setLoading(true);
+    try {
+      // Identify chandas pattern
+      const chandasResponse = await aiApi.post('/chandas/identify', {
+        shloka: shloka.shloka,
+      });
+      setChandasInfo(chandasResponse.data);
+
+      // Get meaning extraction
+      const meaningResponse = await aiApi.post('/meaning/extract', {
+        verse: shloka.shloka,
+        include_word_meanings: true,
+        include_context: true,
+      });
+      setMeaningInfo(meaningResponse.data);
+    } catch (error) {
+      console.error('Error loading info:', error);
+      Alert.alert('Error', 'Failed to load chandas and meaning information');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!shloka) return null;
+
+  return (
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={onClose}
+    >
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' }}>
+        <View
+          style={{
+            backgroundColor: COLORS.cream,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+            maxHeight: '85%',
+            paddingTop: 20,
+          }}
+        >
+          {/* Header */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingBottom: 16 }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontSize: 20, fontWeight: '800', color: COLORS.primaryBrown }}>
+                Why This Works
+              </Text>
+              <Text style={{ fontSize: 13, color: COLORS.copper, marginTop: 2 }}>
+                {shloka.name} for {mood}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={onClose}
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 18,
+                backgroundColor: COLORS.sand,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Ionicons name="close" size={20} color={COLORS.primaryBrown} />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 20 }}>
+            {loading ? (
+              <View style={{ paddingVertical: 40, alignItems: 'center' }}>
+                <ActivityIndicator size="large" color={COLORS.copper} />
+                <Text style={{ marginTop: 12, color: COLORS.copper }}>Analyzing with AI...</Text>
+              </View>
+            ) : (
+              <>
+                {/* Chandas Pattern */}
+                {chandasInfo && (
+                  <View style={{ marginBottom: 20 }}>
+                    <LinearGradient
+                      colors={[COLORS.primaryBrown, COLORS.darkBrown]}
+                      style={{ borderRadius: 16, padding: 16 }}
+                    >
+                      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+                        <Ionicons name="pulse" size={20} color={COLORS.gold} />
+                        <Text style={{ fontSize: 16, fontWeight: '700', color: '#ffffff', marginLeft: 8 }}>
+                          Chandas Pattern
+                        </Text>
+                      </View>
+                      <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.gold, marginBottom: 8 }}>
+                        {chandasInfo.chandas_name || 'Analyzing...'}
+                      </Text>
+                      <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.9)', lineHeight: 20 }}>
+                        {chandasInfo.explanation || 'Pattern analysis in progress...'}
+                      </Text>
+                    </LinearGradient>
+                  </View>
+                )}
+
+                {/* Meaning & Translation */}
+                {meaningInfo && (
+                  <View style={{ backgroundColor: '#ffffff', borderRadius: 16, padding: 16, marginBottom: 20 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+                      <Ionicons name="book" size={20} color={COLORS.copper} />
+                      <Text style={{ fontSize: 16, fontWeight: '700', color: COLORS.primaryBrown, marginLeft: 8 }}>
+                        Meaning & Translation
+                      </Text>
+                    </View>
+                    <Text style={{ fontSize: 14, color: COLORS.primaryBrown, lineHeight: 22 }}>
+                      {meaningInfo.translation || shloka.meaning}
+                    </Text>
+                  </View>
+                )}
+
+                {/* Why It Works */}
+                <View style={{ backgroundColor: '#ffffff', borderRadius: 16, padding: 16 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+                    <Ionicons name="heart" size={20} color={COLORS.saffron} />
+                    <Text style={{ fontSize: 16, fontWeight: '700', color: COLORS.primaryBrown, marginLeft: 8 }}>
+                      Therapeutic Benefits
+                    </Text>
+                  </View>
+                  <Text style={{ fontSize: 14, color: COLORS.primaryBrown, lineHeight: 22 }}>
+                    This shloka helps with {mood.toLowerCase()} through its rhythmic pattern and vibrational frequency. 
+                    The specific chandas meter creates a calming effect on the mind and nervous system, promoting {shloka.benefit.toLowerCase()}.
+                  </Text>
+                </View>
+              </>
+            )}
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
   );
 };
 
@@ -530,6 +793,9 @@ export default function HealScreen() {
   const [playbackStatus, setPlaybackStatus] = useState({ position: 0, duration: 0 });
   const [isLoading, setIsLoading] = useState(false);
   const [dailyShloka, setDailyShloka] = useState<HealingShloka | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showChandasModal, setShowChandasModal] = useState(false);
+  const [selectedShlokaForDetails, setSelectedShlokaForDetails] = useState<HealingShloka | null>(null);
 
   const scrollViewRef = useRef<ScrollView>(null);
   const headerFade = useRef(new Animated.Value(0)).current;
@@ -589,12 +855,24 @@ export default function HealScreen() {
         await sound.unloadAsync();
       }
 
-      // Get the audio URL from the filename
-      const audioUrl = getAudioUrlFromFilename(shloka.audioFile);
+      // Get the audio asset from the filename
+      const audioAsset = getAudioUrlFromFilename(shloka.audioFile);
+      
+      // Check if audio file is available
+      if (!audioAsset) {
+        console.warn(`Audio file not found for: ${shloka.audioFile}`);
+        Alert.alert(
+          'Audio Not Available',
+          `Audio for "${shloka.name}" is not available yet. Please try another shloka.`,
+          [{ text: 'OK' }]
+        );
+        setIsLoading(false);
+        return;
+      }
       
       // Create and load new sound
       const { sound: newSound } = await Audio.Sound.createAsync(
-        { uri: audioUrl },
+        audioAsset,
         { shouldPlay: true },
         (status) => {
           if (status.isLoaded) {
@@ -612,9 +890,12 @@ export default function HealScreen() {
       
     } catch (error) {
       console.error('Error playing audio:', error);
+      Alert.alert(
+        'Playback Error',
+        'Unable to play audio. Please try again.',
+        [{ text: 'OK' }]
+      );
       setIsLoading(false);
-      // Still set the shloka to show UI even if audio fails
-      setCurrentShloka(shloka);
     }
   };
 
@@ -662,75 +943,124 @@ export default function HealScreen() {
     }
   };
 
-  const categoryColor = selectedCategory?.color || '#4A2E1C';
+  const handleViewDetails = (shloka: HealingShloka) => {
+    setSelectedShlokaForDetails(shloka);
+    setShowChandasModal(true);
+  };
+
+  // Filter shlokas based on search query
+  const getFilteredShlokas = () => {
+    if (!selectedCategory) return [];
+    if (!searchQuery.trim()) return selectedCategory.shlokas;
+
+    const query = searchQuery.toLowerCase();
+    return selectedCategory.shlokas.filter(
+      (shloka) =>
+        shloka.name.toLowerCase().includes(query) ||
+        shloka.nameHindi.includes(query) ||
+        shloka.meaning.toLowerCase().includes(query) ||
+        shloka.benefit.toLowerCase().includes(query) ||
+        shloka.source.toLowerCase().includes(query)
+    );
+  };
+
+  // Filter categories based on search
+  const getFilteredCategories = () => {
+    if (!searchQuery.trim()) return moodCategories;
+
+    const query = searchQuery.toLowerCase();
+    return moodCategories.filter(
+      (category) =>
+        category.name.toLowerCase().includes(query) ||
+        category.nameHindi.includes(query) ||
+        category.description.toLowerCase().includes(query) ||
+        category.shlokas.some(
+          (shloka) =>
+            shloka.name.toLowerCase().includes(query) ||
+            shloka.meaning.toLowerCase().includes(query)
+        )
+    );
+  };
+
+  const categoryColor = selectedCategory?.color || COLORS.primaryBrown;
+  const filteredCategories = getFilteredCategories();
+  const filteredShlokas = getFilteredShlokas();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.cream }}>
       <ScrollView
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: currentShloka ? 180 : 100 }}
       >
-        {/* Header */}
-        <Animated.View
+        {/* Header with Gradient */}
+        <LinearGradient
+          colors={[COLORS.primaryBrown, COLORS.darkBrown]}
           style={{
-            opacity: headerFade,
-            transform: [{ translateY: headerSlide }],
             paddingHorizontal: 20,
             paddingTop: 16,
-            paddingBottom: 20,
+            paddingBottom: 24,
+            borderBottomLeftRadius: 32,
+            borderBottomRightRadius: 32,
           }}
         >
-          {/* Back & Title */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-            <TouchableOpacity
-              onPress={() => router.back()}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 12,
-                backgroundColor: '#f3f4f6',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginRight: 12,
-              }}
-            >
-              <Ionicons name="arrow-back" size={20} color="#374151" />
-            </TouchableOpacity>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 24, fontWeight: '800', color: '#1f2937' }}>
-                Heal with Shlokas
-              </Text>
-              <Text style={{ fontSize: 14, color: '#6b7280', marginTop: 2 }}>
-                Mood-based shloka therapy
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: '#4A2E1C',
-                paddingHorizontal: 10,
-                paddingVertical: 6,
-                borderRadius: 8,
-              }}
-            >
-              <Text style={{ fontSize: 10, fontWeight: '700', color: '#ffffff' }}>USP</Text>
-            </View>
-          </View>
-
-          {/* Daily Recommendation */}
-          {dailyShloka && (
-            <TouchableOpacity
-              onPress={() => playAudio(dailyShloka)}
-              activeOpacity={0.9}
-            >
-              <View
+          <Animated.View
+            style={{
+              opacity: headerFade,
+              transform: [{ translateY: headerSlide }],
+            }}
+          >
+            {/* Back & Title */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+              <TouchableOpacity
+                onPress={() => router.back()}
                 style={{
-                  backgroundColor: '#4A2E1C',
-                  borderRadius: 20,
-                  padding: 20,
-                  marginBottom: 8,
+                  width: 40,
+                  height: 40,
+                  borderRadius: 12,
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: 12,
                 }}
               >
+                <Ionicons name="arrow-back" size={20} color="#ffffff" />
+              </TouchableOpacity>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 26, fontWeight: '800', color: '#ffffff' }}>
+                  Heal with Shlokas
+                </Text>
+                <Text style={{ fontSize: 14, color: 'rgba(255,255,255,0.9)', marginTop: 2 }}>
+                  Chandas-powered mood therapy
+                </Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  paddingHorizontal: 12,
+                  paddingVertical: 6,
+                  borderRadius: 8,
+                }}
+              >
+                <Text style={{ fontSize: 10, fontWeight: '700', color: '#ffffff' }}>AI ✨</Text>
+              </View>
+            </View>
+
+            {/* Daily Recommendation */}
+            {dailyShloka && (
+              <TouchableOpacity
+                onPress={() => playAudio(dailyShloka)}
+                activeOpacity={0.9}
+              >
+                <View
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.15)',
+                    borderRadius: 20,
+                    padding: 20,
+                    borderWidth: 1,
+                    borderColor: 'rgba(255,255,255,0.3)',
+                  }}
+                >
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
                   <View
                     style={{
@@ -769,7 +1099,7 @@ export default function HealScreen() {
                 <Text
                   style={{
                     fontSize: 13,
-                    color: 'rgba(255,255,255,0.9)',
+                    color: '#ffffff',
                     lineHeight: 20,
                   }}
                   numberOfLines={2}
@@ -779,15 +1109,22 @@ export default function HealScreen() {
               </View>
             </TouchableOpacity>
           )}
-        </Animated.View>
+          </Animated.View>
+        </LinearGradient>
 
         {/* Mood Selection */}
-        <View style={{ paddingHorizontal: 20 }}>
+        <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
+          {/* Search Bar */}
+          <SearchBar
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            onClear={() => setSearchQuery('')}
+          />
           <Text
             style={{
               fontSize: 18,
               fontWeight: '700',
-              color: '#1f2937',
+              color: COLORS.primaryBrown,
               marginBottom: 4,
             }}
           >
@@ -796,7 +1133,7 @@ export default function HealScreen() {
           <Text
             style={{
               fontSize: 13,
-              color: '#6b7280',
+              color: COLORS.mediumBrown,
               marginBottom: 16,
             }}
           >
@@ -804,23 +1141,57 @@ export default function HealScreen() {
           </Text>
 
           {/* Mood Grid */}
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-            }}
-          >
-            {moodCategories.map((category, index) => (
-              <MoodCard
-                key={category.id}
-                category={category}
-                index={index}
-                onPress={() => handleCategoryPress(category)}
-                isSelected={selectedCategory?.id === category.id}
-              />
-            ))}
-          </View>
+          {filteredCategories.length > 0 ? (
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+              }}
+            >
+              {filteredCategories.map((category, index) => (
+                <MoodCard
+                  key={category.id}
+                  category={category}
+                  index={index}
+                  onPress={() => handleCategoryPress(category)}
+                  isSelected={selectedCategory?.id === category.id}
+                />
+              ))}
+            </View>
+          ) : (
+            <View
+              style={{
+                padding: 32,
+                alignItems: 'center',
+                backgroundColor: COLORS.lightBrown,
+                borderRadius: 16,
+              }}
+            >
+              <Ionicons name="search-outline" size={48} color={COLORS.mediumBrown} />
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: '600',
+                  color: COLORS.primaryBrown,
+                  marginTop: 12,
+                  textAlign: 'center',
+                }}
+              >
+                No moods found
+              </Text>
+              <Text
+                style={{
+                  fontSize: 13,
+                  color: COLORS.mediumBrown,
+                  marginTop: 4,
+                  textAlign: 'center',
+                }}
+              >
+                Try a different search term
+              </Text>
+            </View>
+          )}
         </View>
 
         {/* Selected Category Shlokas */}
@@ -851,26 +1222,61 @@ export default function HealScreen() {
                 />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 18, fontWeight: '700', color: '#1f2937' }}>
+                <Text style={{ fontSize: 18, fontWeight: '700', color: COLORS.primaryBrown }}>
                   {selectedCategory.name}
                 </Text>
-                <Text style={{ fontSize: 12, color: '#6b7280' }}>
-                  {selectedCategory.shlokas.length} healing shlokas
+                <Text style={{ fontSize: 12, color: COLORS.mediumBrown }}>
+                  {filteredShlokas.length} healing shloka{filteredShlokas.length !== 1 ? 's' : ''}
                 </Text>
               </View>
             </View>
 
             {/* Shlokas List */}
-            {selectedCategory.shlokas.map((shloka, index) => (
-              <ShlokaCard
-                key={shloka.id}
-                shloka={shloka}
-                index={index}
-                onPlay={() => playAudio(shloka)}
-                isPlaying={currentShloka?.id === shloka.id && isPlaying}
-                categoryColor={selectedCategory.color}
-              />
-            ))}
+            {filteredShlokas.length > 0 ? (
+              filteredShlokas.map((shloka, index) => (
+                <ShlokaCard
+                  key={shloka.id}
+                  shloka={shloka}
+                  index={index}
+                  onPlay={() => playAudio(shloka)}
+                  isPlaying={currentShloka?.id === shloka.id && isPlaying}
+                  categoryColor={selectedCategory.color}
+                  onViewDetails={handleViewDetails}
+                />
+              ))
+            ) : (
+              <View
+                style={{
+                  padding: 32,
+                  alignItems: 'center',
+                  backgroundColor: COLORS.lightBrown,
+                  borderRadius: 16,
+                }}
+              >
+                <Ionicons name="search-outline" size={48} color={COLORS.mediumBrown} />
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: '600',
+                    color: COLORS.primaryBrown,
+                    marginTop: 12,
+                    textAlign: 'center',
+                  }}
+                >
+                  No shlokas found
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    color: COLORS.mediumBrown,
+                    marginTop: 4,
+                    textAlign: 'center',
+                  }}
+                >
+                  Try a different search term
+                </Text>
+              </View>
+            )}
           </View>
         )}
 
@@ -948,6 +1354,17 @@ export default function HealScreen() {
         duration={playbackStatus.duration / 1000}
         onSeek={handleSeek}
         categoryColor={categoryColor}
+      />
+
+      {/* Chandas Details Modal */}
+      <ChandasModal
+        visible={showChandasModal}
+        shloka={selectedShlokaForDetails}
+        mood={selectedCategory?.name || ''}
+        onClose={() => {
+          setShowChandasModal(false);
+          setSelectedShlokaForDetails(null);
+        }}
       />
     </SafeAreaView>
   );

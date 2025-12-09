@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Animated, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ENHANCED_SHLOKAS } from '../../data/enhancedData';
 import { getTimeOfDay } from './utils';
@@ -198,6 +198,9 @@ export default function DailyRecommendations() {
   const festival = getCurrentFestival();
   const timeRec = getTimeBasedRecommendation(timeOfDay);
   const aiShloka = getAIPickedShloka();
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
   
   const recommendations: Recommendation[] = [
     {
@@ -255,23 +258,60 @@ export default function DailyRecommendations() {
   }
 
   return (
-    <View className="py-6 bg-white">
+    <View className="py-6 bg-white" style={isWeb && isLargeScreen ? {
+      paddingVertical: 64,
+      paddingHorizontal: 60,
+      backgroundColor: '#FFFFFF',
+      marginBottom: 16,
+    } : {}}>
       {/* Section Header */}
-      <View className="px-5 mb-4 flex-row items-center justify-between">
+      <View className="px-5 mb-4 flex-row items-center justify-between" style={isWeb && isLargeScreen ? {
+        paddingHorizontal: 0,
+        marginBottom: 40,
+      } : {}}>
         <View>
-          <Text className="text-gray-900 text-lg font-bold">Today's Picks</Text>
-          <Text className="text-gray-500 text-sm">Personalized for you</Text>
+          <Text 
+            className="text-gray-900 font-bold"
+            style={isWeb && isLargeScreen ? { fontSize: 32, fontWeight: '700', color: '#4A2E1C', fontFamily: 'Playfair Display' } : { fontSize: 18 }}
+          >
+            Today&apos;s Picks
+          </Text>
+          <Text 
+            className="text-gray-500"
+            style={isWeb && isLargeScreen ? { fontSize: 18, marginTop: 8, color: '#B87333' } : { fontSize: 14 }}
+          >
+            Personalized for you
+          </Text>
         </View>
-        <View className="bg-[#FEF3E8] px-3 py-1 rounded-full">
-          <Text className="text-[#DD7A1F] text-xs font-semibold">{recommendations.length} New</Text>
+        <View className="bg-[#FEF3E8] rounded-full" style={isWeb && isLargeScreen ? {
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+          borderWidth: 2,
+          borderColor: '#FCDFC2',
+        } : {
+          paddingHorizontal: 12,
+          paddingVertical: 4,
+        }}>
+          <Text 
+            className="text-[#DD7A1F] font-semibold"
+            style={isWeb && isLargeScreen ? { fontSize: 16, fontWeight: '600' } : { fontSize: 12 }}
+          >
+            {recommendations.length} New
+          </Text>
         </View>
       </View>
       
       {/* Recommendations Cards */}
       <ScrollView 
-        horizontal 
+        horizontal={!isWeb || !isLargeScreen}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
+        contentContainerStyle={isWeb && isLargeScreen ? { 
+          paddingHorizontal: 0,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: 20,
+          justifyContent: 'flex-start',
+        } : { paddingHorizontal: 20 }}
       >
         {recommendations.map((rec, index) => (
           <RecommendationCard key={rec.id} rec={rec} index={index} />

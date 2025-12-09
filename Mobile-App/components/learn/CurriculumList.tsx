@@ -4,8 +4,16 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const isWeb = Platform.OS === 'web';
+const isLargeScreen = isWeb && SCREEN_WIDTH > 768;
+
+const PRIMARY_BROWN = '#4A2E1C';
+const COPPER = '#B87333';
+const SAFFRON = '#DD7A1F';
 
 interface CurriculumListProps {
   course: any;
@@ -49,29 +57,72 @@ export default function CurriculumList({
   };
 
   return (
-    <ScrollView className="flex-1 bg-gray-800">
-      <View className="p-4">
-        <Text className="text-white text-xl font-bold mb-4">Course Content</Text>
+    <ScrollView 
+      style={{ 
+        flex: 1,
+        backgroundColor: isLargeScreen ? '#f9fafb' : '#1f2937' 
+      }}
+      contentContainerStyle={{ 
+        paddingHorizontal: isLargeScreen ? 40 : 16,
+        paddingVertical: isLargeScreen ? 32 : 16,
+        paddingBottom: isLargeScreen ? 120 : 80
+      }}
+      showsVerticalScrollIndicator={true}
+    >
+      <Text 
+        style={{ 
+          color: isLargeScreen ? PRIMARY_BROWN : 'white',
+          fontSize: isLargeScreen ? 32 : 20,
+          fontWeight: 'bold',
+          marginBottom: isLargeScreen ? 32 : 16
+        }}
+      >
+        Course Content
+      </Text>
 
-        {course.structure?.units?.map((unit: any, unitIndex: number) => (
+      {course.structure?.units?.map((unit: any, unitIndex: number) => (
           <View key={unitIndex} className="mb-4">
             {/* Unit Header */}
             <TouchableOpacity
               onPress={() => toggleUnit(unitIndex)}
-              className="bg-gray-700 rounded-lg p-4 flex-row items-center justify-between"
+              style={{
+                backgroundColor: isLargeScreen ? '#ffffff' : '#374151',
+                borderRadius: isLargeScreen ? 16 : 12,
+                padding: isLargeScreen ? 24 : 16,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: isLargeScreen ? 0.08 : 0,
+                shadowRadius: 8,
+                elevation: isLargeScreen ? 3 : 0,
+                borderWidth: isLargeScreen ? 1 : 0,
+                borderColor: '#e5e7eb'
+              }}
+              className="flex-row items-center justify-between"
             >
               <View className="flex-1">
-                <Text className="text-white font-bold text-base">
+                <Text 
+                  style={{ 
+                    color: isLargeScreen ? PRIMARY_BROWN : 'white',
+                    fontWeight: 'bold',
+                    fontSize: isLargeScreen ? 20 : 16
+                  }}
+                >
                   Unit {unitIndex + 1}: {unit.title || 'Untitled Unit'}
                 </Text>
-                <Text className="text-gray-400 text-sm mt-1">
+                <Text 
+                  style={{ 
+                    color: isLargeScreen ? '#6b7280' : '#9ca3af',
+                    fontSize: isLargeScreen ? 16 : 14,
+                    marginTop: isLargeScreen ? 8 : 4
+                  }}
+                >
                   {unit.lessons?.length || 0} lessons
                 </Text>
               </View>
               <Ionicons
                 name={expandedUnits.includes(unitIndex) ? 'chevron-up' : 'chevron-down'}
-                size={24}
-                color="#9ca3af"
+                size={isLargeScreen ? 28 : 24}
+                color={isLargeScreen ? COPPER : '#9ca3af'}
               />
             </TouchableOpacity>
 
@@ -83,13 +134,32 @@ export default function CurriculumList({
                     {/* Lesson Header */}
                     <TouchableOpacity
                       onPress={() => toggleLesson(unitIndex, lessonIndex)}
-                      className="bg-gray-600 rounded-lg p-3 flex-row items-center justify-between"
+                      style={{
+                        backgroundColor: isLargeScreen ? '#f9fafb' : '#4b5563',
+                        borderRadius: isLargeScreen ? 12 : 8,
+                        padding: isLargeScreen ? 20 : 12,
+                        borderWidth: isLargeScreen ? 1 : 0,
+                        borderColor: '#e5e7eb'
+                      }}
+                      className="flex-row items-center justify-between"
                     >
                       <View className="flex-1">
-                        <Text className="text-white font-semibold">
+                        <Text 
+                          style={{ 
+                            color: isLargeScreen ? '#1f2937' : 'white',
+                            fontWeight: '600',
+                            fontSize: isLargeScreen ? 18 : 14
+                          }}
+                        >
                           Lesson {lessonIndex + 1}: {lesson.title || 'Untitled Lesson'}
                         </Text>
-                        <Text className="text-gray-400 text-xs mt-1">
+                        <Text 
+                          style={{ 
+                            color: isLargeScreen ? '#6b7280' : '#9ca3af',
+                            fontSize: isLargeScreen ? 14 : 12,
+                            marginTop: isLargeScreen ? 6 : 4
+                          }}
+                        >
                           {lesson.lectures?.length || 0} lectures
                         </Text>
                       </View>
@@ -99,8 +169,8 @@ export default function CurriculumList({
                             ? 'chevron-up'
                             : 'chevron-down'
                         }
-                        size={20}
-                        color="#9ca3af"
+                        size={isLargeScreen ? 24 : 20}
+                        color={isLargeScreen ? COPPER : '#9ca3af'}
                       />
                     </TouchableOpacity>
 
@@ -115,8 +185,19 @@ export default function CurriculumList({
                             <TouchableOpacity
                               key={lectureIndex}
                               onPress={() => onSelectLecture(unitIndex, lessonIndex, lectureIndex)}
-                              className={`p-3 rounded-lg mb-2 flex-row items-center ${!current && 'bg-gray-700'}`}
-                              style={current ? { backgroundColor: '#DD7A1F' } : undefined}
+                              className="rounded-lg mb-2 flex-row items-center"
+                              style={{
+                                padding: isLargeScreen ? 16 : 12,
+                                backgroundColor: current ? SAFFRON : (isLargeScreen ? '#ffffff' : '#374151'),
+                                borderRadius: isLargeScreen ? 12 : 8,
+                                borderWidth: isLargeScreen && !current ? 1 : 0,
+                                borderColor: '#e5e7eb',
+                                shadowColor: '#000',
+                                shadowOffset: { width: 0, height: 1 },
+                                shadowOpacity: isLargeScreen && !current ? 0.05 : 0,
+                                shadowRadius: 4,
+                                elevation: isLargeScreen && !current ? 1 : 0
+                              }}
                             >
                               {/* Completion Icon */}
                               <View className="mr-3">
@@ -169,7 +250,6 @@ export default function CurriculumList({
             )}
           </View>
         ))}
-      </View>
     </ScrollView>
   );
 }

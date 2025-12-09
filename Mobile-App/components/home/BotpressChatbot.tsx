@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, Modal, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, Modal, StyleSheet, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
+
+const isWeb = Platform.OS === 'web';
 
 const COLORS = {
   primaryBrown: '#4A2E1C',
@@ -116,29 +118,43 @@ export const BotpressChatbot: React.FC<BotpressChatbotProps> = ({ onSuggestion }
             </TouchableOpacity>
           </View>
 
-          {/* Chatbot WebView */}
-          <WebView
-            source={{ html: botpressHTML }}
-            style={styles.webview}
-            javaScriptEnabled={true}
-            domStorageEnabled={true}
-            startInLoadingState={true}
-            scalesPageToFit={true}
-            bounces={false}
-            scrollEnabled={true}
-            onMessage={(event) => {
-              // Handle messages from the chatbot
-              try {
-                const data = JSON.parse(event.nativeEvent.data);
-                if (data.suggestion && onSuggestion) {
-                  onSuggestion(data.suggestion);
-                  setIsExpanded(false);
+          {/* Chatbot WebView or iframe */}
+          {isWeb ? (
+            <iframe
+              srcDoc={botpressHTML}
+              style={{
+                flex: 1,
+                width: '100%',
+                height: '100%',
+                border: 'none',
+                backgroundColor: 'transparent',
+              }}
+              title="Sanskrit AI Assistant"
+            />
+          ) : (
+            <WebView
+              source={{ html: botpressHTML }}
+              style={styles.webview}
+              javaScriptEnabled={true}
+              domStorageEnabled={true}
+              startInLoadingState={true}
+              scalesPageToFit={true}
+              bounces={false}
+              scrollEnabled={true}
+              onMessage={(event) => {
+                // Handle messages from the chatbot
+                try {
+                  const data = JSON.parse(event.nativeEvent.data);
+                  if (data.suggestion && onSuggestion) {
+                    onSuggestion(data.suggestion);
+                    setIsExpanded(false);
+                  }
+                } catch {
+                  console.log('Message from chatbot:', event.nativeEvent.data);
                 }
-              } catch {
-                console.log('Message from chatbot:', event.nativeEvent.data);
-              }
-            }}
-          />
+              }}
+            />
+          )}
 
           {/* Quick Actions Footer */}
           <View style={styles.footer}>

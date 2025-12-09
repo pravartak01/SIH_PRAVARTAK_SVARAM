@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface AITool {
@@ -54,22 +54,59 @@ const aiTools: AITool[] = [
 ];
 
 export default function FeaturedAITools() {
+  const isWeb = Platform.OS === 'web';
+  const windowWidth = Dimensions.get('window').width;
+  const isLargeScreen = windowWidth > 768;
+
   return (
-    <View className="py-6 bg-white">
+    <View className="py-6 bg-white" style={isWeb && isLargeScreen ? {
+      paddingVertical: 64,
+      paddingHorizontal: 60,
+      marginBottom: 16,
+    } : {}}>
       {/* Section Header */}
-      <View className="px-5 mb-4">
-        <View className="flex-row items-center mb-1">
-          <Ionicons name="sparkles" size={18} color="#D4A017" />
-          <Text className="text-gray-900 text-lg font-bold ml-2">AI-Powered Tools</Text>
+      <View className="px-5 mb-4" style={isWeb && isLargeScreen ? {
+        paddingHorizontal: 0,
+        marginBottom: 40,
+      } : {}}>
+        <View className="flex-row items-center mb-1" style={isWeb && isLargeScreen ? {
+          marginBottom: 12,
+        } : {}}>
+          <View className="rounded-lg items-center justify-center mr-2" style={isWeb && isLargeScreen ? {
+            width: 44,
+            height: 44,
+            backgroundColor: '#FDF8E8',
+            borderWidth: 2,
+            borderColor: '#F0E4C0',
+          } : {}}>            
+            <Ionicons name="sparkles" size={isWeb && isLargeScreen ? 24 : 18} color="#D4A017" />
+          </View>
+          <Text 
+            className="text-gray-900 font-bold"
+            style={isWeb && isLargeScreen ? { fontSize: 32, fontWeight: '700', color: '#4A2E1C', fontFamily: 'Playfair Display' } : { fontSize: 18 }}
+          >
+            AI-Powered Tools
+          </Text>
         </View>
-        <Text className="text-gray-500 text-sm">Enhance your learning experience</Text>
+        <Text 
+          className="text-gray-500"
+          style={isWeb && isLargeScreen ? { fontSize: 18, color: '#B87333', marginLeft: 56 } : { fontSize: 14 }}
+        >
+          Enhance your learning experience
+        </Text>
       </View>
 
       {/* Tools Horizontal Scroll */}
       <ScrollView
-        horizontal
+        horizontal={!isWeb || !isLargeScreen}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
+        contentContainerStyle={isWeb && isLargeScreen ? { 
+          paddingHorizontal: 0,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: 24,
+          justifyContent: 'flex-start',
+        } : { paddingHorizontal: 20 }}
       >
         {aiTools.map((tool) => (
           <TouchableOpacity
@@ -80,7 +117,7 @@ export default function FeaturedAITools() {
             <View 
               className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
               style={{ 
-                width: 160,
+                width: isWeb && isLargeScreen ? 220 : 160,
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.05,

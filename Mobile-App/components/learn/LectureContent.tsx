@@ -4,8 +4,15 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Linking, Platform, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const isWeb = Platform.OS === 'web';
+const isLargeScreen = isWeb && SCREEN_WIDTH > 768;
+
+const PRIMARY_BROWN = '#4A2E1C';
+const SAFFRON = '#DD7A1F';
 
 interface LectureContentProps {
   lecture: any;
@@ -38,38 +45,87 @@ export default function LectureContent({ lecture, courseId }: LectureContentProp
   };
 
   return (
-    <View className="bg-gray-800 p-4">
+    <View 
+      style={{ 
+        backgroundColor: isLargeScreen ? '#ffffff' : '#1f2937',
+        padding: isLargeScreen ? 32 : 16,
+        borderRadius: isLargeScreen ? 16 : 0,
+        marginHorizontal: isLargeScreen ? 40 : 0,
+        marginVertical: isLargeScreen ? 24 : 0,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: isLargeScreen ? 0.08 : 0,
+        shadowRadius: 12,
+        elevation: isLargeScreen ? 4 : 0
+      }}
+    >
       {/* Lecture Title */}
-      <Text className="text-white text-2xl font-bold mb-2">
+      <Text 
+        style={{ 
+          color: isLargeScreen ? PRIMARY_BROWN : 'white',
+          fontSize: isLargeScreen ? 32 : 24,
+          fontWeight: 'bold',
+          marginBottom: isLargeScreen ? 16 : 8
+        }}
+      >
         {lecture.title || 'Lecture Title'}
       </Text>
 
       {/* Meta Info */}
-      <View className="flex-row items-center mb-4">
-        <Ionicons name="time-outline" size={16} color="#9ca3af" />
-        <Text className="text-gray-400 text-sm ml-1">
+      <View 
+        className="flex-row items-center"
+        style={{ marginBottom: isLargeScreen ? 24 : 16 }}
+      >
+        <Ionicons name="time-outline" size={isLargeScreen ? 20 : 16} color="#9ca3af" />
+        <Text 
+          style={{ 
+            color: '#9ca3af',
+            fontSize: isLargeScreen ? 16 : 14,
+            marginLeft: isLargeScreen ? 8 : 4
+          }}
+        >
           {lecture.duration || '10'} minutes
         </Text>
         {lecture.type && (
           <>
             <Text className="text-gray-400 mx-2">•</Text>
-            <Text className="text-gray-400 text-sm capitalize">{lecture.type}</Text>
+            <Text 
+              style={{ 
+                color: '#9ca3af',
+                fontSize: isLargeScreen ? 16 : 14
+              }}
+              className="capitalize"
+            >
+              {lecture.type}
+            </Text>
           </>
         )}
       </View>
 
       {/* Tabs */}
-      <View className="flex-row border-b border-gray-700 mb-4">
+      <View 
+        style={{ 
+          flexDirection: 'row',
+          borderBottomWidth: 1,
+          borderBottomColor: isLargeScreen ? '#e5e7eb' : '#374151',
+          marginBottom: isLargeScreen ? 24 : 16
+        }}
+      >
         <TouchableOpacity
           onPress={() => setActiveTab('overview')}
-          className={`py-3 px-6 ${
-            activeTab === 'overview' ? 'border-b-2 border-orange-500' : ''
-          }`}
+          style={{
+            paddingVertical: isLargeScreen ? 16 : 12,
+            paddingHorizontal: isLargeScreen ? 24 : 16,
+            borderBottomWidth: activeTab === 'overview' ? 3 : 0,
+            borderBottomColor: SAFFRON
+          }}
         >
           <Text
-            className={`font-semibold ${
-              activeTab === 'overview' ? 'text-orange-500' : 'text-gray-400'
-            }`}
+            style={{
+              fontWeight: '600',
+              fontSize: isLargeScreen ? 18 : 14,
+              color: activeTab === 'overview' ? SAFFRON : '#9ca3af'
+            }}
           >
             Overview
           </Text>
@@ -77,14 +133,19 @@ export default function LectureContent({ lecture, courseId }: LectureContentProp
 
         <TouchableOpacity
           onPress={() => setActiveTab('resources')}
-          className={`py-3 px-6 ${
-            activeTab === 'resources' ? 'border-b-2 border-orange-500' : ''
-          }`}
+          style={{
+            paddingVertical: isLargeScreen ? 16 : 12,
+            paddingHorizontal: isLargeScreen ? 24 : 16,
+            borderBottomWidth: activeTab === 'resources' ? 3 : 0,
+            borderBottomColor: SAFFRON
+          }}
         >
           <Text
-            className={`font-semibold ${
-              activeTab === 'resources' ? 'text-orange-500' : 'text-gray-400'
-            }`}
+            style={{
+              fontWeight: '600',
+              fontSize: isLargeScreen ? 18 : 14,
+              color: activeTab === 'resources' ? SAFFRON : '#9ca3af'
+            }}
           >
             Resources
           </Text>
