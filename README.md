@@ -1,10 +1,10 @@
 <div align="center">
 
-# 🕉️ SVARAM - Sanskrit Learning Platform
+# 🕉️ SVARAM
 
 ### *Preserving Ancient Wisdom Through Modern Technology*
 
-[![SIH 2024](https://img.shields.io/badge/SIH-2024-orange?style=for-the-badge)](https://sih.gov.in/)
+[![SIH 2025](https://img.shields.io/badge/SIH-2024-orange?style=for-the-badge)](https://sih.gov.in/)
 [![Smart India Hackathon](https://img.shields.io/badge/Smart_India-Hackathon-blue?style=for-the-badge)](https://sih.gov.in/)
 [![Team Pravartak](https://img.shields.io/badge/Team-Pravartak-green?style=for-the-badge)]()
 
@@ -18,7 +18,7 @@
 
 ## 📖 About SVARAM
 
-**SVARAM** (Sanskrit Vedic Ancient Rhythms & Metrics) is an innovative digital platform designed to revive and promote the study of Sanskrit prosody (Chandas) and Bhagavad Gita shlokas. Built for the **Smart India Hackathon 2024**, this platform combines ancient wisdom with cutting-edge technology to create an immersive learning experience.
+**SVARAM** (Sanskrit Vedic Ancient Rhythms & Metrics) is an innovative digital platform designed to revive and promote the study of Sanskrit prosody (Chandas). Built for the **Smart India Hackathon 2025**, this platform combines ancient wisdom with cutting-edge technology to create an immersive learning experience.
 
 ### 🎯 Mission
 To make Sanskrit learning accessible, engaging, and scientifically rigorous through AI-powered tools, gamification, and a comprehensive learning management system.
@@ -511,10 +511,7 @@ This project is developed for **Smart India Hackathon 2024** and is currently un
 ## 📞 Contact & Support
 
 ### **Get Help**
-- 📧 **Email**: support@svaram.com
-- 💬 **Discord**: [Join our community](#)
-- 📱 **Telegram**: [SVARAM Group](#)
-- 🐦 **Twitter**: [@SvaramOfficial](#)
+- 📧 **Email**: pravartak99@gmail.com
 
 ### **Report Issues**
 Found a bug or have suggestions? [Open an issue](https://github.com/pravartak01/SIH_PRAVARTAK_SVARAM/issues)
