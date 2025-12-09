@@ -1,0 +1,706 @@
+# 🕉️ SvaramAI - Sanskrit Intelligence Suite
+
+**Production-grade FastAPI backend for Sanskrit language AI processing with RAG, semantic search, and multi-LLM support**
+
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-green.svg)](https://fastapi.tiangolo.com/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+---
+
+## 📋 Table of Contents
+
+Sanskrit Chandas Identifier
+===========================
+
+A fully deterministic, rule-based Sanskrit Chandas (meter) identifier for Devanagari text. No machine learning, no heuristics—pure classical rules.
+
+## Features
+
+- **Akṣara segmentation**: Handles all Devanagari conjuncts, matras, anusvāra, visarga, and virama.
+- **Laghu/Guru detection**: Implements all classical rules for syllable length.
+- **Meter matching**: Strictly matches only classical meters (Anuṣṭubh, Triṣṭubh, Jagatī, Indravajrā, Upendravajrā, Vasantatilakā, Mandākrāntā, Śārdūlavikrīḍita, Śikhariṇī, Mālinī, Pṛthvī, Aupacchandasika, Atijagatī, etc.).
+- **API**: FastAPI REST endpoint for programmatic access.
+- **Unit tests**: Deterministic, robust test suite.
+
+## Usage
+
+### 1. CLI Demo
+
+```bash
+python chandas_identifier.py
+```
+
+### 2. As a Library
+
+```python
+from chandas_identifier import chandas_identify
+result = chandas_identify("धर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः।\nमामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय॥")
+print(result.chandas)
+print(result.pada_syllable_counts)
+```
+
+### 3. REST API
+
+```bash
+uvicorn fastapi_app:app --reload
+```
+
+POST to `/identify` with JSON:
+
+```json
+{"text": "धर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः।\nमामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय॥"}
+```
+
+## Output JSON Format
+
+```
+{
+  "chandas": "Anuṣṭubh",
+  "confidence": 1.0,
+  "pada_syllable_counts": [8,8,8,8],
+  "pada_laghu_guru": [["G","L",...], ...],
+  "pada_aksharas": [["धा","र्म","क्षे",...], ...],
+  "pada_akshara_positions": [[(start,end),...], ...],
+  "explanation": "Matched meter Anuṣṭubh by syllable count.",
+  "identification_process": ["step1",...]
+}
+```
+
+## Classical Meters Supported
+
+- Anuṣṭubh (8/8/8/8)
+- Triṣṭubh (11/11/11/11)
+- Jagatī (12/12/12/12)
+- Indravajrā (11/11/11/11 + Gana)
+- Upendravajrā (11/11/11/11)
+- Vasantatilakā (14)
+- Mandākrāntā (17)
+- Śārdūlavikrīḍita (19)
+- Śikhariṇī (17)
+- Mālinī (15)
+- Pṛthvī (11)
+- Aupacchandasika (8/12/8/12)
+- Atijagatī (13)
+
+## Akṣara Segmentation Rules
+
+- Consonant (with nukta) + optional vowel matra
+- Trailing anusvāra (ं), visarga (ः)
+- Virama + consonant cluster = one akṣara
+- Standalone vowels handled
+
+## Laghu/Guru Rules
+
+- Guru if: long vowel, anusvāra, visarga, virama, short vowel + conjunct, etc.
+- Laghu otherwise
+
+## License
+
+MIT
+- Error classification: syllable mismatch, word wrong, meter deviation
+- Personalized improvement suggestions
+- Supports: WAV, MP3, M4A, FLAC, OGG formats
+- Real-time error detection and corrections
+
+---
+
+## 🏗️ Architecture
+
+### Clean Architecture Pattern
+
+```
+┌─────────────────────────────────────────┐
+│           FastAPI Routes                │
+│  (API Layer - HTTP Endpoints)           │
+└───────────────┬─────────────────────────┘
+                │
+┌───────────────▼─────────────────────────┐
+│          Controllers                    │
+│  (Business Logic Layer)                 │
+└───────────────┬─────────────────────────┘
+                │
+┌───────────────▼─────────────────────────┐
+│           Services                      │
+│  (LLM, RAG, PDF Processing)             │
+└───────────────┬─────────────────────────┘
+                │
+┌───────────────▼─────────────────────────┐
+│      External Services                  │
+│  (OpenAI, Anthropic, Qdrant)           │
+└─────────────────────────────────────────┘
+```
+
+### Directory Structure
+
+```
+backend/
+├── main.py                    # FastAPI application entry point
+├── config.py                  # Configuration management
+├── models.py                  # Pydantic request/response models
+├── requirements.txt           # Python dependencies
+├── .env.example              # Environment variables template
+│
+├── routes/                   # API route definitions
+│   ├── chandas_routes.py
+│   ├── shloka_routes.py
+│   ├── tagline_routes.py
+│   ├── meaning_routes.py
+│   └── knowledgebase_routes.py
+│
+├── controllers/              # Business logic layer
+│   ├── chandas_controller.py
+│   ├── shloka_controller.py
+│   ├── tagline_controller.py
+│   ├── meaning_controller.py
+│   └── knowledgebase_controller.py
+│
+├── services/                 # External service clients
+│   ├── llm_client.py         # OpenAI/Anthropic wrapper
+│   ├── rag_client.py         # Qdrant vector DB client
+│   └── pdf_loader.py         # PDF processing
+│
+├── prompts/                  # System prompts for LLMs
+│   ├── chandas_system.txt
+│   ├── shloka_generate.txt
+│   ├── tagline_system.txt
+│   └── meaning_system.txt
+│
+└── utils/                    # Utility functions
+    ├── text_cleaner.py       # Sanskrit text processing
+    ├── splitter.py           # Syllable splitting
+    └── helpers.py            # General utilities
+```
+
+---
+
+## 📦 Installation
+
+### Prerequisites
+
+- **Python 3.11+** (Tested on Python 3.12.1)
+- **Qdrant** (Vector database for RAG)
+- **OpenAI API Key** (Primary LLM provider - GPT-4o + Whisper)
+- **Optional**: Groq, Anthropic, or Gemini API keys for additional LLM providers
+
+### Step 1: Clone Repository
+
+```bash
+cd c:\Projects\Chanda\backend
+```
+
+### Step 2: Create Virtual Environment
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+### Step 3: Install Dependencies
+
+```powershell
+pip install -r requirements.txt
+```
+
+### Step 4: Install Qdrant (Local)
+
+**Using Docker:**
+```powershell
+docker pull qdrant/qdrant
+docker run -p 6333:6333 qdrant/qdrant
+```
+
+**Or download from:** https://qdrant.tech/documentation/quick-start/
+
+---
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+1. Copy the example environment file:
+```powershell
+Copy-Item .env.example .env
+```
+
+2. Edit `.env` with your configuration:
+
+```env
+# API Configuration
+API_HOST=0.0.0.0
+API_PORT=8000
+DEBUG=True
+
+# API Keys
+OPENAI_API_KEY=sk-your-openai-key-here
+GROQ_API_KEY=gsk_your-groq-key-here  # Optional
+ANTHROPIC_API_KEY=sk-ant-your-anthropic-key-here  # Optional
+
+# LLM Configuration
+DEFAULT_LLM_PROVIDER=openai
+OPENAI_MODEL=gpt-4o
+GROQ_MODEL=llama-3.3-70b-versatile
+ANTHROPIC_MODEL=claude-3-opus-20240229
+LLM_TEMPERATURE=0.7
+LLM_MAX_TOKENS=2000
+
+# Qdrant Configuration
+QDRANT_HOST=localhost
+QDRANT_PORT=6333
+QDRANT_API_KEY=
+QDRANT_USE_HTTPS=False
+
+# Collection Names
+CHANDAS_COLLECTION=chandas_patterns
+SHLOKAS_COLLECTION=example_shlokas
+GRAMMAR_COLLECTION=grammar_rules
+BRANDING_COLLECTION=branding_vocab
+
+# Embedding Configuration
+EMBEDDING_MODEL=paraphrase-multilingual-MiniLM-L12-v2
+VECTOR_SIZE=384
+```
+
+### Required API Keys
+
+- **OpenAI**: Get from https://platform.openai.com/api-keys (Required for GPT-4o and Whisper)
+- **Groq** (Optional): Get from https://console.groq.com/keys
+- **Anthropic** (Optional): Get from https://console.anthropic.com/
+
+---
+
+## 🚀 Running the API
+
+### Development Mode
+
+```powershell
+python main.py
+```
+
+Or with uvicorn directly:
+```powershell
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Production Mode
+
+```powershell
+uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+```
+
+### Access the API
+
+- **API**: http://localhost:8000
+- **Interactive Docs**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+
+---
+
+## 📡 API Endpoints
+
+### Health Check
+- `GET /` - Root endpoint
+- `GET /health` - Health check with service status
+
+### Chandas Identifier
+- `POST /api/v1/chandas/identify` - Identify meter from shloka
+
+### Shloka Generator
+- `POST /api/v1/shloka/generate` - Generate Sanskrit verse
+
+### Tagline Generator
+- `POST /api/v1/tagline/generate` - Generate Sanskrit taglines
+
+### Meaning Engine
+- `POST /api/v1/meaning/extract` - Extract meaning and translation
+
+### Knowledge Base
+- `POST /api/v1/kb/document` - Add document to collection
+- `POST /api/v1/kb/search` - Semantic search across documents
+- `POST /api/v1/kb/upload-pdf` - Upload and process PDF file
+- `PUT /api/v1/kb/document` - Update existing document
+- `DELETE /api/v1/kb/document` - Delete document by ID
+- `GET /api/v1/kb/collection/{collection}/stats` - Get collection statistics
+
+### Voice Karaoke
+- `POST /api/v1/voice/analyze` - Analyze Sanskrit pronunciation from audio
+- `GET /api/v1/voice/supported-formats` - Get supported audio formats
+
+---
+
+## 💡 Usage Examples
+
+### 1. Identify Chandas
+
+```powershell
+$body = @{
+    shloka = "वसुदेवसुतं देवं कंसचाणूरमर्दनम्"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:8000/api/v1/chandas/identify" `
+    -Method Post `
+    -Body $body `
+    -ContentType "application/json"
+```
+
+**Response:**
+```json
+{
+  "chandas_name": "Anushtup",
+  "syllable_breakdown": [
+    {"syllable": "va", "type": "laghu", "position": 1},
+    {"syllable": "su", "type": "laghu", "position": 2}
+  ],
+  "laghu_guru_pattern": "LGGLGGLG",
+  "explanation": "This is Anushtup meter with 8 syllables per quarter",
+  "confidence": 0.95
+}
+```
+
+### 2. Generate Shloka
+
+```powershell
+$body = @{
+    theme = "Krishna's divine play"
+    deity = "Krishna"
+    mood = "devotional"
+    style = "classical"
+    meter = "Anushtup"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:8000/api/v1/shloka/generate" `
+    -Method Post `
+    -Body $body `
+    -ContentType "application/json"
+```
+
+### 3. Generate Tagline
+
+```powershell
+$body = @{
+    industry = "Technology"
+    company_name = "TechVeda"
+    vision = "Empowering digital transformation"
+    values = @("innovation", "excellence", "integrity")
+    tone = "professional"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:8000/api/v1/tagline/generate" `
+    -Method Post `
+    -Body $body `
+    -ContentType "application/json"
+```
+
+### 4. Extract Meaning
+
+```powershell
+$body = @{
+    verse = "सत्यं ज्ञानमनन्तं ब्रह्म"
+    include_word_meanings = $true
+    include_context = $true
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:8000/api/v1/meaning/extract" `
+    -Method Post `
+    -Body $body `
+    -ContentType "application/json"
+```
+
+### 5. Add to Knowledge Base
+
+```powershell
+$body = @{
+    collection = "chandas_patterns"
+    content = "Anushtup: 8 syllables per quarter, 32 total"
+    metadata = @{
+        name = "Anushtup"
+        category = "sama-vritta"
+        syllables = 32
+    }
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:8000/api/v1/kb/document" `
+    -Method Post `
+    -Body $body `
+    -ContentType "application/json"
+```
+
+### 6. Upload PDF to Knowledge Base
+
+```powershell
+# Using multipart/form-data
+$pdfPath = "C:\path\to\sanskrit_text.pdf"
+$collection = "chandas_patterns"
+
+$form = @{
+    file = Get-Item -Path $pdfPath
+    collection = $collection
+}
+
+Invoke-RestMethod -Uri "http://localhost:8000/api/v1/kb/upload-pdf" `
+    -Method Post `
+    -Form $form
+```
+
+**Response:**
+```json
+{
+  "message": "PDF processed successfully",
+  "chunks_added": 127,
+  "collection": "chandas_patterns",
+  "filename": "sanskrit_text.pdf"
+}
+```
+
+### 7. Semantic Search in Knowledge Base
+
+```powershell
+$body = @{
+    query = "What is Anushtup meter?"
+    collection = "chandas_patterns"
+    limit = 5
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:8000/api/v1/kb/search" `
+    -Method Post `
+    -Body $body `
+    -ContentType "application/json"
+```
+
+**Response:**
+```json
+{
+  "results": [
+    {
+      "content": "Anushtup is the most common Sanskrit meter...",
+      "score": 0.87,
+      "metadata": {
+        "page_number": 1,
+        "chunk_id": 0,
+        "source_file": "sanskrit_text.pdf"
+      }
+    }
+  ]
+}
+```
+
+### 8. Voice Karaoke - Analyze Pronunciation
+
+```powershell
+# Upload audio file for pronunciation analysis
+$audioPath = "C:\path\to\recording.wav"
+
+# With reference shloka
+$form = @{
+    audio = Get-Item -Path $audioPath
+    reference_shloka = "वसुदेवसुतं देवं कंसचाणूरमर्दनम्"
+}
+
+$response = Invoke-RestMethod -Uri "http://localhost:8000/api/v1/voice/analyze" `
+    -Method Post `
+    -Form $form
+
+# Display results
+Write-Host "Transcribed: $($response.transcribed_text)"
+Write-Host "Overall Accuracy: $($response.accuracy_metrics.overall_accuracy * 100)%"
+Write-Host "Suggestions: $($response.suggestions)"
+```
+
+**Response:**
+```json
+{
+  "transcribed_text": "वसुदेव सुतं देवं कंसचाणूरमर्दनम्",
+  "identified_shloka": {
+    "text": "वसुदेवसुतं देवं कंसचाणूरमर्दनम्।\nदेवकीपरमानन्दं कृष्णं वन्दे जगद्गुरुम्॥",
+    "source": "Krishna Stotram",
+    "meter": "Anushtup",
+    "meaning": "I bow to Krishna, son of Vasudeva...",
+    "confidence": 0.92
+  },
+  "accuracy_metrics": {
+    "overall_accuracy": 0.87,
+    "word_accuracy": 0.90,
+    "syllable_accuracy": 0.85,
+    "meter_accuracy": 0.88,
+    "pronunciation_clarity": 0.84
+  },
+  "errors": [
+    {
+      "position": 1,
+      "expected": "वसुदेवसुतं",
+      "actual": "वसुदेव सुतं",
+      "error_type": "syllable_mismatch",
+      "severity": "minor",
+      "note": "Added extra space between compound words"
+    }
+  ],
+  "suggestions": "Focus on connecting compound words smoothly. Practice the 'dev' sound with proper dental pronunciation.",
+  "overall_feedback": "Good attempt! Your pronunciation is 87% accurate. Main areas for improvement: compound word joining and dental consonant clarity."
+}
+```
+
+### 9. Auto-Detect Shloka (Without Reference)
+
+```powershell
+# Let AI identify which shloka you're reciting
+$form = @{
+    audio = Get-Item -Path "C:\path\to\recording.wav"
+}
+
+Invoke-RestMethod -Uri "http://localhost:8000/api/v1/voice/analyze" `
+    -Method Post `
+    -Form $form
+```
+
+The system will:
+1. Transcribe your audio using Whisper
+2. Search knowledge base to identify the shloka
+3. Compare your pronunciation against the correct text
+4. Provide detailed feedback
+
+---
+
+## 🛠️ Development
+
+### Code Style
+
+The project follows:
+- **PEP 8** style guide
+- **Type hints** for all functions
+- **Docstrings** for all modules, classes, and functions
+- **Async/await** for I/O operations
+
+### Adding a New Module
+
+1. Create model in `models.py`
+2. Create controller in `controllers/`
+3. Create routes in `routes/`
+4. Create system prompt in `prompts/`
+5. Update `main.py` to include router
+
+### Logging
+
+All modules use Python's `logging` module:
+```python
+import logging
+logger = logging.getLogger(__name__)
+logger.info("Message")
+```
+
+---
+
+## 🧪 Testing
+
+### Run Tests
+
+```powershell
+pytest tests/ -v
+```
+
+### Test Coverage
+
+```powershell
+pytest --cov=. --cov-report=html
+```
+
+### Manual API Testing
+
+Use the interactive docs at `http://localhost:8000/docs`
+
+---
+
+## 🚢 Deployment
+
+### Using Docker
+
+Create `Dockerfile`:
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+Build and run:
+```powershell
+docker build -t sanskrit-ai .
+docker run -p 8000:8000 --env-file .env sanskrit-ai
+```
+
+### Production Checklist
+
+- [ ] Set `DEBUG=False` in `.env`
+- [ ] Use production-grade ASGI server (uvicorn with workers)
+- [ ] Set up reverse proxy (nginx)
+- [ ] Enable HTTPS
+- [ ] Configure CORS properly
+- [ ] Set up monitoring and logging
+- [ ] Use secret management for API keys
+- [ ] Set up database backups (Qdrant)
+
+---
+
+## 📚 Documentation
+
+- **API Docs**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+- **Source Code**: Fully documented with docstrings
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 🙏 Acknowledgments
+
+- **FastAPI**: Modern async web framework
+- **OpenAI**: GPT-4o LLM and Whisper speech-to-text
+- **Qdrant**: High-performance vector database
+- **sentence-transformers**: Local multilingual embeddings
+- **Sanskrit Scholars**: Traditional knowledge preservation
+
+---
+
+## 🔧 Technical Stack
+
+- **Backend**: FastAPI 0.109+ with Uvicorn
+- **LLM**: OpenAI GPT-4o (primary) with fallback to Groq/Anthropic/Gemini
+- **Speech-to-Text**: OpenAI Whisper API for Sanskrit audio transcription
+- **Embeddings**: sentence-transformers (paraphrase-multilingual-MiniLM-L12-v2) - 384-dim vectors
+- **Vector DB**: Qdrant 1.7.3+ on localhost:6333
+- **PDF Processing**: PyPDF2 with chunking strategy
+- **Python**: 3.11+ (tested on 3.12.1)
+- **Architecture**: Clean Routes → Controllers → Services pattern
+
+---
+
+## 📧 Support
+
+For issues and questions:
+- Open an issue on GitHub
+- Check the documentation at `/docs`
+
+---
+
+**Built with ❤️ for Sanskrit AI Processing by the SvaramAI Team**
+
+*Preserving ancient wisdom with modern technology* 🕉️
